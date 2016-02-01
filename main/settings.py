@@ -15,7 +15,7 @@ import environ
 
 
 env = environ.Env()
-environ.Env.read_env()  # TODO: change argument and remove .env to root of crs
+environ.Env.read_env()  # TODO: change argument and remove .env to root of main
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'crs.wsgi.application'
+WSGI_APPLICATION = 'main.wsgi.application'
 
 
 # Database
