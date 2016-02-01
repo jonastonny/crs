@@ -6,4 +6,4 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Main Site!")
+    return render(request, 'home/index.html')
