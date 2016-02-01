@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <title>CRS</title>
+    {% block extra_head %}{% endblock %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
+</head>
+<body>
+    {% include 'main/menu.html' %}
+
+    {% block content %}{% endblock %}
+
+</body>
+</html>
