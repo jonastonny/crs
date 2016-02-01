@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.contrib.auth import views
+from django.contrib.auth import views, login
 
 
 def change_password(request):
