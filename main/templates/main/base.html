@@ -6,12 +6,17 @@
     <title>CRS</title>
     {% block extra_head %}{% endblock %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css'  %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/style.css' %}">
 </head>
 <body>
-    {% include 'main/menu.html' %}
+    {% include 'main/nav.html' %}
 
     {% block content %}{% endblock %}
+
+
+    <script src="{% static 'main/js/jquery-1.12.0.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
 
 </body>
 </html>
