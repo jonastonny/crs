@@ -1,10 +1,5 @@
 from django.shortcuts import render
+from django.views import generic
+
 
 # Create your views here.
-from django.contrib.auth import views, login
-
-
-def change_password(request):
-    template_response = views.password_change(request)
-    # Do something with `template_response`
-    return template_response
