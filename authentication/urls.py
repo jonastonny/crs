@@ -1,8 +1,11 @@
 from django.conf.urls import include, url
 from django.contrib.auth import views as auth_views
 
+from . import views
+
 urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'authentication/login_form.html'}),
+    url(r'^register/$', views.register, name='register'),
     url('^', include('django.contrib.auth.urls')),  # same as the following lines
     # ^login/$ [name='login']
     # ^logout/$ [name='logout']

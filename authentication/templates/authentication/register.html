@@ -1,0 +1,40 @@
+{% extends 'main/base.html' %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+
+    <div class="container">
+
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+{#            {{ form.as_p }}#}
+            <div class="form-group">
+                <label for="id_username">Username:</label>
+                <input id="id_username" class="form-control" maxlength="30" name="username" type="text" />
+{#                <span class="helptext">Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.</span>#}
+            </div>
+
+            <div class="form-group">
+                <label for="id_email">Email:</label>
+                <input id="id_email" class="form-control" maxlength="100" name="email" type="email">
+            </div>
+
+            <div class="form-group">
+                <label for="id_password1">Password:</label>
+                <input id="id_password1" class="form-control" name="password1" type="password" />
+            </div>
+
+            <div class="form-group">
+                <label for="id_password2">Password confirmation:</label>
+                <input id="id_password2" class="form-control" name="password2" type="password" />
+{#                <span class="helptext">Enter the same password as before, for verification.</span>#}
+            </div>
+
+            <input type="submit" class="btn btn-default" value="Create the account">
+        </form>
+
+    </div>
+
+
+{% endblock %}
