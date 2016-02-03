@@ -36,6 +36,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'vote.apps.VoteConfig',
     'authentication.apps.AuthenticationConfig',
     'dashboard.apps.DashboardConfig',
     'home.apps.HomeConfig',
