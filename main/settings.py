@@ -37,7 +37,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'authentication.apps.AuthenticationConfig',
+    'dashboard.apps.DashboardConfig',
     'home.apps.HomeConfig',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -135,3 +137,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     'main/static/',
 ]
+
+# Redirect to LOGIN_REDIRECT_URL after login
+LOGIN_REDIRECT_URL = '/dashboard'
