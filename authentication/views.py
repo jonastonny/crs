@@ -1,20 +1,11 @@
 from django.shortcuts import render, redirect
-from django.views import generic
+
 from django.forms import EmailField
-from django.contrib.auth.models import User
 
 from django.utils.translation import ugettext_lazy as _
 
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
-
-
-# Create your views here.
-# def register(request):
-#     if request.user.is_authenticated():
-#         return render(request, 'dashboard/dashboard.html')
-#     else:
-#         return render(request, 'authentication/register.html')
+from django.contrib.auth.models import User
 
 
 class UserCreationForm(UserCreationForm):
