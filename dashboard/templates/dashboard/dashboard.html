@@ -5,9 +5,8 @@
     <div class="container">
         <h1>Dashboard</h1>
         <p><a href="{% url 'room_create' %}">Create new room</a></p>
-
-        <h3>Rooms I'm participating in</h3>
-
+        <hr>
+        <h3>Rooms I'm subscriped to</h3>
         {% for subscriped in user.subscription_set.all %}
             <p><a href="{% url 'room_detail' subscriped.room.id %}">{{ subscriped.room.title }}</a></p>
         {% endfor %}
@@ -17,8 +16,6 @@
         {% for room in user.room_set.all %}
             <p><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></p>
         {% endfor %}
-
-
     </div>
 
 

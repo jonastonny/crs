@@ -1,6 +1,7 @@
-
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.views import generic
-from vote.models import Room, Question
+from vote.models import Room, Question, Subscription
 
 
 class RoomDetailView(generic.DetailView):
@@ -15,10 +16,17 @@ class QuestionDetailView(generic.DetailView):
 
 class CreateRoomView(generic.CreateView):
     template_name = 'vote/room_create.html'
-
     model = Room
     fields = ['title']
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(CreateRoomView, self).form_valid(form)
+
+
+@login_required
+def subscribe(request, room):
+    obj, created = Subscription.objects.get_or_create(user_id=request.user.id, room_id=room)
+    if not created:
+        obj.delete()
+    return HttpResponse(status=201)
