@@ -4,8 +4,20 @@
 
     <div class="container">
         <h1>Dashboard</h1>
-        <p>Username: {{ request.user.username }}</p>
 
+        <h3>Rooms I'm participating in</h3>
+
+        {% for room in rooms %}
+
+        {% endfor %}
+
+
+        <h3>My rooms</h3>
+
+        <p><a href="#">Create new room</a></p>
+        {% for room in user.room_set.all %}
+            <p><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></p>
+        {% endfor %}
 
 
     </div>
