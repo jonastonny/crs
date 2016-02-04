@@ -62,3 +62,15 @@ class Response(models.Model):
     def __str__(self):
         return "%s @ %s" % (self.user.username, self.answer.answer_text)
 
+
+class Subscriptions(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    date_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'room',)
+
+    def __str__(self):
+        return "%s subscribes to %s" % (self.user.username, self.room)
+
