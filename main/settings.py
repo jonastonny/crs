@@ -141,3 +141,8 @@ STATICFILES_DIRS = [
 
 # Redirect to LOGIN_REDIRECT_URL after login
 LOGIN_REDIRECT_URL = '/dashboard'
+
+# Mailgun vairables for email
+EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+MAILGUN_ACCESS_KEY = 'key-255d55091d7eb676c3a929fbcf7ee04c'
+MAILGUN_SERVER_NAME = 'sandbox7df316d50b1b40a19bdefe4db775ae2b.mailgun.org'

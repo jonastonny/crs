@@ -6,6 +6,8 @@ from . import views
 urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'authentication/login_form.html'}),
     url(r'^register/$', views.register, name='register'),
+    url(r'^reset/$', views.reset_password, {'post_reset_redirect': '/authentication/reset/done/'}, name='reset_password'),
+    url(r'reset/done/$', views.reset_password_done, name='reset_password_done'),
     url('^', include('django.contrib.auth.urls')),  # same as the following lines
     # ^login/$ [name='login']
     # ^logout/$ [name='logout']
