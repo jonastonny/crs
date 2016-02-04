@@ -37,19 +37,22 @@ class QuestionAdmin(admin.ModelAdmin):
 
     inlines = [AnswerInline]
 
-    readonly_fields = ['room', ]
+    # readonly_fields = ['room', ]
     model = Question
 
 
-class QuestionInline(SuperInlineModelAdmin, admin.StackedInline):
+class QuestionInline(admin.TabularInline):
     model = Question
     extra = 0
-    inlines = [AnswerInline]
+    #inlines = [AnswerInline]
+    readonly_fields = ['question_text', 'date_time', 'pub_date']
+    max_num = 0
 
 
-class RoomAdmin(SuperModelAdmin):
+
+class RoomAdmin(admin.ModelAdmin):
     search_fields = ['title']
-    inlines = [QuestionInline, ]
+    inlines = [QuestionInline]
 
 
 admin.site.register(Room, RoomAdmin)
