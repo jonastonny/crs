@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        {{ question.question_text }}
+        {% for answer in question.answer_set.all %}
+            <li>{{ answer }}</li>
+        {% endfor %}
+
+    </div>
+{% endblock %}
