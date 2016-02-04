@@ -7,8 +7,6 @@ from django.contrib.auth.models import User
 
 
 class CustomUserCreationForm(UserCreationForm):
-    error_css_class = 'list-unstyled'
-    required_css_class = 'required'
 
     email = EmailField(label=_("Email address"), required=True, help_text=_("Required."))
 
@@ -17,7 +15,7 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
-        user = super(UserCreationForm, self).save(commit=False)
+        user = super(CustomUserCreationForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
         if commit:
             user.save()
