@@ -26,6 +26,8 @@ class CreateRoomView(generic.CreateView):
 
 @login_required
 def subscribe(request, room):
+    if not request.method == 'POST':
+        return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
     obj, created = Subscription.objects.get_or_create(user_id=request.user.id, room_id=room)
     if not created:
         obj.delete()

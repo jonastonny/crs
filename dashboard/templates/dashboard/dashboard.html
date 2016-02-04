@@ -1,14 +1,15 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+    {% load staticfiles %}
 
     <div class="container">
         <h1>Dashboard</h1>
         <p><a href="{% url 'room_create' %}">Create new room</a></p>
         <hr>
         <h3>Rooms I'm subscriped to</h3>
-        {% for subscriped in user.subscription_set.all %}
-            <p><a href="{% url 'room_detail' subscriped.room.id %}">{{ subscriped.room.title }}</a></p>
+        {% for subscribed in user.subscription_set.all %}
+            <p><a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a> <span class="glyphicon glyphicon-remove" aria-hidden="true" id="unsubscribe" data-url="{% url 'room_detail' subscribed.room.id %}" ></span></p>
         {% endfor %}
 
         <hr>
@@ -18,5 +19,6 @@
         {% endfor %}
     </div>
 
+    <script src="{% static 'vote/js/subscribe.js' %}"></script>
 
 {% endblock %}
