@@ -5,7 +5,7 @@
     <div class="container">
         {{ question.question_text }}
         {% for answer in question.answer_set.all %}
-            <li>{{ answer }}</li>
+            <li>{{ answer }} - number of answers: {{ answer.number_of_responses }}</li>
         {% endfor %}
 
     </div>

@@ -14,7 +14,7 @@
 
         <h3>My rooms</h3>
 
-        <p><a href="#">Create new room</a></p>
+        <p><a href="{% url 'room_create' %}">Create new room</a></p>
         {% for room in user.room_set.all %}
             <p><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></p>
         {% endfor %}
