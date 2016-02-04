@@ -5,6 +5,9 @@
 {% block content %}
 
     <div class="container">
+        {% if user.is_authenticated %}
+            <p>You are already registered and logged in.</p>
+        {% else %}
 
         <form action="{% url 'register' %}" method="post">
             {% csrf_token %}
@@ -33,6 +36,8 @@
 
             <input type="submit" class="btn btn-default" value="Create the account">
         </form>
+
+    {% endif %}
 
     </div>
 
