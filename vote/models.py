@@ -63,7 +63,7 @@ class Response(models.Model):
         return "%s @ %s" % (self.user.username, self.answer.answer_text)
 
 
-class Subscriptions(models.Model):
+class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     date_time = models.DateTimeField(auto_now_add=True)
