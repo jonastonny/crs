@@ -24,6 +24,10 @@ class CreateRoomView(generic.CreateView):
         return super(CreateRoomView, self).form_valid(form)
 
 
+class EditRoomDetailView(generic.DetailView):
+    template_name = 'vote/room_edit.html'
+    model = Room
+
 @login_required
 def subscribe(request, room):
     if not request.method == 'POST':
@@ -32,3 +36,6 @@ def subscribe(request, room):
     if not created:
         obj.delete()
     return HttpResponse(status=201)
+
+
+

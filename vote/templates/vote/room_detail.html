@@ -4,11 +4,12 @@
 {% block content %}
 
     <div class="container">
-        <h2>{{ room.title }}</h2>
-        {% if room|room_is_owned_by_user:user %}
-            <a href="#">Edit room</a>
-        {% endif %}
-
+        <h2>{{ room.title }}
+            {% if room|room_is_owned_by_user:user %}
+               <small><a href="#">Edit</a></small>
+            {% endif %}
+        </h2>
+    
         <div class="table-responsive">
         <table class="table table-hover">
         <tr>
