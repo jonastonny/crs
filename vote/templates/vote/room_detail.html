@@ -6,7 +6,7 @@
     <div class="container">
         <h2>{{ room.title }}
             {% if room|room_is_owned_by_user:user %}
-               <small><a href="#">Edit</a></small>
+               <small><a href="{% url 'room_edit' room.id %}">Edit</a></small>
             {% endif %}
         </h2>
 
