@@ -14,7 +14,7 @@
                 url: _url + "subscribe/",
                 method: "POST"
             }).done(function(data){
-                $(_parent).hide("slide", { direction: "left" }, 1000).remove();
+                $(_parent).remove();
             })
         });
     };
