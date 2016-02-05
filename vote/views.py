@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.views import generic
+
+from vote.forms import VoteRoomForm
 from vote.models import Room, Question, Subscription
 
 
@@ -24,13 +27,29 @@ class CreateRoomView(generic.CreateView):
         return super(CreateRoomView, self).form_valid(form)
 
 
-class EditRoomDetailView(generic.DetailView):
-    template_name = 'vote/room_edit.html'
-    model = Room
+@login_required
+def room_edit(request, room):
+    room = Room.objects.get(pk=room)
+    context = {'room': room}
+    return render(request, 'vote/room_edit.html', context)
 
 
 @login_required
-def subscribe(request, room):
+def room_update(request, room):
+
+    if not request.method == 'POST':
+        return HttpResponse(status=201)
+    room = Room.objects.get(pk=room)
+    form = VoteRoomForm(request.POST or None, instance=room)
+
+    if form.is_valid():
+        form.save()
+        return redirect(room)
+
+
+
+@login_required
+def room_subscribe(request, room):
     if not request.method == 'POST':
         return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
     obj, created = Subscription.objects.get_or_create(user_id=request.user.id, room_id=room)
