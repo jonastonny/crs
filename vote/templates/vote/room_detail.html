@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+{% load vote_extras %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="container">
+        <h2>{{ room.title }}
+            {% if room|room_is_owned_by_user:user %}
+               <small><a href="#">Edit</a></small>
+            {% endif %}
+        </h2>
+
+        <div class="table-responsive">
+        <table class="table table-hover">
+        <tr>
+            <th>Question</th>
+            <th>Created answers</th>
+            <th>Received answers</th>
+            <th>Date published</th>
+            <th>Open for answers</th>
+
+        </tr>
+
+        {% for question in room.question_set.all %}
+            <tr>
+                <td><a href="{% url 'question_detail' room.id question.id %}">{{ question.question_text }}</a></td>
+                <td>{{ question.number_of_possible_answers }}</td>
+                <td>{{ question.total_responses }}</td>
+                <td>{{ question.pub_date }}</td>
+
+                <td>
+                {% if room|room_is_owned_by_user:user %}
+                    <div class="checkbox">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" class="toggle_subscription" data-url="{% url 'question_toggle' room.id question.id %}" {% if question.is_open %}checked{% endif %}>
+                    </label>
+                    </div>
+                {% else %}
+                    {{ question.is_open }}
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+
+        </table>
+        </div>
+
+    </div>
+
+    <script src="{% static 'vote/js/subscribe.js' %}"></script>
+
+{% endblock %}

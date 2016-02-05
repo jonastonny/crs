@@ -1,3 +1,4 @@
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from . import forms
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
@@ -8,6 +9,8 @@ def register(request):
         form = forms.CustomUserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
+            user = authenticate(username=request.POST['username'], password=request.POST['password1'])
+            login(request, user)
             return redirect("/dashboard/")
     else:
         form = forms.CustomUserCreationForm()

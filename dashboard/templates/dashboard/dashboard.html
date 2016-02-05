@@ -1,14 +1,25 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+    {% load staticfiles %}
 
     <div class="container">
         <h1>Dashboard</h1>
-        <p>Username: {{ request.user.username }}</p>
 
-    
+        <p><a href="{% url 'room_create' %}">Create new room</a></p>
+        <hr>
+        <h3>Rooms I'm subscribed to</h3>
+        {% for subscribed in user.subscription_set.all %}
+            <p><a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a> <span class="glyphicon glyphicon-remove" aria-hidden="true" class="unsubscribe" data-url="{% url 'room_subscribe' subscribed.room.id %}" ></span></p>
+        {% endfor %}
 
+        <hr>
+        <h3>My rooms</h3>
+        {% for room in user.room_set.all %}
+            <p><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></p>
+        {% endfor %}
     </div>
 
+    <script src="{% static 'vote/js/subscribe.js' %}"></script>
 
 {% endblock %}

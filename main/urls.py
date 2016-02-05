@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^authentication/', include('authentication.urls')),
     url(r'^dashboard/', include('dashboard.urls')),
+    url(r'^vote/', include('vote.urls')),
 ]
 
