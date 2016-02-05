@@ -38,4 +38,14 @@ def subscribe(request, room):
     return HttpResponse(status=201)
 
 
+@login_required
+def question_toggle(request, room, question):
+    if not request.method == 'POST':
+        return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 
+    obj = Question.objects.get(id=question)
+    bool_status = obj.is_open
+    obj.is_open = not bool_status
+    obj.save()
+
+    return HttpResponse(status=201)
