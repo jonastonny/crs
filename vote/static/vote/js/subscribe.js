@@ -12,6 +12,19 @@
         });
     };
 
+    var toggle = function(){
+            $(".toggle_subscription").click(function(){
+                var _url = $(this).data('url');
+                $.ajax({
+                    url: _url,
+                    method: "POST"
+                }).done(function(){
+                    console.log("OK!!!")
+                })
+            });
+        };
+
     subscribe();
+    toggle();
 
 })();

@@ -25,6 +25,7 @@ class Question(models.Model):
     question_text = models.CharField(max_length=1000)
     date_time = models.DateTimeField(auto_now_add=True)
     pub_date = models.DateTimeField('date published')
+    is_open = models.BooleanField(default=False)
 
     def number_of_possible_answers(self):
         return self.answer_set.count()

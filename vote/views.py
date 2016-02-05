@@ -47,6 +47,7 @@ def room_update(request, room):
         return redirect(room)
 
 
+
 @login_required
 def room_subscribe(request, room):
     if not request.method == 'POST':
@@ -57,4 +58,17 @@ def room_subscribe(request, room):
     return HttpResponse(status=201)
 
 
+@login_required
+def question_toggle(request, room, question):
+    if not request.method == 'POST':
+        return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 
+    room_obj = Room.objects.get(id=room)
+    if request.user.id == room_obj.owner_id:
+        question_obj = Question.objects.get(id=question)
+        bool_status = question_obj.is_open
+        question_obj.is_open = not bool_status
+        question_obj.save()
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=403)
