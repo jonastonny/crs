@@ -28,6 +28,7 @@ class EditRoomDetailView(generic.DetailView):
     template_name = 'vote/room_edit.html'
     model = Room
 
+
 @login_required
 def subscribe(request, room):
     if not request.method == 'POST':
@@ -43,9 +44,12 @@ def question_toggle(request, room, question):
     if not request.method == 'POST':
         return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 
-    obj = Question.objects.get(id=question)
-    bool_status = obj.is_open
-    obj.is_open = not bool_status
-    obj.save()
-
-    return HttpResponse(status=201)
+    room_obj = Room.objects.get(id=room)
+    if request.user.id == room_obj.owner_id:
+        question_obj = Question.objects.get(id=question)
+        bool_status = question_obj.is_open
+        question_obj.is_open = not bool_status
+        question_obj.save()
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=403)
