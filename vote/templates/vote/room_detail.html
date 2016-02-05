@@ -5,8 +5,8 @@
 
     <div class="container">
         <h2>{{ room.title }}</h2>
-        {% if room|room_is_owned_by_user:user.id %}
-            Pølser
+        {% if room|room_is_owned_by_user:user %}
+            You are the owner!
         {% endif %}
 
         {% for question in room.question_set.all %}
