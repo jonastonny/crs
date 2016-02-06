@@ -47,7 +47,6 @@ def room_update(request, room):
         return redirect(room)
 
 
-
 @login_required
 def room_subscribe(request, room):
     if not request.method == 'POST':

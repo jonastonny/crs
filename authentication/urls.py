@@ -6,8 +6,10 @@ from . import views
 urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'authentication/login_form.html'}),
     url(r'^register/$', views.register, name='register'),
-    url(r'^reset/$', views.reset_password, {'post_reset_redirect': '/authentication/reset/done/'}, name='reset_password'),
-    url(r'reset/done/$', views.reset_password_done, name='reset_password_done'),
+    url(r'^passwordreset/$', auth_views.password_reset, {'template_name': 'authentication/password_reset_form.html'}),
+    url(r'passwordreset/done/$', auth_views.password_reset_done, {'template_name': 'authentication/password_reset_done.html'}),
+    url(r'reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, {'template_name': 'authentication/password_reset_confirm.html'}),
+    url(r'reset/done/$', auth_views.password_reset_complete, {'template_name': 'authentication/password_reset_complete.html'}),
     url('^', include('django.contrib.auth.urls')),  # same as the following lines
     # ^login/$ [name='login']
     # ^logout/$ [name='logout']
