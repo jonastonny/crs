@@ -1,12 +1,14 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+{% load widget_tweaks %}
 
     <div class="container">
 
         <form action="{% url 'room_update' room.id %}" method="post">{% csrf_token %}
             <div class="form-group">
-                <input type="text" class="form-control" name="title" value="{{ room.title  }}" id="id_title">
+                {{ form.title|add_class:'form-control' }}
+{#                <input type="text" class="form-control" name="title" value="{{ room.title  }}" id="id_title">#}
             </div>
 
         <input type="submit" class="btn btn-primary" value="Update" />
@@ -17,6 +19,13 @@
             <p>{{ question.question_text }}</p>
 
         {% endfor %}
+
+
+    {% for error in form.errors %}
+
+        <p>{{ error }}</p>
+
+    {% endfor %}
 
     </div>
 {% endblock %}

@@ -30,7 +30,7 @@ class CreateRoomView(generic.CreateView):
 @login_required
 def room_edit(request, room):
     room = Room.objects.get(pk=room)
-    context = {'room': room}
+    context = {'room': room, 'form': VoteRoomForm(instance=room)}
     return render(request, 'vote/room_edit.html', context)
 
 
@@ -45,6 +45,7 @@ def room_update(request, room):
     if form.is_valid():
         form.save()
         return redirect(room)
+    return render(request, 'vote/room_edit.html', {'room': room, 'form': form})
 
 
 
