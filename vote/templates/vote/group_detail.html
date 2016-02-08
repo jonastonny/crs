@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="container">
-        <h2>{{ questiongroup.title }}
+        <h2>{{ questiongroup.title }} {{ room.title }}
 {#            {% if room|room_is_owned_by_user:user %}#}
 {#               <small><a href="{% url 'room_edit' room.id %}">Edit</a></small>#}
 {#            {% endif %}#}
@@ -35,7 +35,7 @@
 {#                {% if room|room_is_owned_by_user:user %}#}
                     <div class="checkbox">
                     <label class="checkbox-inline">
-                        <input type="checkbox" class="toggle_subscription" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}" {% if question.is_open %}checked{% endif %}>
+                        <input type="checkbox" class="toggle_question" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}" {% if question.is_open %}checked{% endif %}>
                     </label>
                     </div>
 {#                {% else %}#}

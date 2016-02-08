@@ -79,9 +79,17 @@ def question_toggle(request, room, questiongroup, question):
         return HttpResponse(status=403)
 
 
-# @login_required
-# def questiongroup_toggle(request, room, questiongroup, question):
-#     if not request.method == 'POST':
-#         return HttpResponse('{"message"}: "Updates are handled through POSTS only"}', status=405)
-#
-#     if request.user.id
+@login_required
+def questiongroup_toggle(request, room, questiongroup):
+    if not request.method == 'POST':
+        return HttpResponse('{"message"}: "Updates are handled through POSTS only"}', status=405)
+
+    room_obj = Room.objects.get(id=room)
+    if request.user.id == room_obj.owner_id:
+        questiongroup_obj = QuestionGroup.objects.get(id=questiongroup)
+        bool_status = questiongroup_obj.is_open
+        questiongroup_obj.is_open = not bool_status
+        questiongroup_obj.save()
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=403)

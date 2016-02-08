@@ -20,14 +20,14 @@
 {#        {% if room.has_questions %} CHANGE TO QUESTIONGROUP #}
         <div class="table-responsive">
         <table class="table table-hover">
-        <tr>
-            <th>Question group</th>
-            <th>Date published</th>
-            <th>Visible for subscribers</th>
+            <tr>
+                <th>Question group</th>
+                <th>Date published</th>
+                <th>Visible for subscribers</th>
 
-        </tr>
+            </tr>
 
-        {% for questiongroup in room.questiongroup_set.all %}
+            {% for questiongroup in room.questiongroup_set.all %}
             <tr>
                 <td><a href="{% url 'questiongroup_detail' room.id questiongroup.id %}">{{ questiongroup.title }}</a></td>
 
@@ -37,17 +37,17 @@
                 {% if room|room_is_owned_by_user:user %}
                     <div class="checkbox">
                     <label class="checkbox-inline">
-{#                        <input type="checkbox" class="toggle_subscription" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}" {% if questiongroup.is_open %}checked{% endif %}>#}
+                        <input type="checkbox" class="toggle_question" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}" {% if questiongroup.is_open %}checked{% endif %}>
                     </label>
                     </div>
                 {% else %}
                     {{ questiongroup.is_open }}
-                    {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
+                {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 {#        {% else %}#}
 {#            <p>Currently no groups in this room!</p>#}
 {#        {% endif %}#}
