@@ -8,7 +8,11 @@
                 url: _url,
                 method: "POST"
             }).done(function(data){
-                if($(_this).attr("id") != "room_detail"){
+                if($(_this).attr("id") == "room_detail"){
+                    if($(_this).html() == "Subscribe"){ $(_this).text("Unsubscribe") }
+                    else{ $(_this).text("Subscribe") }
+                }
+                else{
                     $(_parent).remove();
                 }
             })

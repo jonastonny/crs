@@ -10,7 +10,7 @@
         <hr>
         <h3>Rooms I'm subscribed to</h3>
         {% for subscribed in user.subscription_set.all %}
-            <p><a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a> <span class="glyphicon glyphicon-remove" aria-hidden="true" class="toggle_subscription" data-url="{% url 'room_subscribe' subscribed.room.id %}" ></span></p>
+            <p><a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a> <span class="glyphicon glyphicon-remove toggle_subscription" aria-hidden="true" data-url="{% url 'room_subscribe' subscribed.room.id %}" ></span></p>
         {% endfor %}
 
         <hr>
