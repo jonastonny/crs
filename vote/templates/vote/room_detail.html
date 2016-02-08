@@ -8,6 +8,13 @@
         <h2>{{ room.title }}
             {% if room|room_is_owned_by_user:user %}
                <small><a href="{% url 'room_edit' room.id %}">Edit</a></small>
+
+            {% else %}
+                {% if user|user_is_subscribed_to_room:room %}
+                    <small id="room_detail" class="toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Unsubscribe</small>
+                {% else %}
+                    <small id="room_detail" class="toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Subscribe</small>
+                {% endif %}
             {% endif %}
         </h2>
 
@@ -19,7 +26,6 @@
             <th>Received answers</th>
             <th>Date published</th>
             <th>Open for answers</th>
-
         </tr>
 
         {% for question in room.question_set.all %}
@@ -33,7 +39,7 @@
                 {% if room|room_is_owned_by_user:user %}
                     <div class="checkbox">
                     <label class="checkbox-inline">
-                        <input type="checkbox" class="toggle_subscription" data-url="{% url 'question_toggle' room.id question.id %}" {% if question.is_open %}checked{% endif %}>
+                        <input type="checkbox" class="toggle_question" data-url="{% url 'question_toggle' room.id question.id %}" {% if question.is_open %}checked{% endif %}>
                     </label>
                     </div>
                 {% else %}

@@ -17,7 +17,7 @@
           <ul class="nav navbar-nav navbar-right">
               {% if user.is_authenticated %}
                   <li>
-                  <form class="navbar-form navbar-right">
+                  <form class="navbar-form navbar-right" action="{% url 'search_room' %}">
                     <input type="text" class="form-control" placeholder="Room Search" name="q">
                   </form>
                   </li>
