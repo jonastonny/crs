@@ -27,11 +27,14 @@ class QuestionGroup(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     date_time = models.DateTimeField(auto_now_add=True)
-    pub_date = models.DateTimeField('date published')
+    # pub_date = models.DateTimeField('date published')
     is_open = models.BooleanField(default=False)
 
     def has_questions(self):
         return len(self.question_set.all()) > 0
+
+    def get_absolute_url(self):
+        return reverse('questiongroup_detail', kwargs={'room': self.room_id,'pk': self.pk})
 
     class Meta:
         unique_together = ('room', 'title')

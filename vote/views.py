@@ -13,7 +13,7 @@ class RoomDetailView(generic.DetailView):
 
 
 class QuestionGroupDetailView(generic.DetailView):
-    template_name = 'vote/group_detail.html'
+    template_name = 'vote/questiongroup_detail.html'
     model = QuestionGroup
 
 
@@ -30,6 +30,18 @@ class CreateRoomView(generic.CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(CreateRoomView, self).form_valid(form)
+
+
+class CreateQuestionGroupView(generic.CreateView):
+    template_name = 'vote/questiongroup_create.html'
+    model = QuestionGroup
+    fields = ['title']
+
+    def form_valid(self, form):
+        room_obj = Room.objects.get(pk=self.kwargs['room'])
+        if room_obj.owner_id == self.request.user.id:
+            form.instance.room = room_obj
+            return super(CreateQuestionGroupView, self).form_valid(form)
 
 
 @login_required
