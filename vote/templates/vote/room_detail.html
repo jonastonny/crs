@@ -8,9 +8,16 @@
         <h2>{{ room.title }}
             {% if room|room_is_owned_by_user:user %}
                <small><a href="{% url 'room_edit' room.id %}">Edit</a></small>
+            {% else %}
+                {% if user|user_is_subscribed_to_room:room %}
+                    <small id="room_detail" class="toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Unsubscribe</small>
+                {% else %}
+                    <small id="room_detail" class="toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Subscribe</small>
+                {% endif %}
             {% endif %}
         </h2>
 
+{#        {% if room.has_questions %} CHANGE TO QUESTIONGROUP #}
         <div class="table-responsive">
         <table class="table table-hover">
         <tr>
@@ -35,13 +42,15 @@
                     </div>
                 {% else %}
                     {{ questiongroup.is_open }}
-                {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-
-        </table>
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
+{#        {% else %}#}
+{#            <p>Currently no groups in this room!</p>#}
+{#        {% endif %}#}
 
     </div>
 
