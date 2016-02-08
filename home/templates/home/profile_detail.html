@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+{% load staticfiles %}
+
+    <div class="container">
+
+
+
+        <div id="tabs">
+              <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+            <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane" id="profile">
+                <p><strong>Username: </strong> {{ user.username }}</p>
+                <p><strong>Name: </strong>{{ user.first_name }}</p>
+                <p><strong>Last: </strong>{{ user.last_name }}</p>
+                <p><strong>Email: </strong>{{ user.email }}</p>
+                <p><strong>Date Joined: </strong> {{ user.date_joined }}</p>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="settings">
+
+                <a href="{% url 'password_change' %}">Change password</a>
+
+            </div>
+          </div>
+        </div>
+        <script>$('#tabs a:first').tab('show')</script>
+    </div>
+{% endblock %}
