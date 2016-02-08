@@ -16,6 +16,9 @@ class Room(models.Model):
     def get_absolute_url(self):
         return reverse('room_detail', kwargs={'pk': self.pk})
 
+    def has_questions(self):
+        return len(self.question_set.all()) > 0
+
     def __str__(self):
         return self.title
 
