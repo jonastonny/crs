@@ -20,8 +20,22 @@ class Room(models.Model):
         return self.title
 
 
-class Question(models.Model):
+class QuestionGroup(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    date_time = models.DateTimeField(auto_now_add=True)
+    pub_date = models.DateTimeField('date published')
+    is_open = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('room', 'title')
+
+    def __str__(self):
+        return self.title
+
+
+class Question(models.Model):
+    group = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=1000)
     date_time = models.DateTimeField(auto_now_add=True)
     pub_date = models.DateTimeField('date published')

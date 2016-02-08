@@ -4,12 +4,17 @@ from django.shortcuts import render, redirect
 from django.views import generic
 
 from vote.forms import VoteRoomForm
-from vote.models import Room, Question, Subscription
+from vote.models import Room, QuestionGroup, Question, Subscription
 
 
 class RoomDetailView(generic.DetailView):
     template_name = 'vote/room_detail.html'
     model = Room
+
+
+class QuestionGroupDetailView(generic.DetailView):
+    template_name = 'vote/group_detail.html'
+    model = QuestionGroup
 
 
 class QuestionDetailView(generic.DetailView):
@@ -59,7 +64,7 @@ def room_subscribe(request, room):
 
 
 @login_required
-def question_toggle(request, room, question):
+def question_toggle(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 

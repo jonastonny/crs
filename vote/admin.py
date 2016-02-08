@@ -49,13 +49,17 @@ class QuestionInline(admin.TabularInline):
     max_num = 0
 
 
+class QuestionGroupInline(admin.TabularInline):
+    model = QuestionGroup
+
 
 class RoomAdmin(admin.ModelAdmin):
     search_fields = ['title']
-    inlines = [QuestionInline]
+    inlines = [QuestionGroupInline]
 
 
 admin.site.register(Room, RoomAdmin)
+admin.site.register(QuestionGroup)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer)
 admin.site.register(Response)
