@@ -16,6 +16,11 @@
          </ul>
           <ul class="nav navbar-nav navbar-right">
               {% if user.is_authenticated %}
+                  <li>
+                  <form class="navbar-form navbar-right">
+                    <input type="text" class="form-control" placeholder="Room Search" name="q">
+                  </form>
+                  </li>
                   <li class="navbar-text">Hi, <strong>{{ user.username }}</strong></li>
                   <li><a href="/authentication/logout?next=/home">Logout</a></li>
               {% else %}
