@@ -12,14 +12,16 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/dashboard">Dashboard</a></li>
+              {% if user.is_authenticated %}
+                  <li class="active"><a href="/dashboard">Dashboard</a></li>
+              {% endif %}
          </ul>
           <ul class="nav navbar-nav navbar-right">
               {% if user.is_authenticated %}
                   <li>
-                  <form class="navbar-form navbar-right" action="{% url 'search_room' %}">
-                    <input type="text" class="form-control" placeholder="Room Search" name="q">
-                  </form>
+                      <form class="navbar-form navbar-right" action="{% url 'search_room' %}">
+                          <input type="text" class="form-control" placeholder="Room Search" name="q">
+                      </form>
                   </li>
                   <li class="navbar-text">Hi, <strong>{{ user.username }}</strong></li>
                   <li><a href="/authentication/logout?next=/home">Logout</a></li>
