@@ -77,3 +77,11 @@ def question_toggle(request, room, questiongroup, question):
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=403)
+
+
+# @login_required
+# def questiongroup_toggle(request, room, questiongroup, question):
+#     if not request.method == 'POST':
+#         return HttpResponse('{"message"}: "Updates are handled through POSTS only"}', status=405)
+#
+#     if request.user.id
