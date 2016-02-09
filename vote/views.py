@@ -20,10 +20,11 @@ class QuestionGroupDetailView(generic.DetailView):
 
     def get(self, request, *args, **kwargs):
         qg = get_object_or_404(QuestionGroup, pk=kwargs['pk'])
-        if not qg.is_open:
+        if not qg.is_open and request.user != qg.room.owner:
             messages.warning(request, "Group '%s' is not open!" % qg.title)
             return redirect(qg.room)
         return render(request, template_name=self.template_name, context={'questiongroup': qg})
+
 
 class QuestionDetailView(generic.DetailView):
     template_name = 'vote/question_detail.html'
