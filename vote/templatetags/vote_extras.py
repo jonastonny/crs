@@ -19,3 +19,9 @@ def questiongroup_is_owned_by_user(questiongroup, user):
 @register.filter
 def user_is_subscribed_to_room(user, room):
     return len(user.subscription_set.filter(room_id__in=str(room.id))) > 0
+
+
+@register.filter
+def group_disabled_class(questiongroup):
+    if not questiongroup.is_open:
+        return 'disabled'

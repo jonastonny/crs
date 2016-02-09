@@ -4,5 +4,8 @@ body {
 
 .toggle_subscription {
     cursor: pointer;
-    
+}
+
+.disabled {
+    background-color: lightgrey;
 }
