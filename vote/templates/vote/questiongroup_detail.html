@@ -7,8 +7,8 @@
     <div class="container">
         <h2>{{ questiongroup.title }} {{ room.title }}
             {% if questiongroup|questiongroup_is_owned_by_user:user %}
-                <small>Edit link</small>
-{#               <small><a href="{% url 'questiongroup_edit' questiongroup.room_id questiongroup.id %}">Edit</a></small>#}
+{#                <small>Edit link</small>#}
+               <small><a href="{% url 'questiongroup_edit' questiongroup.room_id questiongroup.id %}">Edit</a></small>
             {% endif %}
         </h2>
 
