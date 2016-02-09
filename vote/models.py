@@ -34,7 +34,7 @@ class QuestionGroup(models.Model):
         return len(self.question_set.all()) > 0
 
     def get_absolute_url(self):
-        return reverse('questiongroup_detail', kwargs={'room': self.room_id,'pk': self.pk})
+        return reverse('questiongroup_detail', kwargs={'room': self.room_id, 'pk': self.pk})
 
     class Meta:
         unique_together = ('room', 'title')
@@ -47,11 +47,15 @@ class Question(models.Model):
     group = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=1000)
     date_time = models.DateTimeField(auto_now_add=True)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
     is_open = models.BooleanField(default=False)
 
     def number_of_possible_answers(self):
         return self.answer_set.count()
+
+    def get_absolute_url(self):
+        group = QuestionGroup.objects.get(id=self.group_id)
+        return reverse('question_detail', kwargs={'room': group.room_id, 'questiongroup': group.id, 'pk': self.id})
 
     def total_responses(self):
         total_sum = 0

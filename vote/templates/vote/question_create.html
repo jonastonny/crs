@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+{% load widget_tweaks %}
+
+    <div class="container">
+        <form action="" method="post">{% csrf_token %}
+            <div class="form-group">
+                <label>Question:</label>
+                {{ form.question_text|add_class:"form-control" }}
+            </div>
+        <input type="submit" value="Create" class="btn btn-primary" />
+        </form>
+
+    </div>
+{% endblock %}

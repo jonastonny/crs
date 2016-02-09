@@ -9,9 +9,9 @@
             {% if questiongroup|questiongroup_is_owned_by_user:user %}
                <small><a href="{% url 'questiongroup_edit' questiongroup.room_id questiongroup.id %}">Edit</a></small> |
                 <small>
-{#                    <a href="{% url 'question_create' questiongroup.room_id questiongroup.id %}">#}
+                    <a href="{% url 'question_create' questiongroup.room_id questiongroup.id %}">
                         Add Question
-{#                    </a>#}
+                    </a>
                 </small>
             {% endif %}
         </h2>
