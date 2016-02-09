@@ -7,6 +7,7 @@
 
         <form action="{% url 'questiongroup_update' questiongroup.room_id questiongroup.id %}" method="post">{% csrf_token %}
             <div class="form-group">
+                <label>New name for this group of questions:</label>
                 {{ form.title|add_class:'form-control' }}
 {#                <input type="text" class="form-control" name="title" value="{{ room.title  }}" id="id_title">#}
             </div>
