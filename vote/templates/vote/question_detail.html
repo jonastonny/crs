@@ -3,6 +3,11 @@
 {% block content %}
 
     <div class="container">
+        <h5>
+            <a href="{% url 'room_detail' question.group.room_id %}">{{ question.group.room.title }}</a> >
+            <a href="{% url 'questiongroup_detail' question.group.room_id question.group_id %}">{{ question.group.title }}</a> >
+            question
+        </h5>
         {{ question.question_text }}
         {% for answer in question.answer_set.all %}
             <li>{{ answer }} - number of answers: {{ answer.number_of_responses }}</li>

@@ -5,7 +5,11 @@
 {% block content %}
 
     <div class="container">
-        <h2>{{ questiongroup.title }} {{ room.title }}
+        <h5>
+            <a href="{% url 'room_detail' questiongroup.room_id %}">{{ questiongroup.room.title }}</a> >
+            <a href="{% url 'questiongroup_detail' questiongroup.room_id questiongroup.id %}">{{ questiongroup.title }}</a>
+        </h5>
+        <h2>{{ questiongroup.title }}
             {% if questiongroup|questiongroup_is_owned_by_user:user %}
                <small><a href="{% url 'questiongroup_edit' questiongroup.room_id questiongroup.id %}">Edit</a></small> |
                 <small>
