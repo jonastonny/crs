@@ -16,15 +16,35 @@ class Room(models.Model):
     def get_absolute_url(self):
         return reverse('room_detail', kwargs={'pk': self.pk})
 
+    def has_questiongroups(self):
+        return len(self.questiongroup_set.all()) > 0
+
+    def __str__(self):
+        return self.title
+
+
+class QuestionGroup(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    date_time = models.DateTimeField(auto_now_add=True)
+    # pub_date = models.DateTimeField('date published')
+    is_open = models.BooleanField(default=False)
+
     def has_questions(self):
         return len(self.question_set.all()) > 0
+
+    def get_absolute_url(self):
+        return reverse('questiongroup_detail', kwargs={'room': self.room_id,'pk': self.pk})
+
+    class Meta:
+        unique_together = ('room', 'title')
 
     def __str__(self):
         return self.title
 
 
 class Question(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    group = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=1000)
     date_time = models.DateTimeField(auto_now_add=True)
     pub_date = models.DateTimeField('date published')

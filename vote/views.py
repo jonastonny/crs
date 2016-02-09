@@ -4,12 +4,17 @@ from django.shortcuts import render, redirect
 from django.views import generic
 
 from vote.forms import VoteRoomForm
-from vote.models import Room, Question, Subscription
+from vote.models import Room, QuestionGroup, Question, Subscription
 
 
 class RoomDetailView(generic.DetailView):
     template_name = 'vote/room_detail.html'
     model = Room
+
+
+class QuestionGroupDetailView(generic.DetailView):
+    template_name = 'vote/questiongroup_detail.html'
+    model = QuestionGroup
 
 
 class QuestionDetailView(generic.DetailView):
@@ -25,6 +30,18 @@ class CreateRoomView(generic.CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(CreateRoomView, self).form_valid(form)
+
+
+class CreateQuestionGroupView(generic.CreateView):
+    template_name = 'vote/questiongroup_create.html'
+    model = QuestionGroup
+    fields = ['title']
+
+    def form_valid(self, form):
+        room_obj = Room.objects.get(pk=self.kwargs['room'])
+        if room_obj.owner_id == self.request.user.id:
+            form.instance.room = room_obj
+            return super(CreateQuestionGroupView, self).form_valid(form)
 
 
 @login_required
@@ -59,7 +76,7 @@ def room_subscribe(request, room):
 
 
 @login_required
-def question_toggle(request, room, question):
+def question_toggle(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 
@@ -69,6 +86,22 @@ def question_toggle(request, room, question):
         bool_status = question_obj.is_open
         question_obj.is_open = not bool_status
         question_obj.save()
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=403)
+
+
+@login_required
+def questiongroup_toggle(request, room, questiongroup):
+    if not request.method == 'POST':
+        return HttpResponse('{"message"}: "Updates are handled through POSTS only"}', status=405)
+
+    room_obj = Room.objects.get(id=room)
+    if request.user.id == room_obj.owner_id:
+        questiongroup_obj = QuestionGroup.objects.get(id=questiongroup)
+        bool_status = questiongroup_obj.is_open
+        questiongroup_obj.is_open = not bool_status
+        questiongroup_obj.save()
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=403)
