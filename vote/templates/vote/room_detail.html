@@ -7,7 +7,8 @@
     <div class="container">
         <h2>{{ room.title }}
             {% if room|room_is_owned_by_user:user %}
-               <small><a href="{% url 'room_edit' room.id %}">Edit</a></small>
+                <small><a href="{% url 'room_edit' room.id %}">Edit</a></small> |
+                <small><a href="{% url 'questiongroup_create' room.id %}">Add Group</a></small>
             {% else %}
                 {% if user|user_is_subscribed_to_room:room %}
                     <small id="room_detail" class="toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Unsubscribe</small>
