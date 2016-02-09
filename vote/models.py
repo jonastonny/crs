@@ -19,6 +19,12 @@ class Room(models.Model):
     def has_questiongroups(self):
         return len(self.questiongroup_set.all()) > 0
 
+    def has_open_questiongroups(self):
+        for questiongroup in self.questiongroup_set.all():
+            if questiongroup.is_open:
+                return True
+        return False
+
     def __str__(self):
         return self.title
 

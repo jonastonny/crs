@@ -1,6 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 
 from vote.forms import VoteRoomForm, VoteQuestiongroupForm
@@ -16,6 +18,12 @@ class QuestionGroupDetailView(generic.DetailView):
     template_name = 'vote/questiongroup_detail.html'
     model = QuestionGroup
 
+    def get(self, request, *args, **kwargs):
+        qg = get_object_or_404(QuestionGroup, pk=kwargs['pk'])
+        if not qg.is_open:
+            messages.warning(request, "Group '%s' is not open!" % qg.title)
+            return redirect(qg.room)
+        return render(request, template_name=self.template_name, context={'questiongroup': qg})
 
 class QuestionDetailView(generic.DetailView):
     template_name = 'vote/question_detail.html'

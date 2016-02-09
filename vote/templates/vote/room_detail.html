@@ -18,38 +18,43 @@
             {% endif %}
         </h2>
 
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
         {% if room.has_questiongroups %}
-        <div class="table-responsive">
-        <table class="table table-hover">
-            <tr>
-                <th>Question group</th>
-                <th>Date created</th>
-                <th>Visible for subscribers</th>
+                <div class="table-responsive">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Question group</th>
+                        <th>Date created</th>
+                        <th>Is open for voting</th>
 
-            </tr>
+                    </tr>
+                    {% for questiongroup in room.questiongroup_set.all %}
+                        <tr class="{{ questiongroup|group_disabled_class }}">
+                            <td><a href="{% url 'questiongroup_detail' room.id questiongroup.id %}">{{ questiongroup.title }}</a></td>
+                            <td>{{ questiongroup.date_time }}</td>
+                            <td>
+                            {% if room|room_is_owned_by_user:user %}
+                                <div class="checkbox">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" class="toggle_question" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}" {% if questiongroup.is_open %}checked{% endif %}>
+                                </label>
+                                </div>
+                            {% else %}
+                                {{ questiongroup.is_open }}
+                            {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
 
-            {% for questiongroup in room.questiongroup_set.all %}
-            <tr>
-                <td><a href="{% url 'questiongroup_detail' room.id questiongroup.id %}">{{ questiongroup.title }}</a></td>
-
-                <td>{{ questiongroup.date_time }}</td>
-
-                <td>
-                {% if room|room_is_owned_by_user:user %}
-                    <div class="checkbox">
-                    <label class="checkbox-inline">
-                        <input type="checkbox" class="toggle_question" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}" {% if questiongroup.is_open %}checked{% endif %}>
-                    </label>
-                    </div>
-                {% else %}
-                    {{ questiongroup.is_open }}
-                {% endif %}
-                </td>
-
-            </tr>
-            {% endfor %}
-            </table>
-        </div>
         {% else %}
             <p>Currently no groups in this room!</p>
         {% endif %}
