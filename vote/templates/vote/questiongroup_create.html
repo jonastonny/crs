@@ -6,6 +6,7 @@
     <div class="container">
         <form action="" method="post">{% csrf_token %}
             <div class="form-group">
+                <label>Name of new group of questions:</label>
                 {{ form.title|add_class:"form-control" }}
             </div>
         <input type="submit" value="Create" class="btn btn-primary" />

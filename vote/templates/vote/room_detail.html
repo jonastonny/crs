@@ -23,7 +23,7 @@
         <table class="table table-hover">
             <tr>
                 <th>Question group</th>
-                <th>Date published</th>
+                <th>Date created</th>
                 <th>Visible for subscribers</th>
 
             </tr>
@@ -32,7 +32,7 @@
             <tr>
                 <td><a href="{% url 'questiongroup_detail' room.id questiongroup.id %}">{{ questiongroup.title }}</a></td>
 
-                <td>{{ questiongroup.pub_date }}</td>
+                <td>{{ questiongroup.date_time }}</td>
 
                 <td>
                 {% if room|room_is_owned_by_user:user %}
@@ -45,6 +45,7 @@
                     {{ questiongroup.is_open }}
                 {% endif %}
                 </td>
+
             </tr>
             {% endfor %}
             </table>

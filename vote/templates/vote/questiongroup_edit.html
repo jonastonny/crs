@@ -5,9 +5,9 @@
 
     <div class="container">
 
-        <form action="{% url 'room_update' room.id %}" method="post">{% csrf_token %}
+        <form action="{% url 'questiongroup_update' questiongroup.room_id questiongroup.id %}" method="post">{% csrf_token %}
             <div class="form-group">
-                <label>New room name:</label>
+                <label>New name for this group of questions:</label>
                 {{ form.title|add_class:'form-control' }}
 {#                <input type="text" class="form-control" name="title" value="{{ room.title  }}" id="id_title">#}
             </div>
@@ -15,11 +15,11 @@
         <input type="submit" class="btn btn-primary" value="Update" />
         </form>
 
-        {% for question in room.question_set.all %}
-
-            <p>{{ question.question_text }}</p>
-
-        {% endfor %}
+{#        {% for question in room.question_set.all %}#}
+{##}
+{#            <p>{{ question.question_text }}</p>#}
+{##}
+{#        {% endfor %}#}
 
 
     {% for error in form.errors %}

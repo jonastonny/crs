@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 
-from vote.forms import VoteRoomForm
+from vote.forms import VoteRoomForm, VoteQuestiongroupForm
 from vote.models import Room, QuestionGroup, Question, Subscription
 
 
@@ -104,3 +104,24 @@ def questiongroup_toggle(request, room, questiongroup):
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=403)
+
+
+@login_required
+def questiongroup_edit(request, room, questiongroup):
+    questiongroup_obj = QuestionGroup.objects.get(pk=questiongroup)
+    context = {'questiongroup': questiongroup_obj, 'form': VoteQuestiongroupForm(instance=questiongroup_obj)}
+    return render(request, 'vote/questiongroup_edit.html', context)
+
+
+@login_required
+def questiongroup_update(request, room, questiongroup):
+
+    if not request.method == 'POST':
+        return HttpResponse(status=201)
+    questiongroup = QuestionGroup.objects.get(pk=questiongroup)
+    form = VoteQuestiongroupForm(request.POST or None, instance=questiongroup)
+
+    if form.is_valid():
+        form.save()
+        return redirect(questiongroup)
+    return render(request, 'vote/questiongroup_edit.html', {'questiongroup': questiongroup, 'form': form})
