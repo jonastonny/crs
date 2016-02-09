@@ -1,10 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import generic
 
 from django.views.generic import *
+
+from home.forms import HomeProfileEdit
 
 
 class IndexView(TemplateView):
@@ -20,3 +24,23 @@ class IndexView(TemplateView):
 def profile_detail(request):
     return render(request, template_name='home/profile_detail.html', context={'user': request.user})
 
+
+@login_required
+def profile_edit(request):
+    user = request.user
+    form = HomeProfileEdit(instance=user)
+    context = {'user': user, 'form': form}
+    return render(request, template_name='home/profile_edit.html', context=context)
+
+
+@login_required
+def profile_update(request):
+    if not request.method == 'POST':
+        return HttpResponse(status=201)
+    user = request.user
+    form = HomeProfileEdit(request.POST or None, instance=user)
+
+    if form.is_valid():
+        form.save()
+        return redirect('profile')
+    return render(request, 'home/profile_edit.html', {'user': user, 'form': form})

@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+    <div class="container">
+        <h2>Edit Profile</h2>
+
+        <form action="{% url 'profile_update' %}" method="POST">{% csrf_token %}
+
+            <div class="form-group">
+                <p>{{ form.username|add_class:'form-control' }}</p>{{ form.username.errors }}
+            </div>
+            <div class="form-group">
+                <p>{{ form.first_name|add_class:'form-control' }}</p>{{ form.first_name.errors }}
+            </div>
+            <div class="form-group">
+                <p>{{ form.last_name|add_class:'form-control' }}</p>{{ form.last_name.errors }}
+            </div>
+            <div class="form-group">
+                <p>{{ form.email|add_class:'form-control' }}</p>{{ form.email.errors }}
+            </div>
+
+            <button class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+{% endblock %}

@@ -53,7 +53,6 @@ def room_edit(request, room):
 
 @login_required
 def room_update(request, room):
-
     if not request.method == 'POST':
         return HttpResponse(status=201)
     room = Room.objects.get(pk=room)
