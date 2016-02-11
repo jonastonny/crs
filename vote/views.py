@@ -154,16 +154,22 @@ def questiongroup_update(request, room, questiongroup):
 
 
 def question_answer_create(request, room, questiongroup):
-
+    size = len([k for k in request.POST if 'answer_text' in k])
     if request.method == 'POST':
         questionform = AddQuestionForm(request.POST or None, instance=Question())
-        answerform = AddAnswerForm(request.POST or None, instance=Answer())
+        answerform = [AddAnswerForm(request.POST or None, prefix=str(x), instance=Answer()) for x in range(0, size)]
         questionform.instance.group_id = questiongroup
-        questionform.save()
-        answerform.save()
+
+        if questionform.is_valid() and all([af.is_valid() for af in answerform]):
+            new_question = questionform.save()
+            for af in answerform:
+                new_answer = af.save(commit=False)
+                new_answer.question = new_question
+                new_answer.save()
+            return redirect(new_question)
 
     else:
         questionform = AddQuestionForm()
-        answerform = AddAnswerForm()
+        answerform = [AddAnswerForm(prefix=str(0), instance=Answer())]
 
-    return render(request, 'vote/question_create.html', {'qform': questionform, 'aform': answerform, 'room': room, 'questiongroup': questiongroup})
+    return render(request, 'vote/question_create.html', {'qform': questionform, 'aforms': answerform, 'room': room, 'questiongroup': questiongroup})

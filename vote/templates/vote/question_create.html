@@ -4,31 +4,29 @@
 {% load widget_tweaks %}
 
     <div class="container">
+    {{ qform.errors }}
+    {{ aform.errors }}
         <form action="{% url 'question_create' room questiongroup %}" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>New question:</label>
                 {{ qform.question_text|add_class:"form-control" }}
+                {% for aform in aforms %}
+                    <label>Answer:</label>
+                    {{ aform.answer_text|add_class:"form-control" }}
+                {% endfor %}
             </div>
+            <input type="submit" value="Create" class="btn btn-primary" />
         </form>
-        <form action="{% url 'question_create' room questiongroup %}" method="post">{% csrf_token %}
-            {{ aform.answer_text|add_class:"form-control" }}
-        </form>
-{#        <form action="{% url 'question_create' %}" method="post">{% csrf_token %}#}
-{#            {{ aform.answer_text|add_class:"form-control" }}#}
-{#        </form>#}
-{#        <form action="{% url 'question_create' %}" method="post">{% csrf_token %}#}
-{#            {{ aform.answer_text|add_class:"form-control" }}#}
-{#        </form>#}
-        <input type="submit" id="submitforms" value="Create" class="btn btn-primary" />
+
     {{ request.POST }}
 
-    <script>
-        $("#submitforms").click(function () {
-            $("form").each(function () {
-                $(this).submit()
-            })
-        })
-    </script>
+{#    <script>#}
+{#        $("#submitforms").click(function () {#}
+{#            $("form").each(function () {#}
+{#                $(this).submit()#}
+{#            })#}
+{#        })#}
+{#    </script>#}
 
 
     </div>
