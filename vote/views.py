@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 
-from vote.forms import VoteRoomForm, VoteQuestiongroupForm
-from vote.models import Room, QuestionGroup, Question, Subscription
+from vote.forms import VoteRoomForm, VoteQuestiongroupForm, AddQuestionForm, AddAnswerForm
+from vote.models import Room, QuestionGroup, Question, Subscription, Answer
 
 
 class RoomDetailView(generic.DetailView):
@@ -53,18 +53,21 @@ class CreateQuestionGroupView(generic.CreateView):
             return super(CreateQuestionGroupView, self).form_valid(form)
 
 
-class CreateQuestionView(generic.CreateView):
-    template_name = 'vote/question_create.html'
-    model = Question
-    fields = ['question_text']
+# class CreateQuestionView(generic.CreateView):
+#     template_name = 'vote/question_create.html'
+#     model = Question
+#     fields = ['question_text']
+#
+#     def form_valid(self, form):
+#         questiongroup_obj = QuestionGroup.objects.get(pk=self.kwargs['questiongroup'])
+#         room_obj = Room.objects.get(pk=questiongroup_obj.room_id)
+#         # if user is owner of the room, then you are allowed to create questions in question groups
+#         if room_obj.owner_id == self.request.user.id:
+#             form.instance.group_id = questiongroup_obj.id
+#             return super(CreateQuestionView, self).form_valid(form)
 
-    def form_valid(self, form):
-        questiongroup_obj = QuestionGroup.objects.get(pk=self.kwargs['questiongroup'])
-        room_obj = Room.objects.get(pk=questiongroup_obj.room_id)
-        # if user is owner of the room, then you are allowed to create questions in question groups
-        if room_obj.owner_id == self.request.user.id:
-            form.instance.group_id = questiongroup_obj.id
-            return super(CreateQuestionView, self).form_valid(form)
+
+
 
 
 @login_required
@@ -148,3 +151,19 @@ def questiongroup_update(request, room, questiongroup):
         form.save()
         return redirect(questiongroup)
     return render(request, 'vote/questiongroup_edit.html', {'questiongroup': questiongroup, 'form': form})
+
+
+def question_answer_create(request, room, questiongroup):
+
+    if request.method == 'POST':
+        questionform = AddQuestionForm(request.POST or None, instance=Question())
+        answerform = AddAnswerForm(request.POST or None, instance=Answer())
+        questionform.instance.group_id = questiongroup
+        questionform.save()
+        answerform.save()
+
+    else:
+        questionform = AddQuestionForm()
+        answerform = AddAnswerForm()
+
+    return render(request, 'vote/question_create.html', {'qform': questionform, 'aform': answerform, 'room': room, 'questiongroup': questiongroup})

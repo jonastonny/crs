@@ -4,13 +4,32 @@
 {% load widget_tweaks %}
 
     <div class="container">
-        <form action="" method="post">{% csrf_token %}
+        <form action="{% url 'question_create' room questiongroup %}" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>New question:</label>
-                {{ form.question_text|add_class:"form-control" }}
+                {{ qform.question_text|add_class:"form-control" }}
             </div>
-        <input type="submit" value="Create" class="btn btn-primary" />
         </form>
+        <form action="{% url 'question_create' room questiongroup %}" method="post">{% csrf_token %}
+            {{ aform.answer_text|add_class:"form-control" }}
+        </form>
+{#        <form action="{% url 'question_create' %}" method="post">{% csrf_token %}#}
+{#            {{ aform.answer_text|add_class:"form-control" }}#}
+{#        </form>#}
+{#        <form action="{% url 'question_create' %}" method="post">{% csrf_token %}#}
+{#            {{ aform.answer_text|add_class:"form-control" }}#}
+{#        </form>#}
+        <input type="submit" id="submitforms" value="Create" class="btn btn-primary" />
+    {{ request.POST }}
+
+    <script>
+        $("#submitforms").click(function () {
+            $("form").each(function () {
+                $(this).submit()
+            })
+        })
+    </script>
+
 
     </div>
 {% endblock %}
