@@ -24,4 +24,4 @@ def user_is_subscribed_to_room(user, room):
 @register.filter
 def group_disabled_class(questiongroup):
     if not questiongroup.is_open:
-        return 'disabled'
+        return 'danger'

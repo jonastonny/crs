@@ -2,6 +2,7 @@
 
 {% block content %}
 {% load widget_tweaks %}
+{% load staticfiles %}
 
     <div class="container">
     {{ qform.errors }}
@@ -10,24 +11,25 @@
             <div class="form-group">
                 <label>New question:</label>
                 {{ qform.question_text|add_class:"form-control" }}
-                {% for aform in aforms %}
-                    <label>Answer:</label>
-                    {{ aform.answer_text|add_class:"form-control" }}
-                {% endfor %}
+
+                <div id="answers">
+                    {% for aform in aforms %}
+                        <div class="form-group has-feedback" id="answer-div">
+                            <label>Answer:</label>
+                            {{ aform.answer_text|add_class:"form-control" }}
+                            <button type="button" class="remove-answer">Remove</button>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             <input type="submit" value="Create" class="btn btn-primary" />
         </form>
 
-    {{ request.POST }}
 
-{#    <script>#}
-{#        $("#submitforms").click(function () {#}
-{#            $("form").each(function () {#}
-{#                $(this).submit()#}
-{#            })#}
-{#        })#}
-{#    </script>#}
 
+    <button class="btn btn-primary" id="add-answer">Add answers</button>
 
     </div>
+
+    <script src="{% static 'vote/js/question.js' %}"></script>
 {% endblock %}
