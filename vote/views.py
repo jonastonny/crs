@@ -53,23 +53,6 @@ class CreateQuestionGroupView(generic.CreateView):
             return super(CreateQuestionGroupView, self).form_valid(form)
 
 
-# class CreateQuestionView(generic.CreateView):
-#     template_name = 'vote/question_create.html'
-#     model = Question
-#     fields = ['question_text']
-#
-#     def form_valid(self, form):
-#         questiongroup_obj = QuestionGroup.objects.get(pk=self.kwargs['questiongroup'])
-#         room_obj = Room.objects.get(pk=questiongroup_obj.room_id)
-#         # if user is owner of the room, then you are allowed to create questions in question groups
-#         if room_obj.owner_id == self.request.user.id:
-#             form.instance.group_id = questiongroup_obj.id
-#             return super(CreateQuestionView, self).form_valid(form)
-
-
-
-
-
 @login_required
 def room_edit(request, room):
     room = Room.objects.get(pk=room)
