@@ -6,7 +6,6 @@
 
     <div class="container">
     {{ qform.errors }}
-    {{ aform.errors }}
         <form action="{% url 'question_create' room questiongroup %}" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>New question:</label>
@@ -17,18 +16,17 @@
                         <div class="form-group has-feedback" id="answer-div">
                             <label>Answer:</label>
                             {{ aform.answer_text|add_class:"form-control" }}
+                            {% if aform.errors %}
+                                <div class="alert alert-warning" role="alert">{{ aform.errors.answer_text }}</div>
+                            {% endif %}
                             <button type="button" class="remove-answer">Remove</button>
                         </div>
                     {% endfor %}
                 </div>
             </div>
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <button type="button" class="btn btn-success" id="add-answer">Add answers</button>
+            <button type="submit" class="btn btn-primary">Create Question </button>
         </form>
-
-
-
-    <button class="btn btn-primary" id="add-answer">Add answers</button>
-
     </div>
 
     <script src="{% static 'vote/js/question.js' %}"></script>

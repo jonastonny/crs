@@ -6,30 +6,29 @@
             $(answer).attr('id', 'id_' + index + '-answer_text');
             $(answer).attr('name', index + '-answer_text');
         });
+        toggleButton();
     };
 
     var addAnswer = function(){
-        $('#add-answer').click(function(){
+        $('#add-answer').on('click', function(){
            var answerDiv = $('#answer-div').clone();
            $('#answers').append(answerDiv);
            answerDiv.find('input').val('').focus();
            removeAnswer();
            clean();
-           toggleButton();
         });
     };
 
     var removeAnswer = function(){
-        $('.remove-answer').click(function(){
+        $('.remove-answer').on('click', function(){
             if($('.remove-answer').length > 1){
                 $(this).parent().remove();
             }
-            toggleButton();
+            clean();
         });
     };
 
     var toggleButton = function(){
-        console.log($('.remove-answer').length);
         if($('.remove-answer').length == 1){
             $('.remove-answer').each(function(){
                $(this).hide();
@@ -42,8 +41,8 @@
         }
     };
 
-    //removeAnswer();
     addAnswer();
+    removeAnswer();
     toggleButton();
 
 })();

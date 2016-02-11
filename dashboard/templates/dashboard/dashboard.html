@@ -6,6 +6,12 @@
     <div class="container">
         <h1>Dashboard</h1>
 
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
         <p><a href="{% url 'room_create' %}">Create new room</a></p>
         <hr>
         <h3>Rooms I'm subscribed to</h3>

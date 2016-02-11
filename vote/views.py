@@ -173,3 +173,18 @@ def question_answer_create(request, room, questiongroup):
         answerform = [AddAnswerForm(prefix=str(0), instance=Answer())]
 
     return render(request, 'vote/question_create.html', {'qform': questionform, 'aforms': answerform, 'room': room, 'questiongroup': questiongroup})
+
+@login_required
+def room_delete(request, room):
+    if not request.method == 'POST':
+        return HttpResponse(201)
+    room = Room.objects.get(pk=room)
+
+    if room.owner == request.user:
+        messages.info(request, "%s was succesfully removed." % room.title)
+        room.delete()
+        return redirect('dashboard')
+    else:
+        messages.error(request, "You are trying to delete a room that you do not own!")
+        return redirect(room)
+
