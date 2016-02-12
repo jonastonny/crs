@@ -174,6 +174,7 @@ def question_answer_create(request, room, questiongroup):
 
     return render(request, 'vote/question_create.html', {'qform': questionform, 'aforms': answerform, 'room': room, 'questiongroup': questiongroup})
 
+
 @login_required
 def room_delete(request, room):
     if not request.method == 'POST':
@@ -200,7 +201,7 @@ def question_delete(request, room, questiongroup, question):
             question = get_object_or_404(Question, pk=question)
             if question.group == qg:
                 (val, d) = question.delete()
-                if val > 1:
+                if val > 0:
                     messages.info(request, 'Question deleted.')
                     return redirect(qg)
                 else:
@@ -211,6 +212,26 @@ def question_delete(request, room, questiongroup, question):
     return redirect(room)  # If anything goes wrong, return not allowed!
 
 
-
+@login_required
+def answer_delete(request, room, questiongroup, question, answer):
+    if not request.method == 'POST':
+        return HttpResponse(403)
+    room = get_object_or_404(Room, pk=room)
+    if room.owner == request.user:
+        qg = get_object_or_404(QuestionGroup, pk=questiongroup)
+        if qg.room == room:
+            question = get_object_or_404(Question, pk=question)
+            if question.group == qg:
+                answer = get_object_or_404(Answer, pk=answer)
+                if answer.question == question:
+                    (val, d) = answer.delete()
+                    if val > 0:
+                        # messages.info(request, 'Answer deleted.')
+                        return JsonResponse({'message': 'Answer Deleted'})
+                    else:
+                        # messages.warning(request, 'Could not delete question.')
+                        return JsonResponse({'message': 'Answer could not be deleted'})
+    messages.warning(request, 'You are not allowed to delete this answer!')
+    return redirect(room)  # If anything goes wrong, return not allowed!
 
 
