@@ -5,14 +5,25 @@
 
     <div class="container">
 
+        {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success" role="alert">{{ message }}</div>
+                {% endfor %}
+        {% endif %}
+
         <form action="{% url 'room_update' room.id %}" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>New room name:</label>
                 {{ form.title|add_class:'form-control' }}
 {#                <input type="text" class="form-control" name="title" value="{{ room.title  }}" id="id_title">#}
             </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Update</button>
+            </div>
 
-        <input type="submit" class="btn btn-primary" value="Update" />
+        </form>
+        <form action="{% url 'room_delete' room.id %}" method="POST">{% csrf_token %}
+            <button class="btn btn-warning btn-block">Delete Room</button>
         </form>
 
         {% for question in room.question_set.all %}
