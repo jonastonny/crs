@@ -60,8 +60,9 @@ class Question(models.Model):
         return self.answer_set.count()
 
     def get_absolute_url(self):
-        group = QuestionGroup.objects.get(id=self.group_id)
-        return reverse('question_detail', kwargs={'room': group.room_id, 'questiongroup': group.id, 'pk': self.id})
+        return reverse('question_detail', kwargs={'room': self.group.room.id,
+                                                  'questiongroup': self.group.id,
+                                                  'pk': self.id})
 
     def total_responses(self):
         total_sum = 0

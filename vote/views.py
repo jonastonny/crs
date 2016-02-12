@@ -126,7 +126,7 @@ def questiongroup_edit(request, room, questiongroup):
 def questiongroup_update(request, room, questiongroup):
 
     if not request.method == 'POST':
-        return HttpResponse(status=201)
+        return HttpResponse(status=403)
     questiongroup = QuestionGroup.objects.get(pk=questiongroup)
     form = VoteQuestiongroupForm(request.POST or None, instance=questiongroup)
 
@@ -190,10 +190,11 @@ def question_answer_update(request, room, questiongroup, question):
     # return JsonResponse({"message": "Could not update"})
     return HttpResponse(status=402)
 
+
 @login_required
 def room_delete(request, room):
     if not request.method == 'POST':
-        return HttpResponse(201)
+        return HttpResponse(403)
     room = Room.objects.get(pk=room)
 
     if room.owner == request.user:
@@ -205,3 +206,46 @@ def room_delete(request, room):
         return redirect(room)
 
 
+@login_required
+def question_delete(request, room, questiongroup, question):
+    if not request.method == 'POST':
+        return HttpResponse(403)
+    room = get_object_or_404(Room, pk=room)
+    if room.owner == request.user:
+        qg = get_object_or_404(QuestionGroup, pk=questiongroup)
+        if qg.room == room:
+            question = get_object_or_404(Question, pk=question)
+            if question.group == qg:
+                (val, d) = question.delete()
+                if val > 0:
+                    messages.info(request, 'Question deleted.')
+                    return redirect(qg)
+                else:
+                    messages.warning(request, 'Could not delete question.')
+                    return redirect(qg)  # Should link to Question instead
+
+    messages.warning(request, 'You are not allowed to delete this question!')
+    return redirect(room)  # If anything goes wrong, return not allowed!
+
+
+@login_required
+def answer_delete(request, room, questiongroup, question, answer):
+    if not request.method == 'POST':
+        return HttpResponse(403)
+    room = get_object_or_404(Room, pk=room)
+    if room.owner == request.user:
+        qg = get_object_or_404(QuestionGroup, pk=questiongroup)
+        if qg.room == room:
+            question = get_object_or_404(Question, pk=question)
+            if question.group == qg:
+                answer = get_object_or_404(Answer, pk=answer)
+                if answer.question == question:
+                    (val, d) = answer.delete()
+                    if val > 0:
+                        # messages.info(request, 'Answer deleted.')
+                        return JsonResponse({'message': 'Answer Deleted'})
+                    else:
+                        # messages.warning(request, 'Could not delete question.')
+                        return JsonResponse({'message': 'Answer could not be deleted'})
+    messages.warning(request, 'You are not allowed to delete this answer!')
+    return redirect(room)  # If anything goes wrong, return not allowed!
