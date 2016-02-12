@@ -20,6 +20,8 @@
             {% endif %}
         </h2>
 
+        {% include 'main/messages.html' %}
+
         {% if questiongroup.has_questions %}
 
         <div class="table-responsive">
@@ -30,7 +32,6 @@
             <th>Received answers</th>
             <th>Date published</th>
             <th>Open for answers</th>
-
         </tr>
 
         {% for question in questiongroup.question_set.all %}
