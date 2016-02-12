@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 
@@ -102,7 +102,7 @@ def question_toggle(request, room, questiongroup, question):
 @login_required
 def questiongroup_toggle(request, room, questiongroup):
     if not request.method == 'POST':
-        return HttpResponse('{"message"}: "Updates are handled through POSTS only"}', status=405)
+        return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 
     room_obj = Room.objects.get(id=room)
     if request.user.id == room_obj.owner_id:
@@ -157,6 +157,39 @@ def question_answer_create(request, room, questiongroup):
 
     return render(request, 'vote/question_create.html', {'qform': questionform, 'aforms': answerform, 'room': room, 'questiongroup': questiongroup})
 
+
+@login_required
+def question_answer_edit(request, room, questiongroup, question):
+    question_obj = Question.objects.get(pk=question, group=questiongroup)
+    questionform = AddQuestionForm(instance=question_obj)
+    answer_set = question_obj.answer_set.all()
+    answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
+
+    return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question})
+
+
+@login_required
+def question_answer_update(request, room, questiongroup, question):
+    if not request.method == 'POST':
+        return HttpResponse(status=402)
+
+    if "question_text" in request.POST:
+        question_obj = Question.objects.get(id=question)
+        questionform = AddQuestionForm(request.POST, instance=question_obj)
+        if questionform.is_valid():
+            questionform.save()
+        return JsonResponse(questionform.errors)
+
+    if "answer_text" in request.POST:
+        answer_obj = Answer.objects.get(id=request.POST['answer_id'])
+        answerform = AddAnswerForm(request.POST, instance=answer_obj)
+        if answerform.is_valid():
+            answerform.save()
+        return JsonResponse(answerform.errors)
+
+    # return JsonResponse({"message": "Could not update"})
+    return HttpResponse(status=402)
+
 @login_required
 def room_delete(request, room):
     if not request.method == 'POST':
@@ -170,4 +203,5 @@ def room_delete(request, room):
     else:
         messages.error(request, "You are trying to delete a room that you do not own!")
         return redirect(room)
+
 
