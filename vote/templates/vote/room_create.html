@@ -8,6 +8,7 @@
             <div class="form-group">
                 <label>Name of new room:</label>
                 {{ form.title|add_class:"form-control" }}
+                {{ form.errors.title }}
             </div>
         <input type="submit" value="Create" class="btn btn-primary" />
         </form>
