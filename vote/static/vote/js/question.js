@@ -41,6 +41,25 @@
         }
     };
 
+    var postUpdate = function() {
+        $('.update').on('blur', function(data) {
+            $(console.log(data));
+            if ($(this).attr('id') == 'id_question_text') {
+                var postdata = {question_text: $(this).val()}
+            }
+            else {
+                var postdata = {answer_text: $(this).val(), answer_id: $(this).siblings('#answer_id')[0].value}
+            }
+            console.log(postdata);
+            $.ajax({
+                url: $("#update-url").data("url"),
+                method: 'POST',
+                data: postdata
+            });
+        });
+    };
+
+    postUpdate();
     addAnswer();
     removeAnswer();
     toggleButton();

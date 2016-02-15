@@ -53,23 +53,6 @@ class CreateQuestionGroupView(generic.CreateView):
             return super(CreateQuestionGroupView, self).form_valid(form)
 
 
-# class CreateQuestionView(generic.CreateView):
-#     template_name = 'vote/question_create.html'
-#     model = Question
-#     fields = ['question_text']
-#
-#     def form_valid(self, form):
-#         questiongroup_obj = QuestionGroup.objects.get(pk=self.kwargs['questiongroup'])
-#         room_obj = Room.objects.get(pk=questiongroup_obj.room_id)
-#         # if user is owner of the room, then you are allowed to create questions in question groups
-#         if room_obj.owner_id == self.request.user.id:
-#             form.instance.group_id = questiongroup_obj.id
-#             return super(CreateQuestionView, self).form_valid(form)
-
-
-
-
-
 @login_required
 def room_edit(request, room):
     room = Room.objects.get(pk=room)
@@ -119,7 +102,7 @@ def question_toggle(request, room, questiongroup, question):
 @login_required
 def questiongroup_toggle(request, room, questiongroup):
     if not request.method == 'POST':
-        return HttpResponse('{"message"}: "Updates are handled through POSTS only"}', status=405)
+        return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 
     room_obj = Room.objects.get(id=room)
     if request.user.id == room_obj.owner_id:
@@ -173,6 +156,39 @@ def question_answer_create(request, room, questiongroup):
         answerform = [AddAnswerForm(prefix=str(0), instance=Answer())]
 
     return render(request, 'vote/question_create.html', {'qform': questionform, 'aforms': answerform, 'room': room, 'questiongroup': questiongroup})
+
+
+@login_required
+def question_answer_edit(request, room, questiongroup, question):
+    question_obj = Question.objects.get(pk=question, group=questiongroup)
+    questionform = AddQuestionForm(instance=question_obj)
+    answer_set = question_obj.answer_set.all()
+    answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
+
+    return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question})
+
+
+@login_required
+def question_answer_update(request, room, questiongroup, question):
+    if not request.method == 'POST':
+        return HttpResponse(status=402)
+
+    if "question_text" in request.POST:
+        question_obj = Question.objects.get(id=question)
+        questionform = AddQuestionForm(request.POST, instance=question_obj)
+        if questionform.is_valid():
+            questionform.save()
+        return JsonResponse(questionform.errors)
+
+    if "answer_text" in request.POST:
+        answer_obj = Answer.objects.get(id=request.POST['answer_id'])
+        answerform = AddAnswerForm(request.POST, instance=answer_obj)
+        if answerform.is_valid():
+            answerform.save()
+        return JsonResponse(answerform.errors)
+
+    # return JsonResponse({"message": "Could not update"})
+    return HttpResponse(status=402)
 
 
 @login_required
@@ -233,5 +249,3 @@ def answer_delete(request, room, questiongroup, question, answer):
                         return JsonResponse({'message': 'Answer could not be deleted'})
     messages.warning(request, 'You are not allowed to delete this answer!')
     return redirect(room)  # If anything goes wrong, return not allowed!
-
-
