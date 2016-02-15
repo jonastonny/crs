@@ -7,33 +7,25 @@
     <div class="container">
     {{ qform.errors }}
     {{ aform.errors }}
-{#        <form action="" method="post">#}
-            <div class="form-group">
-                <label>Question:</label>
-                {{ qform.question_text|add_class:"form-control update" }}
+        <div class="form-group">
+            <label>Question:</label>
+            {{ qform.question_text|add_class:"form-control update" }}
 
-                <div id="answers">
-                    {% for aform in aforms %}
-                        <div class="form-group has-feedback" id="answer-div">
-                            <label>Answer: {{ aform.data.id }}</label>
+            <div id="answers">
+                {% for aform in aforms %}
+                    <div class="form-group has-feedback" id="answer-div">
+                        <label>Answer: {{ aform.data.id }}</label>
 
-                            {{ aform.answer_text|add_class:"form-control update" }}
-                            <input type="hidden" id="answer_id" value="{{ aform.data.id }}">
-                            <button type="button" class="remove-answer">Remove</button>
-                        </div>
-                    {% endfor %}
-                </div>
-                <input type="hidden" id="update-url" data-url="{% url 'question_update' room questiongroup question %}">
+                        {{ aform.answer_text|add_class:"form-control update" }}
+                        <input type="hidden" id="answer_id" value="{{ aform.data.id }}">
+                        <button type="button" class="remove-answer">Remove</button>
+                    </div>
+                {% endfor %}
             </div>
-            <button type="button" class="btn btn-success" id="add-answer">Add answers</button>
-            <button type="submit" class="btn btn-primary">Submit changes </button>
-{#        </form>#}
-
-
-
-
-    {{ request.POST }}
-
+            <input type="hidden" id="update-url" data-url="{% url 'question_update' room questiongroup question %}">
+        </div>
+        <button type="button" class="btn btn-success btn-block" id="add-answer">Add one more answer</button>
+        <a href="{% url 'question_detail' room questiongroup question %}" class="btn btn-primary btn-block">Submit changes </a>
     </div>
 
     <script src="{% static 'vote/js/question.js' %}"></script>
