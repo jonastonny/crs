@@ -255,3 +255,12 @@ def answer_delete(request, room, questiongroup, question, answer):
                         return JsonResponse({'message': 'Answer could not be deleted'})
     messages.warning(request, 'You are not allowed to delete this answer!')
     return redirect(room)  # If anything goes wrong, return not allowed!
+
+
+@login_required
+def answer_vote(request, room, questiongroup, question, answer):
+    if not request.method == 'POST':
+        return HttpResponse(403)
+    # Lots of stuff
+    # ...
+    return redirect(room)
