@@ -21,8 +21,8 @@
         $('#add-answer').on('click', function(){
             var answerDiv = $('#answer-div').clone();
             $('#answers').append(answerDiv);
-            answerDiv.find('input').val('').attr('value', '').focus();
-            answerDiv.find('input:hidden').val('None');
+            answerDiv.find('input.answer').val('').attr('value', '').focus();
+            answerDiv.find('input:hidden#answer_id').val('None');
             removeAnswer();
             postUpdate();
             clean();
@@ -34,12 +34,14 @@
             clean();
             var _this = $(this);
             if($('.remove-answer').length > 1){
-                $(this).parent().remove();
+                _this.parent().remove();
                 if(~(window.location.pathname).indexOf('edit')){ // we are editing and deleting
-                    $.ajax({
-                       method: 'POST',
-                       url : _this.parent().find('#delete-url').val()
-                    });
+                    if($(_this).parent().find("#answer_id").val() != "None"){
+                        $.ajax({
+                           method: 'POST',
+                           url : _this.parent().find('#delete-url').val()
+                        });
+                    }
                 }
             }
             clean();
@@ -62,21 +64,26 @@
     var postUpdate = function() {
         $('.update').blur(function(data) {
             var _this = $(this);
-            if ($(this).attr('id') == 'id_question_text') {
-                var postdata = {question_text: $(this).val()}
+            if (_this.val()){
+                if ($(this).attr('id') == 'id_question_text') {
+                    var postdata = {
+                        question_text: $(this).val()
+                    }
+                }
+                else {
+                    var postdata = {
+                        answer_text: $(this).val(),
+                        answer_id: $(this).siblings('#answer_id')[0].value
+                    }
+                }
+                $.ajax({
+                    url: $("#update-url").data("url"),
+                    method: 'POST',
+                    data: postdata
+                }).done(function(data) {
+                    _this.parent().find('#answer_id').attr('value', JSON.parse(data)[0].pk);
+                });
             }
-            else {
-                var postdata = {answer_text: $(this).val(), answer_id: $(this).siblings('#answer_id')[0].value}
-            }
-            console.log(postdata);
-            $.ajax({
-                url: $("#update-url").data("url"),
-                method: 'POST',
-                data: postdata
-            }).done(function(data) {
-                _this.parent().find('#answer_id').attr('value', JSON.parse(data)[0].pk);
-                console.log(_this.parent());
-            });
         });
     };
 
