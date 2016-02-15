@@ -7,6 +7,12 @@
     <div class="container">
     {{ qform.errors }}
     {{ aform.errors }}
+        <ol class="breadcrumb">
+            <li><a href="{% url 'room_detail' q.group.room_id %}">{{ q.group.room.title }}</a></li>
+            <li><a href="{% url 'questiongroup_detail' q.group.room_id q.group_id %}">{{ q.group.title }}</a></li>
+            <li><a href="{% url 'question_detail' q.group.room_id q.group_id q.id %}">Question</a></li>
+            <li class="active">Edit question</li>
+        </ol>
 
         <div class="form-group">
             <label>Question:</label>
@@ -16,7 +22,7 @@
             <div id="answers">
                 {% for aform in aforms %}
                     <div class="form-group has-feedback" id="answer-div">
-                        <label>Answer: {{ aform.data.id }}</label>
+                        <label>Answer:</label>
 
                         {{ aform.answer_text|add_class:"form-control answer" }}
                         <input type="hidden" id="answer_id" value="{{ aform.data.id }}">
