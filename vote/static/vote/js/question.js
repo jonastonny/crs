@@ -87,8 +87,8 @@
         });
     };
 
-    postUpdate();
     addAnswer();
+    postUpdate();
     removeAnswer();
     toggleButton();
 

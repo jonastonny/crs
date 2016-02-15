@@ -166,7 +166,7 @@ def question_answer_edit(request, room, questiongroup, question):
     answer_set = question_obj.answer_set.all()
     answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
 
-    return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question})
+    return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question, 'q': question_obj})
 
 
 @login_required
@@ -255,3 +255,12 @@ def answer_delete(request, room, questiongroup, question, answer):
                         return JsonResponse({'message': 'Answer could not be deleted'})
     messages.warning(request, 'You are not allowed to delete this answer!')
     return redirect(room)  # If anything goes wrong, return not allowed!
+
+
+@login_required
+def answer_vote(request, room, questiongroup, question, answer):
+    if not request.method == 'POST':
+        return HttpResponse(403)
+    # Lots of stuff
+    # ...
+    return redirect(room)
