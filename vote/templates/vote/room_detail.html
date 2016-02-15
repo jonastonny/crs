@@ -5,9 +5,10 @@
 {% block content %}
 
     <div class="container">
-        <h5>
-            <a href="{% url 'room_detail' room.id %}">{{ room.title }}</a>
-        </h5>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></li>
+            <li class="active">Groups</li>
+        </ol>
         <h2>{{ room.title }}
             {% if room|room_is_owned_by_user:user %}
                 <small><a href="{% url 'room_edit' room.id %}">Edit</a></small> |

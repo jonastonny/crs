@@ -12,7 +12,6 @@
             {% endfor %}
         {% endif %}
 
-        <p><a href="{% url 'room_create' %}">Create new room</a></p>
         <hr>
         <h3>Rooms I'm subscribed to</h3>
         {% for subscribed in user.subscription_set.all %}
@@ -20,7 +19,10 @@
         {% endfor %}
 
         <hr>
-        <h3>My rooms</h3>
+        <h3>
+            My rooms
+            <small><a href="{% url 'room_create' %}">Create new room</a></small>
+        </h3>
         {% for room in user.room_set.all %}
             <p><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></p>
         {% endfor %}
