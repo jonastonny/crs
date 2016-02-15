@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -181,10 +182,15 @@ def question_answer_update(request, room, questiongroup, question):
         return JsonResponse(questionform.errors)
 
     if "answer_text" in request.POST:
-        answer_obj = Answer.objects.get(id=request.POST['answer_id'])
+        my_id = request.POST['answer_id']
+        if my_id == 'None':
+            my_id = None
+        (answer_obj, created) = Answer.objects.update_or_create(id=my_id, question_id=question)
         answerform = AddAnswerForm(request.POST, instance=answer_obj)
         if answerform.is_valid():
             answerform.save()
+            data = serializers.serialize("json", [answer_obj])
+            return JsonResponse(data, safe=False)
         return JsonResponse(answerform.errors)
 
     # return JsonResponse({"message": "Could not update"})

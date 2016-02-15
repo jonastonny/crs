@@ -1,7 +1,7 @@
 (function(){
 
     var clean = function(){
-        var answers = $('#answers input');
+        var answers = $('#answers input.update');
         answers.each(function(index, answer){
             $(answer).attr('id', 'id_' + index + '-answer_text');
             $(answer).attr('name', index + '-answer_text');
@@ -11,11 +11,13 @@
 
     var addAnswer = function(){
         $('#add-answer').on('click', function(){
-           var answerDiv = $('#answer-div').clone();
-           $('#answers').append(answerDiv);
-           answerDiv.find('input').val('').focus();
-           removeAnswer();
-           clean();
+            var answerDiv = $('#answer-div').clone();
+            $('#answers').append(answerDiv);
+            answerDiv.find('input').val('').attr('value', '').focus();
+            answerDiv.find('input:hidden').val('None');
+            removeAnswer();
+            postUpdate();
+            clean();
         });
     };
 
@@ -42,7 +44,8 @@
     };
 
     var postUpdate = function() {
-        $('.update').on('blur', function(data) {
+        $('.update').blur(function(data) {
+            var _this = $(this);
             $(console.log(data));
             if ($(this).attr('id') == 'id_question_text') {
                 var postdata = {question_text: $(this).val()}
@@ -55,6 +58,10 @@
                 url: $("#update-url").data("url"),
                 method: 'POST',
                 data: postdata
+            }).done(function(data) {
+                    //console.log(data);
+                _this.parent().find('#answer_id').attr('value', JSON.parse(data)[0].pk);
+                console.log(_this.parent());
             });
         });
     };
