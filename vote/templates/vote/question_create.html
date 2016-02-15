@@ -15,7 +15,7 @@
                     {% for aform in aforms %}
                         <div class="form-group has-feedback" id="answer-div">
                             <label>Answer:</label>
-                            {{ aform.answer_text|add_class:"form-control" }}
+                            {{ aform.answer_text|add_class:"form-control answer" }}
                             {% if aform.errors %}
                                 <div class="alert alert-warning" role="alert">{{ aform.errors.answer_text }}</div>
                             {% endif %}
@@ -24,8 +24,8 @@
                     {% endfor %}
                 </div>
             </div>
-            <button type="button" class="btn btn-success" id="add-answer">Add one more answer</button>
-            <button type="submit" class="btn btn-primary">Create Question </button>
+            <button type="button" class="btn btn-success btn-block" id="add-answer">Add one more answer</button>
+            <button type="submit" class="btn btn-primary btn-block">Create Question </button>
         </form>
     </div>
 
