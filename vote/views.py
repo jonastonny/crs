@@ -33,6 +33,13 @@ class QuestionDetailView(generic.DetailView):
     template_name = 'vote/question_detail.html'
     model = Question
 
+    def get(self, request, *args, **kwargs):
+        question_obj = Question.objects.get(pk=kwargs['pk'])
+        if not question_obj.is_open:
+            messages.warning(request, "Question '%s' is not open!" % question_obj.question_text)
+            return redirect(question_obj.group)
+        return render(request, template_name=self.template_name, context={'question': question_obj})
+
 
 class CreateRoomView(generic.CreateView):
     template_name = 'vote/room_create.html'

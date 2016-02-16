@@ -51,7 +51,7 @@
                         <input type="checkbox" class="toggle_question" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}" {% if question.is_open %}checked{% endif %}>
                     </label>
                 {% else %}
-                    {{ questiongroup.is_open }}
+                    {{ question.is_open }}
                     </div>
                 {% endif %}
                 </td>
