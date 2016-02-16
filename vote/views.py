@@ -59,6 +59,8 @@ class CreateQuestionGroupView(generic.CreateView):
 @login_required
 def room_edit(request, room):
     room = Room.objects.get(pk=room)
+    if not room.owner == request.user:
+        return redirect(room)
     context = {'room': room, 'form': VoteRoomForm(instance=room)}
     return render(request, 'vote/room_edit.html', context)
 
@@ -120,9 +122,12 @@ def questiongroup_toggle(request, room, questiongroup):
 
 @login_required
 def questiongroup_edit(request, room, questiongroup):
+    room_obj = Room.objects.get(pk=room)
     questiongroup_obj = QuestionGroup.objects.get(pk=questiongroup)
-    context = {'questiongroup': questiongroup_obj, 'form': VoteQuestiongroupForm(instance=questiongroup_obj)}
-    return render(request, 'vote/questiongroup_edit.html', context)
+    if room_obj.owner == request.user:
+        context = {'questiongroup': questiongroup_obj, 'form': VoteQuestiongroupForm(instance=questiongroup_obj)}
+        return render(request, 'vote/questiongroup_edit.html', context)
+    return redirect(questiongroup_obj)
 
 
 @login_required
@@ -141,6 +146,10 @@ def questiongroup_update(request, room, questiongroup):
 
 def question_answer_create(request, room, questiongroup):
     size = len([k for k in request.POST if 'answer_text' in k])
+    room_obj = Room.objects.get(pk=room)
+    questiongroup_obj = QuestionGroup.objects.get(pk=questiongroup)
+    if not room_obj.owner == request.user:
+        return redirect(questiongroup_obj)
     if request.method == 'POST':
         questionform = AddQuestionForm(request.POST or None, instance=Question())
         answerform = [AddAnswerForm(request.POST or None, prefix=str(x), instance=Answer()) for x in range(0, size)]
