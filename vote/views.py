@@ -9,6 +9,8 @@ from django.views import generic
 from vote.forms import VoteRoomForm, VoteQuestiongroupForm, AddQuestionForm, AddAnswerForm
 from vote.models import Room, QuestionGroup, Question, Subscription, Answer, Response
 
+from vote.utils import get_pusher
+
 
 class RoomDetailView(generic.DetailView):
     template_name = 'vote/room_detail.html'
@@ -259,7 +261,9 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 @login_required
 def question_response(request, room, questiongroup, question):
+    get_pusher().trigger('crs', 'new_response', {'message': 'Aloha!'})
     return render(request, 'vote/question_response.html')
+
 
 def answer_response(request, room, questiongroup, question):
     if not request.method == 'POST':
