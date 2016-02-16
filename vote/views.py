@@ -261,11 +261,13 @@ def answer_delete(request, room, questiongroup, question, answer):
 def answer_response(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse(403)
-    subscription = get_object_or_404(Subscription, room=room, user=request.self.user.id)
+    subscription = get_object_or_404(Subscription, room=room, user=request.user)
     if subscription:
         qg = QuestionGroup.objects.get(pk=questiongroup)
         if qg.is_open:
-            response, created = Response.objects.update_or_create(answer=request.POST['answer'], question=question, user=request.self.user.id)
+            question_obj = Question.objects.get(pk=question)
+            answer_obj = Answer.objects.get(pk=request.POST['answer'])
+            response, created = Response.objects.update_or_create(question=question_obj, user=request.user, answer=answer_obj)
             if not created:
-                response.delete()
+                response.save()
     return redirect(qg)
