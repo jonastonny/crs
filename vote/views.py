@@ -258,9 +258,15 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 
 @login_required
-def answer_vote(request, room, questiongroup, question, answer):
+def answer_response(request, room, questiongroup, question, answer):
     if not request.method == 'POST':
         return HttpResponse(403)
     # Lots of stuff
     # ...
     return redirect(room)
+
+
+
+
+def question_response(request, room, questiongroup, question):
+    return render(request, 'vote/question_response.html')
