@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 
 from vote.forms import VoteRoomForm, VoteQuestiongroupForm, AddQuestionForm, AddAnswerForm
-from vote.models import Room, QuestionGroup, Question, Subscription, Answer
+from vote.models import Room, QuestionGroup, Question, Subscription, Answer, Response
 
 
 class RoomDetailView(generic.DetailView):
@@ -258,15 +258,19 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 
 @login_required
-def answer_response(request, room, questiongroup, question, answer):
-    if not request.method == 'POST':
-        return HttpResponse(403)
-    # Lots of stuff
-    # ...
-    return redirect(room)
-
-
-
-
 def question_response(request, room, questiongroup, question):
     return render(request, 'vote/question_response.html')
+
+def answer_response(request, room, questiongroup, question):
+    if not request.method == 'POST':
+        return HttpResponse(403)
+    subscription = get_object_or_404(Subscription, room=room, user=request.user)
+    if subscription:
+        qg = QuestionGroup.objects.get(pk=questiongroup)
+        if qg.is_open:
+            question_obj = Question.objects.get(pk=question)
+            answer_obj = Answer.objects.get(pk=request.POST['answer'])
+            response, created = Response.objects.update_or_create(question=question_obj, user=request.user, answer=answer_obj)
+            if not created:
+                response.save()
+    return redirect(qg)

@@ -10,7 +10,7 @@
         </ol>
         <h3>{{ question.question_text }}</h3>
         {#{% url 'answer_response' question_group.room_id question_group.id question.id  %}#}
-        <form action="" method="POST">{% csrf_token %}
+        <form action="{% url 'answer_response' question.group.room_id question.group.id question.id %}" method="POST">{% csrf_token %}
             {% for answer in question.answer_set.all %}
                 <div class="radio">
                     <label>
