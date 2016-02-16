@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h1>Pusher Test</h1>
+
+        <div id="response"></div>
+
+      <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.log = function(message) {
+          if (window.console && window.console.log) {
+            window.console.log(message);
+          }
+        };
+
+        var pusher = new Pusher('52b285639f1c7195cfac', {
+          encrypted: true
+        });
+        var channel = pusher.subscribe('crs');
+        channel.bind('new_response', function(data) {
+            $("#response").text(data.message)
+        });
+      </script>
+
+    </div>
+
+{% endblock %}
