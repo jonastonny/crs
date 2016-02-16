@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/(?P<question>[0-9]+)/toggle/$', views.question_toggle, name='question_toggle'),
     # ANSWERS
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/(?P<question>[0-9]+)/answer/(?P<answer>[0-9]+)/delete/$', views.answer_delete, name='answer_delete'),
-    url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/(?P<question>[0-9]+)/answer/(?P<answer>[0-9]+)/vote/$', views.answer_vote, name='answer_vote'),
+    url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/(?P<question>[0-9]+)/answer/(?P<answer>[0-9]+)/vote/$', views.answer_response, name='answer_response'),
 ]
