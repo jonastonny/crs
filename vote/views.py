@@ -63,6 +63,12 @@ class CreateQuestionGroupView(generic.CreateView):
             return super(CreateQuestionGroupView, self).form_valid(form)
         return redirect(room_obj)
 
+    def get(self, request, *args, **kwargs):
+        room_obj = Room.objects.get(pk=kwargs['room'])
+        if not room_obj.owner == request.user:
+            return redirect(room_obj)
+        return render(request, template_name=self.template_name, context={'room': room_obj, 'form': generic.CreateView.get_form_class(self)})
+
 
 @login_required
 def room_edit(request, room):
