@@ -90,7 +90,7 @@ class Response(models.Model):
     user = models.ForeignKey(User)
     question = models.ForeignKey(Question)
     answer = models.ForeignKey(Answer)
-    date_time = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('user', 'question',)

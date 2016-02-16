@@ -273,7 +273,7 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 @login_required
 def question_response(request, room, questiongroup, question):
-    return render(request, 'vote/question_response.html')
+    return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question})
 
 
 def answer_response(request, room, questiongroup, question):
@@ -294,5 +294,6 @@ def answer_response(request, room, questiongroup, question):
                 answer_obj = get_object_or_404(Answer, pk=request.POST['answer'])
                 response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
                 data = serializers.serialize("json", question_obj.response_set.all())
-                get_pusher().trigger('crs', 'new_response', {'data': data})
+                event = "response-%s%s%s" % (room, questiongroup, question)
+                get_pusher().trigger('crs', event, {'data': data})
     return redirect(qg)
