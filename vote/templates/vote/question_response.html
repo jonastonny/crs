@@ -7,6 +7,7 @@
         <h1>Pusher Test</h1>
 
         <div id="response"></div>
+        <input type="hidden" id="event" value="response-{{ room }}{{ questiongroup }}{{ question }}">
 
       <script>
         // Enable pusher logging - don't include this in production
@@ -20,8 +21,13 @@
           encrypted: true
         });
         var channel = pusher.subscribe('crs');
-        channel.bind('new_response', function(data) {
-            $("#response").text(data.message)
+        var event = $("#event");
+        channel.bind(event, function(data) {
+            var result = JSON.parse(data.data)
+            for(var i = 0; i < result.length; i++){
+                console.log(result[i].fields.answer)
+            }
+            $("#response").text(JSON.parse(data.data))
         });
       </script>
 
