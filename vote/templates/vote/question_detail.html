@@ -14,7 +14,12 @@
             {% for answer in question.answer_set.all %}
                 <div class="radio">
                     <label>
-                        <input type="radio" name="answer" value="{{ answer.id }}"> {{ answer }} - number of answers: {{ answer.number_of_responses }}
+                        <input type="radio" name="answer" value="{{ answer.id }}"
+                            {% for response in answer.response_set.all %}
+                                {% if response.user_id == request.user.id %}
+                                    checked
+                                {% endif %}
+                            {% endfor %}> {{ answer }} - number of answers: {{ answer.number_of_responses }}
                     </label>
                 </div>
             {% endfor %}

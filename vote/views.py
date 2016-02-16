@@ -261,13 +261,22 @@ def answer_delete(request, room, questiongroup, question, answer):
 def answer_response(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse(403)
-    subscription = get_object_or_404(Subscription, room=room, user=request.user)
-    if subscription:
-        qg = QuestionGroup.objects.get(pk=questiongroup)
+
+    try:
+        subscription = Subscription.objects.get(room=room, user=request.user)
+    except Subscription.DoesNotExist:
+        subscription = None
+
+    room_obj = Room.objects.get(pk=room)
+    qg = get_object_or_404(QuestionGroup, pk=questiongroup)
+    if subscription or room_obj.owner == request.user:
         if qg.is_open:
-            question_obj = Question.objects.get(pk=question)
-            answer_obj = Answer.objects.get(pk=request.POST['answer'])
-            response, created = Response.objects.update_or_create(question=question_obj, user=request.user, answer=answer_obj)
-            if not created:
-                response.save()
+            question_obj = get_object_or_404(Question, pk=question)
+            if question_obj.is_open:
+                answer_obj = get_object_or_404(Answer, pk=request.POST['answer'])
+                response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
+                # if created:
+                #     return JsonResponse({'message:' 'Response created'}, safe=False)
+                # else:
+                #     return JsonResponse({'message': 'Response updated'}, safe=False)
     return redirect(qg)
