@@ -61,6 +61,7 @@ class CreateQuestionGroupView(generic.CreateView):
         if room_obj.owner_id == self.request.user.id:
             form.instance.room = room_obj
             return super(CreateQuestionGroupView, self).form_valid(form)
+        return redirect(room_obj)
 
 
 @login_required
