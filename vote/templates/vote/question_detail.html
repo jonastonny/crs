@@ -8,10 +8,17 @@
             <li><a href="{% url 'questiongroup_detail' question.group.room_id question.group_id %}">{{ question.group.title }}</a></li>
             <li class="active">Question</li>
         </ol>
-        {{ question.question_text }} - <a href="{% url 'question_edit' question.group.room_id question.group_id question.id %}">Edit</a>
-        {% for answer in question.answer_set.all %}
-            <li>{{ answer }} - number of answers: {{ answer.number_of_responses }}</li>
-        {% endfor %}
-
+        <h3>{{ question.question_text }}</h3>
+        {#{% url 'answer_response' question_group.room_id question_group.id question.id  %}#}
+        <form action="" method="POST">{% csrf_token %}
+            {% for answer in question.answer_set.all %}
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="answer" value="{{ answer.id }}"> {{ answer }} - number of answers: {{ answer.number_of_responses }}
+                    </label>
+                </div>
+            {% endfor %}
+        <button type="submit" class="btn btn-primary btn-block"> Send Answer</button>
+        </form>
     </div>
 {% endblock %}
