@@ -163,13 +163,16 @@ def question_answer_create(request, room, questiongroup):
 
 @login_required
 def question_answer_edit(request, room, questiongroup, question):
+    room_obj = Room.objects.get(pk=room)
     question_obj = Question.objects.get(pk=question, group=questiongroup)
-    questionform = AddQuestionForm(instance=question_obj)
-    answer_set = question_obj.answer_set.all()
-    answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
+    if room_obj.owner == request.user:
+        questionform = AddQuestionForm(instance=question_obj)
+        answer_set = question_obj.answer_set.all()
+        answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
 
-    return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question, 'q': question_obj})
-
+        return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question, 'q': question_obj})
+    else:
+        return redirect(question_obj)
 
 @login_required
 def question_answer_update(request, room, questiongroup, question):
@@ -261,7 +264,6 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 @login_required
 def question_response(request, room, questiongroup, question):
-    get_pusher().trigger('crs', 'new_response', {'message': 'Aloha!'})
     return render(request, 'vote/question_response.html')
 
 
@@ -282,10 +284,6 @@ def answer_response(request, room, questiongroup, question):
             if question_obj.is_open:
                 answer_obj = get_object_or_404(Answer, pk=request.POST['answer'])
                 response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
-                # if created:
-                #     return JsonResponse({'message:' 'Response created'}, safe=False)
-                # else:
-                #     return JsonResponse({'message': 'Response updated'}, safe=False)
                 data = serializers.serialize("json", question_obj.response_set.all())
                 get_pusher().trigger('crs', 'new_response', {'data': data})
     return redirect(qg)
