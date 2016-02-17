@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.core.serializers import json
+from django.db.models import Count
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -261,6 +263,7 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 @login_required
 def question_response(request, room, questiongroup, question):
+    question = Question.objects.get(pk=question)
     return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question})
 
 
@@ -275,17 +278,21 @@ def answer_response(request, room, questiongroup, question):
 
     room_obj = Room.objects.get(pk=room)
     qg = get_object_or_404(QuestionGroup, pk=questiongroup)
-    if subscription or room_obj.owner == request.user:
-        if qg.is_open:
-            question_obj = get_object_or_404(Question, pk=question)
-            if question_obj.is_open:
-                answer_obj = get_object_or_404(Answer, pk=request.POST['answer'])
-                response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
-                # if created:
-                #     return JsonResponse({'message:' 'Response created'}, safe=False)
-                # else:
-                #     return JsonResponse({'message': 'Response updated'}, safe=False)
-                data = serializers.serialize("json", question_obj.response_set.all())
-                event = "response-%s%s%s" % (room, questiongroup, question)
-                get_pusher().trigger('crs', event, {'data': data})
+    if subscription or room_obj.owner == request.user and qg.is_open:
+        question_obj = get_object_or_404(Question, pk=question)
+        if question_obj.is_open:
+            answer_obj = get_object_or_404(Answer, pk=request.POST['answer'])
+            response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
+            # if created:
+            #     return JsonResponse({'message:' 'Response created'}, safe=False)
+            # else:
+            #     return JsonResponse({'message': 'Response updated'}, safe=False)
+            result = question_obj.response_set.all().values('answer_id').annotate(answer_count=Count('answer_id'))
+            # result = Answer.objects.filter(question_id=question).annotate(answer_count=Count('response'))
+            myData = {}
+            for v in result:
+                myData[v['answer_id']] = v
+            # data = serializers.serialize("json", myData)
+            event = "response-%s%s%s" % (room, questiongroup, question)
+            get_pusher().trigger('crs', event, {'data': myData})
     return redirect(qg)
