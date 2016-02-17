@@ -315,9 +315,13 @@ def answer_response(request, room, questiongroup, question):
             #     return JsonResponse({'message': 'Response updated'}, safe=False)
             result = question_obj.response_set.all().values('answer_id').annotate(answer_count=Count('answer_id'))
             # result = Answer.objects.filter(question_id=question).annotate(answer_count=Count('response'))
-            myData = {}
-            for v in result:
-                myData[v['answer_id']] = v
+            answer_set = question_obj.answer_set.all()
+            myData = {
+                'labels': [a.answer_text for a in answer_set],
+                'series': [a.number_of_responses() for a in answer_set]
+            }
+            # for v in result:
+            #     myData[v['answer_id']] = v
             # data = serializers.serialize("json", myData)
             event = "response-%s%s%s" % (room, questiongroup, question)
             get_pusher().trigger('crs', event, {'data': myData})
