@@ -2,6 +2,9 @@
 
 {% block content %}
 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
     <div class="container">
 
         <h1>{{ question.question_text }}</h1>
@@ -13,6 +16,38 @@
             {% endfor %}
         </div>
         <input type="hidden" id="event" value="response-{{ room }}{{ questiongroup }}{{ question.id }}">
+
+    <div class="ct-chart ct-perfect-fourth"></div>
+
+    <script>
+        var data = {
+          labels: ['Bananas', 'Apples', 'Grapes'],
+          series: [20, 15, 40]
+        };
+
+        var options = {
+          labelInterpolationFnc: function(value) {
+            return value[0]
+          }
+        };
+
+        var responsiveOptions = [
+          ['screen and (min-width: 640px)', {
+            chartPadding: 30,
+            labelOffset: 100,
+            labelDirection: 'explode',
+            labelInterpolationFnc: function(value) {
+              return value;
+            }
+          }],
+          ['screen and (min-width: 1024px)', {
+            labelOffset: 80,
+            chartPadding: 20
+          }]
+        ];
+
+        new Chartist.Pie('.ct-chart', data, options, responsiveOptions);
+    </script>
 
       <script>
         // Enable pusher logging - don't include this in production
