@@ -6,9 +6,13 @@
 
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/vue/1.0.16/vue.min.js"></script>
 
         <h1>{{ question.question_text }}</h1>
 
+        <div class="col-md-4 col-md-offset-2">
+            <div class="ct-chart ct-perfect-fourth" id="chart"></div>
+        </div>
 
         <div id="response">
             {% for answer in question.answer_set.all %}
@@ -18,6 +22,14 @@
         <input type="hidden" id="event" value="response-{{ room }}{{ questiongroup }}{{ question.id }}">
 
       <script>
+
+        var chart = new Chartist.Bar('.ct-chart', {
+              labels: {{ data.labels|safe }},
+              series: {{ data.series }}
+            }, {
+              distributeSeries: true
+        });
+
         // Enable pusher logging - don't include this in production
         Pusher.log = function(message) {
           if (window.console && window.console.log) {
@@ -30,16 +42,9 @@
         var channel = pusher.subscribe('crs');
         var event = $("#event:hidden").val();
         channel.bind(event, function(data) {
-
-            divs = $(".answer-box");
-            divs.each(function(index, value){
-                var answerId = parseInt($(value).attr('id'));
-                var count = data.data[answerId] ? data.data[answerId].answer_count : 0;
-                $(value).text(count);
-            });
+            chart.update(data.data);
         });
       </script>
-
     </div>
 
 {% endblock %}

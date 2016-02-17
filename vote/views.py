@@ -6,6 +6,7 @@ from django.db.models import Count
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.html import strip_tags
 from django.views import generic
 
 from vote.forms import VoteRoomForm, VoteQuestiongroupForm, AddQuestionForm, AddAnswerForm
@@ -290,7 +291,13 @@ def answer_delete(request, room, questiongroup, question, answer):
 @login_required
 def question_response(request, room, questiongroup, question):
     question = Question.objects.get(pk=question)
-    return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question})
+    answer_set = question.answer_set.all()
+    myData = {
+        'labels': [strip_tags(a.answer_text) for a in answer_set],
+        'series': [a.number_of_responses() for a in answer_set]
+    }
+    # myData = serializers.serialize("json", myData)
+    return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
 
 
 def answer_response(request, room, questiongroup, question):
