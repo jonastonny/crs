@@ -35,6 +35,13 @@ class QuestionDetailView(generic.DetailView):
     template_name = 'vote/question_detail.html'
     model = Question
 
+    def get(self, request, *args, **kwargs):
+        question_obj = Question.objects.get(pk=kwargs['pk'])
+        if not question_obj.is_open:
+            messages.warning(request, "Question '%s' is not open!" % question_obj.question_text)
+            return redirect(question_obj.group)
+        return render(request, template_name=self.template_name, context={'question': question_obj})
+
 
 class CreateRoomView(generic.CreateView):
     template_name = 'vote/room_create.html'
@@ -56,11 +63,20 @@ class CreateQuestionGroupView(generic.CreateView):
         if room_obj.owner_id == self.request.user.id:
             form.instance.room = room_obj
             return super(CreateQuestionGroupView, self).form_valid(form)
+        return redirect(room_obj)
+
+    def get(self, request, *args, **kwargs):
+        room_obj = Room.objects.get(pk=kwargs['room'])
+        if not room_obj.owner == request.user:
+            return redirect(room_obj)
+        return render(request, template_name=self.template_name, context={'room': room_obj, 'form': generic.CreateView.get_form_class(self)})
 
 
 @login_required
 def room_edit(request, room):
     room = Room.objects.get(pk=room)
+    if not room.owner == request.user:
+        return redirect(room)
     context = {'room': room, 'form': VoteRoomForm(instance=room)}
     return render(request, 'vote/room_edit.html', context)
 
@@ -122,9 +138,12 @@ def questiongroup_toggle(request, room, questiongroup):
 
 @login_required
 def questiongroup_edit(request, room, questiongroup):
+    room_obj = Room.objects.get(pk=room)
     questiongroup_obj = QuestionGroup.objects.get(pk=questiongroup)
-    context = {'questiongroup': questiongroup_obj, 'form': VoteQuestiongroupForm(instance=questiongroup_obj)}
-    return render(request, 'vote/questiongroup_edit.html', context)
+    if room_obj.owner == request.user:
+        context = {'questiongroup': questiongroup_obj, 'form': VoteQuestiongroupForm(instance=questiongroup_obj)}
+        return render(request, 'vote/questiongroup_edit.html', context)
+    return redirect(questiongroup_obj)
 
 
 @login_required
@@ -143,6 +162,10 @@ def questiongroup_update(request, room, questiongroup):
 
 def question_answer_create(request, room, questiongroup):
     size = len([k for k in request.POST if 'answer_text' in k])
+    room_obj = Room.objects.get(pk=room)
+    questiongroup_obj = QuestionGroup.objects.get(pk=questiongroup)
+    if not room_obj.owner == request.user:
+        return redirect(questiongroup_obj)
     if request.method == 'POST':
         questionform = AddQuestionForm(request.POST or None, instance=Question())
         answerform = [AddAnswerForm(request.POST or None, prefix=str(x), instance=Answer()) for x in range(0, size)]
@@ -165,13 +188,16 @@ def question_answer_create(request, room, questiongroup):
 
 @login_required
 def question_answer_edit(request, room, questiongroup, question):
+    room_obj = Room.objects.get(pk=room)
     question_obj = Question.objects.get(pk=question, group=questiongroup)
-    questionform = AddQuestionForm(instance=question_obj)
-    answer_set = question_obj.answer_set.all()
-    answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
+    if room_obj.owner == request.user:
+        questionform = AddQuestionForm(instance=question_obj)
+        answer_set = question_obj.answer_set.all()
+        answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
 
-    return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question, 'q': question_obj})
-
+        return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question, 'q': question_obj})
+    else:
+        return redirect(question_obj)
 
 @login_required
 def question_answer_update(request, room, questiongroup, question):
