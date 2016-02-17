@@ -7,9 +7,6 @@
 
     <div class="container">
 
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-
         <h1>{{ question.question_text }}</h1>
 
 
@@ -22,14 +19,6 @@
 
     <div class="ct-chart ct-perfect-fourth"></div>
 
-    <script>
-        new Chartist.Bar('.ct-chart', {
-          labels: [{% for answer in question.answer_set.all %}{{ answer }}, {% endfor %}],
-          series: [{% for answer in question.answer_set.all %}{{ answer.number_of_responses }}, {% endfor %}]
-        }, {
-          distributeSeries: true
-        });
-    </script>
 
       <script>
         // Enable pusher logging - don't include this in production
@@ -51,7 +40,17 @@
                 var count = data.data[answerId] ? data.data[answerId].answer_count : 0;
                 $(value).text(count);
             });
+            chartfunction(data.data['labels'], data.data['series']);
         });
+
+        function chartfunction (l, s) {
+            new Chartist.Bar('.ct-chart', {
+                labels: l,
+                series: s
+            }, {
+                distributeSeries: true
+            });
+        }
       </script>
 
     </div>
