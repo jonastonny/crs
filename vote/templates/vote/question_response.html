@@ -8,17 +8,10 @@
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
     <script src="http://cdn.jsdelivr.net/vue/1.0.16/vue.min.js"></script>
 
-        <h1>{{ question.question_text }}</h1>
+        <h1>{{ question.question_text }} <small>Total Responses: {{ question.total_responses }}</small></h1>
 
-        <div class="col-md-4 col-md-offset-2">
-            <div class="ct-chart ct-perfect-fourth" id="chart"></div>
-        </div>
+        <div class="ct-chart ct-perfect-fourth" id="chart"></div>
 
-        <div id="response">
-            {% for answer in question.answer_set.all %}
-               <div>{{ answer }}<span class="answer-box" id="{{ answer.id }}">{{ answer.number_of_responses }}</span></div>
-            {% endfor %}
-        </div>
         <input type="hidden" id="event" value="response-{{ room }}{{ questiongroup }}{{ question.id }}">
 
       <script>
@@ -27,8 +20,13 @@
               labels: {{ data.labels|safe }},
               series: {{ data.series }}
             }, {
+              low: 0,
+              axisY: {
+                    onlyInteger: true
+              },
               distributeSeries: true
-        });
+            }
+        );
 
         // Enable pusher logging - don't include this in production
         Pusher.log = function(message) {
