@@ -9,7 +9,7 @@
 
         <div id="response">
             {% for answer in question.answer_set.all %}
-               <div> {{ answer }}<span id="{{ answer.id }}"></span></div>
+               <div> {{ answer }}<span id="{{ answer.id }}">{{ answer.number_of_responses }}</span></div>
             {% endfor %}
         </div>
         <input type="hidden" id="event" value="response-{{ room }}{{ questiongroup }}{{ question.id }}">
@@ -30,8 +30,7 @@
             for(var key in data.data){
                 var div = "#"+key;
                 var count = data.data[key].answer_count;
-                var out =  "|".repeat(count);
-                $(div).text(out);
+                $(div).text(count);
             }
 
             console.log(data);
