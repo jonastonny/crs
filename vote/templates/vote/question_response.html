@@ -12,7 +12,7 @@
 
         <div id="response">
             {% for answer in question.answer_set.all %}
-               <div> {{ answer }}<span id="{{ answer.id }}">{{ answer.number_of_responses }}</span></div>
+               <div>{{ answer }}<span class="answer-box" id="{{ answer.id }}">{{ answer.number_of_responses }}</span></div>
             {% endfor %}
         </div>
         <input type="hidden" id="event" value="response-{{ room }}{{ questiongroup }}{{ question.id }}">
@@ -62,15 +62,13 @@
         var channel = pusher.subscribe('crs');
         var event = $("#event:hidden").val();
         channel.bind(event, function(data) {
-            for(var key in data.data){
-                var div = "#"+key;
-                var count = data.data[key].answer_count;
-                $(div).text(count);
-            }
 
-            console.log(data);
-
-            $("#response").text();
+            divs = $(".answer-box");
+            divs.each(function(index, value){
+                var answerId = parseInt($(value).attr('id'));
+                var count = data.data[answerId] ? data.data[answerId].answer_count : 0;
+                $(value).text(count);
+            });
         });
       </script>
 
