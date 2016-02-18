@@ -5,3 +5,4 @@ django-widget-tweaks
 django-mailgun
 django-super-inlines
 pusher
+bleach

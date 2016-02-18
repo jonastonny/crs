@@ -8,7 +8,7 @@
             <li><a href="{% url 'questiongroup_detail' question.group.room_id question.group_id %}">{{ question.group.title }}</a></li>
             <li class="active">Question</li>
         </ol>
-        <h3>{{ question.question_text }}
+        <h3><pre>{{ question.question_text|linebreaks }}</pre>
             {% if question.group.room.owner_id == request.user.id %}
                 <small> <a href="{% url 'question_edit' question.group.room_id question.group_id question.id %}">Edit</a></small>
             {% endif %}
@@ -23,11 +23,13 @@
                                 {% if response.user_id == request.user.id %}
                                     checked
                                 {% endif %}
-                            {% endfor %}> {{ answer }} - number of answers: {{ answer.number_of_responses }}
+                            {% endfor %}>
+                            {{ answer|safe }}
                     </label>
                 </div>
             {% endfor %}
         <button type="submit" class="btn btn-primary btn-block"> Send Answer</button>
         </form>
     </div>
+
 {% endblock %}
