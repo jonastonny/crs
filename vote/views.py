@@ -176,7 +176,9 @@ def question_answer_create(request, room, questiongroup):
         questionform.instance.group_id = questiongroup
 
         if questionform.is_valid() and all([af.is_valid() for af in answerform]):
-            new_question = questionform.save()
+            new_question = questionform.save(commit=False)
+            new_question.question_text = bleach.clean(new_question.question_text, tags=['pre'])
+            new_question.save()
             for af in answerform:
                 new_answer = af.save(commit=False)
                 # af.cleaned_data['answer_text'] = bleach.clean(af.cleaned_data['answer_text'])
