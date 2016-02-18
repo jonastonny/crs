@@ -18,6 +18,7 @@ class VoteQuestiongroupForm(forms.ModelForm):
 
 
 class AddQuestionForm(forms.ModelForm):
+    # question_text = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Question
@@ -25,6 +26,7 @@ class AddQuestionForm(forms.ModelForm):
 
 
 class AddAnswerForm(forms.ModelForm):
+    # answer_text = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Answer

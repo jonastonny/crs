@@ -51,7 +51,7 @@ class QuestionGroup(models.Model):
 
 class Question(models.Model):
     group = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=1000)
+    question_text = models.TextField()
     date_time = models.DateTimeField(auto_now_add=True)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     is_open = models.BooleanField(default=False)
@@ -76,7 +76,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    answer_text = models.CharField(max_length=500)
+    answer_text = models.TextField()
     date_time = models.DateTimeField(auto_now_add=True)
 
     def number_of_responses(self):
