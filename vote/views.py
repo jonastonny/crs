@@ -1,3 +1,4 @@
+import bleach
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -175,9 +176,12 @@ def question_answer_create(request, room, questiongroup):
         questionform.instance.group_id = questiongroup
 
         if questionform.is_valid() and all([af.is_valid() for af in answerform]):
-            new_question = questionform.save()
+            new_question = questionform.save(commit=False)
+            new_question.question_text = bleach.clean(new_question.question_text, tags=['pre'])
+            new_question.save()
             for af in answerform:
                 new_answer = af.save(commit=False)
+                new_answer.answer_text = bleach.clean(new_answer.answer_text, tags=['pre'])
                 new_answer.question = new_question
                 new_answer.save()
             return redirect(new_question)

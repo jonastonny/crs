@@ -4,6 +4,9 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script>tinymce.init({ selector:'textarea' });</script>
+
     <div class="container">
     {{ qform.errors }}
     {{ aform.errors }}

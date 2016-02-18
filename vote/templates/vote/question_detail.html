@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+{% load staticfiles %}
 
     <div class="container">
         <ol class="breadcrumb">
@@ -23,11 +24,16 @@
                                 {% if response.user_id == request.user.id %}
                                     checked
                                 {% endif %}
-                            {% endfor %}> {{ answer }} - number of answers: {{ answer.number_of_responses }}
+                            {% endfor %}>
+                            {{ answer|safe }} - number of answers: {{ answer.number_of_responses }}
                     </label>
                 </div>
             {% endfor %}
-        <button type="submit" class="btn btn-primary btn-block"> Send Answer</button>
+        <button type="submit" class="btn btn-primary btn-block">Send Answer</button>
         </form>
     </div>
+
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script src="{% static 'vote/js/pretty.js' %}"></script>
+
 {% endblock %}
