@@ -1,7 +1,7 @@
 (function(){
 
     var clean = function(){
-        var answers = $('#answers input.answer');
+        var answers = $('#answers textarea.answer');
         answers.each(function(index, answer){
             $(answer).attr('id', 'id_' + index + '-answer_text');
             $(answer).attr('name', index + '-answer_text');
@@ -21,7 +21,7 @@
         $('#add-answer').on('click', function(){
             var answerDiv = $('#answer-div').clone();
             $('#answers').append(answerDiv);
-            answerDiv.find('input.answer').val('').attr('value', '').focus();
+            answerDiv.find('textarea.answer').val('').attr('value', '').focus();
             answerDiv.find('input:hidden#answer_id').val('None');
             removeAnswer();
             postUpdate();

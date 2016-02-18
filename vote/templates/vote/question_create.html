@@ -15,7 +15,7 @@
                     {% for aform in aforms %}
                         <div class="form-group has-feedback" id="answer-div">
                             <label>Answer:</label>
-                            {{ aform.answer_text|add_class:"form-control answer" }}
+                            {{ aform.answer_text|add_class:"answer form-control" }}
                             {% if aform.errors %}
                                 <div class="alert alert-warning" role="alert">{{ aform.errors.answer_text }}</div>
                             {% endif %}
@@ -29,5 +29,6 @@
         </form>
     </div>
 
+    <script>var editor = new MediumEditor('.editable');</script>
     <script src="{% static 'vote/js/question.js' %}"></script>
 {% endblock %}

@@ -1,3 +1,4 @@
+import bleach
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -176,6 +177,8 @@ def question_answer_create(request, room, questiongroup):
             new_question = questionform.save()
             for af in answerform:
                 new_answer = af.save(commit=False)
+                # af.cleaned_data['answer_text'] = bleach.clean(af.cleaned_data['answer_text'])
+                new_answer.answer_text = bleach.clean(new_answer.answer_text, tags=['code', 'pre'], attributes={'*': ['class']})
                 new_answer.question = new_question
                 new_answer.save()
             return redirect(new_question)
@@ -216,10 +219,10 @@ def question_answer_update(request, room, questiongroup, question):
         my_id = request.POST['answer_id']
         if my_id == 'None':
             my_id = None
-        (answer_obj, created) = Answer.objects.update_or_create(id=my_id, question_id=question)
-        answerform = AddAnswerForm(request.POST, instance=answer_obj)
+
+        answerform = AddAnswerForm(request.POST)
         if answerform.is_valid():
-            answerform.save()
+            (answer_obj, created) = Answer.objects.update_or_create(id=my_id, question_id=question, defaults={'answer_text': bleach.clean(request.POST['answer_text'])})
             data = serializers.serialize("json", [answer_obj])
             return JsonResponse(data, safe=False)
         return JsonResponse(answerform.errors)
@@ -279,10 +282,8 @@ def answer_delete(request, room, questiongroup, question, answer):
                 if answer.question == question:
                     (val, d) = answer.delete()
                     if val > 0:
-                        # messages.info(request, 'Answer deleted.')
                         return JsonResponse({'message': 'Answer Deleted'})
                     else:
-                        # messages.warning(request, 'Could not delete question.')
                         return JsonResponse({'message': 'Answer could not be deleted'})
     messages.warning(request, 'You are not allowed to delete this answer!')
     return redirect(room)  # If anything goes wrong, return not allowed!
@@ -296,7 +297,6 @@ def question_response(request, room, questiongroup, question):
         'labels': [strip_tags(a.answer_text) for a in answer_set],
         'series': [a.number_of_responses() for a in answer_set]
     }
-    # myData = serializers.serialize("json", myData)
     return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
 
 
@@ -316,20 +316,11 @@ def answer_response(request, room, questiongroup, question):
         if question_obj.is_open:
             answer_obj = get_object_or_404(Answer, pk=request.POST['answer'])
             response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
-            # if created:
-            #     return JsonResponse({'message:' 'Response created'}, safe=False)
-            # else:
-            #     return JsonResponse({'message': 'Response updated'}, safe=False)
-            result = question_obj.response_set.all().values('answer_id').annotate(answer_count=Count('answer_id'))
-            # result = Answer.objects.filter(question_id=question).annotate(answer_count=Count('response'))
             answer_set = question_obj.answer_set.all()
             myData = {
                 'labels': [a.answer_text for a in answer_set],
                 'series': [a.number_of_responses() for a in answer_set]
             }
-            # for v in result:
-            #     myData[v['answer_id']] = v
-            # data = serializers.serialize("json", myData)
             event = "response-%s%s%s" % (room, questiongroup, question)
             get_pusher().trigger('crs', event, {'data': myData})
     return redirect(qg)
