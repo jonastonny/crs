@@ -59,11 +59,11 @@
 
                 {% if questiongroup|questiongroup_is_owned_by_user:user %}
                 <td>
-                    <div class="checkbox">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="toggle_question" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}" {% if question.is_open %}checked{% endif %}>
-                        </label>
-                    </div>
+                    {% if question.is_open %}
+                        <button class="toggle_open toggle_question btn btn-success btn-xs" id="toggle" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Question is open</button>
+                    {% else %}
+                        <button class="toggle_closed toggle_question btn btn-warning btn-xs" id="toggle" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Question is closed</button>
+                    {% endif %}
                 </td>
                 <td>
                     <form action="{% url 'question_delete' questiongroup.room_id questiongroup.id question.id %}" method="post">{% csrf_token %}
@@ -90,6 +90,7 @@
 
     </div>
 
+    <script src="{% static 'vote/js/openclosequestion.js' %}"></script>
     <script src="{% static 'vote/js/subscribe.js' %}"></script>
 
 {% endblock %}
