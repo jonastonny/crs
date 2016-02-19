@@ -39,10 +39,12 @@ class QuestionDetailView(generic.DetailView):
 
     def get(self, request, *args, **kwargs):
         question_obj = Question.objects.get(pk=kwargs['pk'])
-        if not question_obj.is_open:
+        room_obj = Room.objects.get(pk=question_obj.group.room.id)
+        if room_obj.owner == request.user or question_obj.is_open:
+            return render(request, template_name=self.template_name, context={'question': question_obj})
+        else:
             messages.warning(request, "Question '%s' is not open!" % question_obj.question_text)
             return redirect(question_obj.group)
-        return render(request, template_name=self.template_name, context={'question': question_obj})
 
 
 class CreateRoomView(generic.CreateView):
@@ -174,7 +176,9 @@ def question_answer_create(request, room, questiongroup):
         questionform.instance.group_id = questiongroup
 
         if questionform.is_valid() and all([af.is_valid() for af in answerform]):
-            new_question = questionform.save()
+            new_question = questionform.save(commit=False)
+            new_question.question_text = bleach.clean(new_question.question_text, tags=['pre'])
+            new_question.save()
             for af in answerform:
                 new_answer = af.save(commit=False)
                 # af.cleaned_data['answer_text'] = bleach.clean(af.cleaned_data['answer_text'])

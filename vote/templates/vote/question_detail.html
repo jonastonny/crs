@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+{% load staticfiles %}
 
     <div class="container">
         <ol class="breadcrumb">
@@ -25,11 +26,15 @@
                                 {% endif %}
                             {% endfor %}>
                             {{ answer|safe }}
+
                     </label>
                 </div>
             {% endfor %}
-        <button type="submit" class="btn btn-primary btn-block"> Send Answer</button>
+        <button type="submit" class="btn btn-primary btn-block">Send Answer</button>
         </form>
     </div>
+
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script src="{% static 'vote/js/pretty.js' %}"></script>
 
 {% endblock %}

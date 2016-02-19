@@ -9,13 +9,15 @@
         <form action="{% url 'question_create' room questiongroup %}" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>New question:</label>
-                {{ qform.question_text|add_class:"form-control" }}
+                {{ qform.question_text|add_class:"form-control"|attr:"rows:1" }}
 
                 <div id="answers">
                     {% for aform in aforms %}
                         <div class="form-group has-feedback" id="answer-div">
                             <label>Answer:</label>
-                            {{ aform.answer_text|add_class:"answer form-control" }}
+
+                            {{ aform.answer_text|add_class:"form-control answer"|attr:"rows:1" }}
+
                             {% if aform.errors %}
                                 <div class="alert alert-warning" role="alert">{{ aform.errors.answer_text }}</div>
                             {% endif %}
