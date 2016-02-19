@@ -164,6 +164,19 @@ def questiongroup_update(request, room, questiongroup):
     return render(request, 'vote/questiongroup_edit.html', {'questiongroup': questiongroup, 'form': form})
 
 
+def questiongroup_delete(request, room, questiongroup):
+    if request.method == 'POST':
+        questiongroup = QuestionGroup.objects.get(pk=questiongroup)
+        if request.user == questiongroup.room.owner:
+            questiongroup.delete()
+            return redirect(questiongroup.room)
+    else:
+        return HttpResponse(status=403)
+
+    messages.error(request, "You are not allowed to delete this group!")
+    return redirect('dashboard')
+
+
 def question_answer_create(request, room, questiongroup):
     size = len([k for k in request.POST if 'answer_text' in k])
     room_obj = Room.objects.get(pk=room)
@@ -328,3 +341,4 @@ def answer_response(request, room, questiongroup, question):
             event = "response-%s%s%s" % (room, questiongroup, question)
             get_pusher().trigger('crs', event, {'data': myData})
     return redirect(qg)
+

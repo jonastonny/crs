@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/edit/$', views.questiongroup_edit, name='questiongroup_edit'),
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/update/$', views.questiongroup_update, name='questiongroup_update'),
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/toggle/$', views.questiongroup_toggle, name='questiongroup_toggle'),
+    url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/delete/$', views.questiongroup_delete, name='questiongroup_delete'),
     # QUESTION
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/create/$', views.question_answer_create, name='question_create'),
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/(?P<pk>[0-9]+)/$', views.QuestionDetailView.as_view(), name='question_detail'),
