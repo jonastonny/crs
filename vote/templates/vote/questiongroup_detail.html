@@ -41,6 +41,11 @@
             <th>Responses</th>
             <th>Date published</th>
             <th>Open for answers</th>
+            {% if questiongroup|questiongroup_is_owned_by_user:user %}
+                <th>
+                    Remove Question
+                </th>
+            {% endif %}
         </tr>
 
         {% for question in questiongroup.question_set.all %}
@@ -52,17 +57,28 @@
                 <td>{{ question.total_responses }}</td>
                 <td>{{ question.pub_date }}</td>
 
-                <td>
                 {% if questiongroup|questiongroup_is_owned_by_user:user %}
+                <td>
                     <div class="checkbox">
-                    <label class="checkbox-inline">
-                        <input type="checkbox" class="toggle_question" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}" {% if question.is_open %}checked{% endif %}>
-                    </label>
-                {% else %}
-                    {{ question.is_open }}
+                        <label class="checkbox-inline">
+                            <input type="checkbox" class="toggle_question" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}" {% if question.is_open %}checked{% endif %}>
+                        </label>
                     </div>
-                {% endif %}
                 </td>
+                <td>
+                    <form action="{% url 'question_delete' questiongroup.room_id questiongroup.id question.id %}" method="post">{% csrf_token %}
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                        </div>
+                    </form>
+                </td>
+                {% else %}
+                <td>
+                    <div class="checkbox">
+                        {{ question.is_open }}
+                    </div>
+                </td>
+                {% endif %}
             </tr>
         {% endfor %}
 
