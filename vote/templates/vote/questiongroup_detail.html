@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load vote_extras %}
+{% load humanize %}
 {% load staticfiles %}
 
 {% block content %}
@@ -40,6 +41,7 @@
             <th>Created answers</th>
             <th>Responses</th>
             <th>Date published</th>
+            <th>Changed</th>
             <th>Open for answers</th>
             {% if questiongroup|questiongroup_is_owned_by_user:user %}
                 <th>
@@ -56,6 +58,7 @@
                 <td>{{ question.number_of_possible_answers }}</td>
                 <td>{{ question.total_responses }}</td>
                 <td>{{ question.pub_date }}</td>
+                <td>{{ question.updated_at|naturaltime }}</td>
 
                 {% if questiongroup|questiongroup_is_owned_by_user:user %}
                 <td>
