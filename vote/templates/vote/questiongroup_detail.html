@@ -60,9 +60,9 @@
                 {% if questiongroup|questiongroup_is_owned_by_user:user %}
                 <td>
                     {% if question.is_open %}
-                        <button class="toggle_open toggle_question btn btn-success btn-xs" id="toggle" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Question is open</button>
+                        <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Question is open</button>
                     {% else %}
-                        <button class="toggle_closed toggle_question btn btn-warning btn-xs" id="toggle" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Question is closed</button>
+                        <button class="toggleQuestion toggle_question btn btn-warning btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Question is closed</button>
                     {% endif %}
                 </td>
                 <td>
@@ -90,7 +90,7 @@
 
     </div>
 
-    <script src="{% static 'vote/js/openclosequestion.js' %}"></script>
+    <script src="{% static 'vote/js/toggle.js' %}"></script>
     <script src="{% static 'vote/js/subscribe.js' %}"></script>
 
 {% endblock %}

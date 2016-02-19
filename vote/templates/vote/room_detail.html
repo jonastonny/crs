@@ -41,16 +41,16 @@
 
                     </tr>
                     {% for questiongroup in room.questiongroup_set.all %}
-                        <tr class="{{ questiongroup|group_disabled_class }}">
+                        <tr>
                             <td><a href="{% url 'questiongroup_detail' room.id questiongroup.id %}">{{ questiongroup.title }}</a></td>
                             <td>{{ questiongroup.date_time }}</td>
                             <td>
                             {% if room|room_is_owned_by_user:user %}
-                                <div class="checkbox">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" class="toggle_question" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}" {% if questiongroup.is_open %}checked{% endif %}>
-                                </label>
-                                </div>
+                                {% if questiongroup.is_open %}
+                                    <button class="toggleQuestionGroup toggle_question btn btn-success btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Questiongroup is open</button>
+                                {% else %}
+                                    <button class="toggleQuestionGroup toggle_question btn btn-warning btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Questiongroup is closed</button>
+                                {% endif %}
                             {% else %}
                                 {{ questiongroup.is_open }}
                             {% endif %}
@@ -66,6 +66,7 @@
 
     </div>
 
+    <script src="{% static 'vote/js/toggle.js' %}"></script>
     <script src="{% static 'vote/js/subscribe.js' %}"></script>
 
 
