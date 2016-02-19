@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% load vote_extras %}
+{% load humanize %}
 {% load staticfiles %}
 
 {% block content %}
@@ -23,13 +24,7 @@
             {% endif %}
         </h2>
 
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {% include 'main/messages.html' %}
 
         {% if room.has_questiongroups %}
                 <div class="table-responsive">
@@ -37,24 +32,37 @@
                     <tr>
                         <th>Question group</th>
                         <th>Date created</th>
+                        <th>Changed</th>
                         <th>Is open for voting</th>
+                        {% if room|room_is_owned_by_user:user %}
+                            <th>Delete Group</th>
+                        {% endif %}
 
                     </tr>
                     {% for questiongroup in room.questiongroup_set.all %}
                         <tr>
                             <td><a href="{% url 'questiongroup_detail' room.id questiongroup.id %}">{{ questiongroup.title }}</a></td>
                             <td>{{ questiongroup.date_time }}</td>
-                            <td>
+                            <td>{{ questiongroup.updated_at|naturaltime }}</td>
                             {% if room|room_is_owned_by_user:user %}
-                                {% if questiongroup.is_open %}
-                                    <button class="toggleQuestionGroup toggle_question btn btn-success btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Questiongroup is open</button>
-                                {% else %}
-                                    <button class="toggleQuestionGroup toggle_question btn btn-warning btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Questiongroup is closed</button>
-                                {% endif %}
+                                <td>
+                                    {% if questiongroup.is_open %}
+                                        <button class="toggleQuestionGroup toggle_question btn btn-success btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Questiongroup is open</button>
+                                    {% else %}
+                                        <button class="toggleQuestionGroup toggle_question btn btn-warning btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Questiongroup is closed</button>
+                                    {% endif %}
+
+                                </td>
+                                <td>
+                                    <form action="{% url 'questiongroup_delete' room.id questiongroup.id %}" method="POST">{% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                                    </form>
+                                </td>
                             {% else %}
-                                {{ questiongroup.is_open }}
+                                <td>
+                                    {{ questiongroup.is_open }}
+                                </td>
                             {% endif %}
-                            </td>
                         </tr>
                     {% endfor %}
                     </table>

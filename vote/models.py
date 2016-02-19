@@ -9,6 +9,7 @@ class Room(models.Model):
     owner = models.ForeignKey(User)
     title = models.CharField(max_length=200)
     date_time = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('owner', 'title')
@@ -33,7 +34,7 @@ class QuestionGroup(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     date_time = models.DateTimeField(auto_now_add=True)
-    # pub_date = models.DateTimeField('date published')
+    updated_at = models.DateTimeField(auto_now=True)
     is_open = models.BooleanField(default=False)
 
     def has_questions(self):
@@ -53,6 +54,7 @@ class Question(models.Model):
     group = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
     question_text = models.TextField()
     date_time = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     is_open = models.BooleanField(default=False)
 
@@ -78,6 +80,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer_text = models.TextField()
     date_time = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def number_of_responses(self):
         return self.response_set.count()
@@ -90,7 +93,7 @@ class Response(models.Model):
     user = models.ForeignKey(User)
     question = models.ForeignKey(Question)
     answer = models.ForeignKey(Answer)
-    date_time = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('user', 'question',)

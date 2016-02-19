@@ -8,12 +8,11 @@
 
     <div class="container" height="100%">
 
-        <h1>{{ question.question_text }}</h1>
+        <h1>{{ question.question_text }}<small>Total Responses: {{ question.total_responses }}</small></h1>
 
 {#        <div class="col-md-4 col-md-offset-2">#}
             <div class="ct-chart" id="chart"></div>
 {#        </div>#}
-        <h1>{{ question.question_text }} <small>Total Responses: {{ question.total_responses }}</small></h1>
 
         <div class="ct-chart ct-perfect-fourth" id="chart"></div>
 

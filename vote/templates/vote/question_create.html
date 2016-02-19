@@ -5,12 +5,14 @@
 {% load staticfiles %}
 
     <div class="container">
-    {{ qform.errors }}
         <form action="{% url 'question_create' room questiongroup %}" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>New question:</label>
                 {{ qform.question_text|add_class:"form-control"|attr:"rows:1" }}
 
+                {% if qform.errors %}
+                    <div class="alert alert-warning" role="alert">{{ qform.errors.question_text }}</div>
+                {% endif %}
                 <div id="answers">
                     {% for aform in aforms %}
                         <div class="form-group has-feedback" id="answer-div">

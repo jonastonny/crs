@@ -13,7 +13,7 @@
                     else{ $(_this).text("Subscribe") }
                 }
                 else{
-                    $(_parent).remove();
+                    $(_parent).parent().remove();
                 }
             })
         });
