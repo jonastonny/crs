@@ -9,9 +9,9 @@
             <li><a href="{% url 'questiongroup_detail' question.group.room_id question.group_id %}">{{ question.group.title }}</a></li>
             <li class="active">Question</li>
         </ol>
-        <h3><pre>{{ question.question_text|linebreaks }}</pre>
+        <h3>{{ question.question_text|linebreaks }}
             {% if question.group.room.owner_id == request.user.id %}
-                <small> <a href="{% url 'question_edit' question.group.room_id question.group_id question.id %}">Edit</a></small>
+                <small><a href="{% url 'question_edit' question.group.room_id question.group_id question.id %}">Edit</a></small>
             {% endif %}
         </h3>
         {#{% url 'answer_response' question_group.room_id question_group.id question.id  %}#}
