@@ -20,12 +20,13 @@
             {% else %}
                 <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' question.group.room.id question.group.id question.id %}">Question is open</button>
             {% endif %}
+            <p>
+                <a href="{% url 'question_edit' question.group.room_id question.group_id question.id %}">Edit this question</a>
+            </p>
         {% endif %}
 
-        <h3>{{ question.question_text|linebreaks }}
-            {% if question.group.room.owner_id == request.user.id %}
-                <small><a href="{% url 'question_edit' question.group.room_id question.group_id question.id %}">Edit</a></small>
-            {% endif %}
+        <h3>
+            {{ question.question_text|safe }}
         </h3>
         {#{% url 'answer_response' question_group.room_id question_group.id question.id  %}#}
         <form action="{% url 'answer_response' question.group.room_id question.group.id question.id %}" method="POST">{% csrf_token %}
