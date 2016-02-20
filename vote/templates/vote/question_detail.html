@@ -10,12 +10,16 @@
             <li><a href="{% url 'questiongroup_detail' question.group.room_id question.group_id %}">{{ question.group.title }}</a></li>
             <li class="active">Question</li>
         </ol>
-
-        {% if not question.questiongroup.is_open %}
-            <div class="alert alert-info alert-dismissible" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <strong>Notice!</strong> This room is owned by you, but is not yet open for other users!
-            </div>
+        {% if question.group.room.owner == user %}
+            {% if not question.is_open %}
+                <div class="alert alert-info alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <strong>Notice!</strong> This question is owned by you, but is not yet open for other users!
+                </div>
+                <button class="toggleQuestion toggle_question btn btn-warning btn-xs" data-url="{% url 'question_toggle' question.group.room.id question.group.id question.id %}">Question is closed</button>
+            {% else %}
+                <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' question.group.room.id question.group.id question.id %}">Question is open</button>
+            {% endif %}
         {% endif %}
 
         <h3>{{ question.question_text|linebreaks }}
@@ -54,6 +58,8 @@
     </div>
 
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script src="{% static 'vote/js/toggle.js' %}"></script>
+    <script src="{% static 'vote/js/subscribe.js' %}"></script>
     <script src="{% static 'vote/js/pretty.js' %}"></script>
 
 {% endblock %}
