@@ -1,6 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+{% load staticfiles %}
 
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
@@ -8,7 +9,15 @@
 
     <div class="container" height="100%">
 
-        <h1>{{ question.question_text }}<small>Total Responses: {{ question.total_responses }}</small></h1>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseQuestion" aria-expanded="false" aria-controls="collapseQuestion">
+                Show question
+            </button>
+        <h1>
+            <div class="collapse" id="collapseQuestion">
+                {{ question.question_text|safe }}
+            </div>
+            <small>Total Responses: {{ question.total_responses }}</small>
+        </h1>
 
         <div class="ct-chart" id="chart"></div>
 
@@ -50,5 +59,8 @@
         });
       </script>
     </div>
+
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script src="{% static 'vote/js/pretty.js' %}"></script>
 
 {% endblock %}
