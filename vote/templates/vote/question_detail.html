@@ -31,7 +31,17 @@
                     </label>
                 </div>
             {% endfor %}
-        <button type="submit" class="btn btn-primary btn-block">Send Answer</button>
+
+        {% if question.group.room.owner_id == user.id %}
+            <button type="submit" class="btn btn-primary btn-block">Send Answer</button>
+            <a href="{% url 'question_response' question.group.room_id question.group_id question.id %}" class="btn btn-success btn-block">See live responses</a>
+        {% else %}
+            {% if question.is_open %}
+                <button type="submit" class="btn btn-primary btn-block">Send Answer</button>
+            {% else %}
+                <a href="{% url 'question_response' question.group.room_id question.group_id question.id %}" class="btn btn-success btn-block">See live responses</a>
+            {% endif %}
+        {% endif %}
         </form>
     </div>
 
