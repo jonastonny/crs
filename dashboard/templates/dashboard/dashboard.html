@@ -25,6 +25,7 @@
                     <tr>
                         <th>Title</th>
                         <th>Subscribed On</th>
+                        <th>Subscribers</th>
                         <th>Changed</th>
                         <th>Unsubscribe</th>
                     </tr>
@@ -36,6 +37,9 @@
                             </td>
                             <td>
                                 {{ subscribed.date_time }}
+                            </td>
+                            <td>
+                                {{ subscribed.room.total_subscribers }}
                             </td>
                             <td>
                                 {{ subscribed.room.updated_at|naturaltime }}
@@ -67,6 +71,9 @@
                             Created On
                         </th>
                         <th>
+                            Subscribers
+                        </th>
+                        <th>
                             Changed
                         </th>
                     </tr>
@@ -79,6 +86,9 @@
                                 {{ room.date_time }}
                             </td>
                             <td>
+                                {{ room.total_subscribers }}
+                            </td>
+                            <td>
                                 {{ room.updated_at|naturaltime }}
                             </td>
                         </tr>
@@ -87,7 +97,7 @@
             </div>
 
         {% endif %}
-    
+
     </div>
 
     <script src="{% static 'vote/js/subscribe.js' %}"></script>

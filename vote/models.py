@@ -26,6 +26,9 @@ class Room(models.Model):
                 return True
         return False
 
+    def total_subscribers(self):
+        return len(self.subscription_set.all())
+
     def __str__(self):
         return self.title
 
