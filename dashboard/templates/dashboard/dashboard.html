@@ -16,64 +16,78 @@
         <hr>
         <h3>Rooms I'm subscribed to</h3>
 
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <tr>
-                    <th>Title</th>
-                    <th>Subscribed On</th>
-                    <th>Changed</th>
-                    <th>Unsubscribe</th>
-                </tr>
+        {% if not user.subscription_set.all %}
+            You are not subscribed to any rooms! Search for rooms in the search field.
+        {% else %}
 
-                {% for subscribed in user.subscription_set.all %}
+            <div class="table-responsive">
+                <table class="table table-hover">
                     <tr>
-                        <td>
-                            <a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a>
-                        </td>
-                        <td>
-                            {{ subscribed.date_time }}
-                        </td>
-                        <td>
-                            {{ subscribed.room.updated_at|naturaltime }}
-                        </td>
-                        <td>
-                            <button class="btn btn-primary btn-xs toggle_subscription" data-url="{% url 'room_subscribe' subscribed.room.id %}">Unsubscribe</button>
-                        </td>
+                        <th>Title</th>
+                        <th>Subscribed On</th>
+                        <th>Changed</th>
+                        <th>Unsubscribe</th>
                     </tr>
-                {% endfor %}
-            </table>
-        </div>
+
+                    {% for subscribed in user.subscription_set.all %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a>
+                            </td>
+                            <td>
+                                {{ subscribed.date_time }}
+                            </td>
+                            <td>
+                                {{ subscribed.room.updated_at|naturaltime }}
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-xs toggle_subscription" data-url="{% url 'room_subscribe' subscribed.room.id %}">Unsubscribe</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        {% endif %}
 
         <hr>
         <h3>My rooms | <small><a href="{% url 'room_create' %}">Create new room</a></small></h3>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <tr>
-                    <th>
-                        Title
-                    </th>
-                    <th>
-                        Created On
-                    </th>
-                    <th>
-                        Changed
-                    </th>
-                </tr>
-                {% for room in user.room_set.all %}
+
+        {% if not user.room_set.all %}
+            You don't own any rooms.
+        {% else %}
+
+            <div class="table-responsive">
+                <table class="table table-hover">
                     <tr>
-                        <td>
-                            <a href="{% url 'room_detail' room.id %}">{{ room.title }}</a>
-                        </td>
-                        <td>
-                            {{ room.date_time }}
-                        </td>
-                        <td>
-                            {{ room.updated_at|naturaltime }}
-                        </td>
+                        <th>
+                            Title
+                        </th>
+                        <th>
+                            Created On
+                        </th>
+                        <th>
+                            Changed
+                        </th>
                     </tr>
-                {% endfor %}
-            </table>
-        </div>
+                    {% for room in user.room_set.all %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'room_detail' room.id %}">{{ room.title }}</a>
+                            </td>
+                            <td>
+                                {{ room.date_time }}
+                            </td>
+                            <td>
+                                {{ room.updated_at|naturaltime }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        {% endif %}
+    
     </div>
 
     <script src="{% static 'vote/js/subscribe.js' %}"></script>
