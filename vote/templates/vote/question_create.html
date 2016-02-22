@@ -5,6 +5,13 @@
 {% load staticfiles %}
 
     <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'room_detail' qg.room.id %}">{{ qg.room.title }}</a></li>
+            <li><a href="{% url 'questiongroup_detail' qg.room.id qg.id %}">{{ qg.title }}</a></li>
+            <li>Create question</li>
+        </ol>
         <form action="{% url 'question_create' room questiongroup %}" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>New question:</label>

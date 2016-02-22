@@ -4,6 +4,12 @@
 {% load widget_tweaks %}
 
     <div class="container">
+    
+        <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></li>
+            <li>Create group of questions</li>
+        </ol>
         <form action="" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>Name of new group of questions:</label>

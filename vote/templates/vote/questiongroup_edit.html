@@ -5,6 +5,7 @@
 
     <div class="container">
         <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'room_detail' questiongroup.room_id %}">{{ questiongroup.room.title }}</a></li>
             <li><a href="{% url 'questiongroup_detail' questiongroup.room_id questiongroup.id %}">{{ questiongroup.title }}</a></li>
             <li class="active">Edit group</li>

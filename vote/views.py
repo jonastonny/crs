@@ -204,7 +204,7 @@ def question_answer_create(request, room, questiongroup):
         questionform = AddQuestionForm()
         answerform = [AddAnswerForm(prefix=str(0), instance=Answer())]
 
-    return render(request, 'vote/question_create.html', {'qform': questionform, 'aforms': answerform, 'room': room, 'questiongroup': questiongroup})
+    return render(request, 'vote/question_create.html', {'qform': questionform, 'aforms': answerform, 'room': room, 'questiongroup': questiongroup, 'qg': questiongroup_obj})
 
 
 @login_required
