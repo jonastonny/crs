@@ -13,4 +13,4 @@ def register(request):
             return redirect("/dashboard/")
     else:
         form = forms.CustomUserCreationForm()
-    return render(request, "authentication/register.html", {'form': form, })
+    return render(request, "authentication/register.html", {'form': form})
