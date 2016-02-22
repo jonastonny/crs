@@ -27,7 +27,7 @@
                         {{ aform.answer_text|add_class:"form-control answer update" }}
                         <input type="hidden" id="answer_id" value="{{ aform.data.id }}">
                         <input type="hidden" id="delete-url" value="{% url 'answer_delete' room questiongroup question aform.data.id %}">
-                        <button type="button" class="remove-answer">Remove</button>
+                        <button type="button" class="remove-answer btn btn-primary btn-block">Remove</button>
                     </div>
                 {% endfor %}
             </div>
