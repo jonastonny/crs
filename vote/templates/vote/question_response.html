@@ -9,6 +9,15 @@
 
     <div class="container" height="100%">
 
+        <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'room_detail' question.group.room_id %}">{{ question.group.room.title }}</a></li>
+            <li><a href="{% url 'questiongroup_detail' question.group.room_id question.group_id %}">{{ question.group.title }}</a></li>
+            <li><a href="{% url 'question_detail' question.group.room_id question.group_id question.id %}">{{ question.question_text|truncatechars:20 }}</a></li>
+
+            <li class="active">See responses</li>
+        </ol>
+
             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseQuestion" aria-expanded="false" aria-controls="collapseQuestion">
                 Show question
             </button>
