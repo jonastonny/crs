@@ -30,4 +30,4 @@ class AddAnswerForm(forms.ModelForm):
 
     class Meta:
         model = Answer
-        fields = ['answer_text']
+        fields = ['answer_text', 'correct']

@@ -4,6 +4,10 @@
 {% load widget_tweaks %}
 
     <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li>Create room</li>
+        </ol>
         <form action="" method="post">{% csrf_token %}
             <div class="form-group">
                 <label>Name of new room:</label>

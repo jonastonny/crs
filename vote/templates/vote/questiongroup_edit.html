@@ -5,6 +5,7 @@
 
     <div class="container">
         <ol class="breadcrumb">
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'room_detail' questiongroup.room_id %}">{{ questiongroup.room.title }}</a></li>
             <li><a href="{% url 'questiongroup_detail' questiongroup.room_id questiongroup.id %}">{{ questiongroup.title }}</a></li>
             <li class="active">Edit group</li>
@@ -16,8 +17,15 @@
                 {{ form.title|add_class:'form-control' }}
 {#                <input type="text" class="form-control" name="title" value="{{ room.title  }}" id="id_title">#}
             </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-block" value="Update" />
+            </div>
+        </form>
 
-        <input type="submit" class="btn btn-primary" value="Update" />
+        <form action="{% url 'questiongroup_delete' questiongroup.room_id questiongroup.id %}" method="POST">{% csrf_token %}
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger btn-block">Delete</button>
+            </div>
         </form>
 
 {#        {% for question in room.question_set.all %}#}

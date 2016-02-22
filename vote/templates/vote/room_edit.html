@@ -28,7 +28,7 @@
 
         </form>
         <form action="{% url 'room_delete' room.id %}" method="POST">{% csrf_token %}
-            <button class="btn btn-warning btn-block">Delete Room</button>
+            <button class="btn btn-danger btn-block">Delete Room</button>
         </form>
 
         {% for question in room.question_set.all %}

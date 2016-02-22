@@ -53,7 +53,7 @@
         {% for question in questiongroup.question_set.all %}
             <tr>
                 <td>
-                    <a href="{% url 'question_detail' questiongroup.room_id questiongroup.id question.id %}">{{ question.question_text }}</a>
+                    <a href="{% url 'question_detail' questiongroup.room_id questiongroup.id question.id %}">{{ question.question_text|truncatechars:40 }}</a>
                 </td>
                 <td>{{ question.number_of_possible_answers }}</td>
                 <td>{{ question.total_responses }}</td>

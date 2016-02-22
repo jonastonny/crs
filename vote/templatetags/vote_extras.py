@@ -25,3 +25,9 @@ def user_is_subscribed_to_room(user, room):
 def group_disabled_class(questiongroup):
     if not questiongroup.is_open:
         return 'danger'
+
+
+@register.filter
+def answer_correct(answer):
+    if answer.correct:
+        return 'checked'

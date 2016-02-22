@@ -84,6 +84,7 @@ class Answer(models.Model):
     answer_text = models.TextField()
     date_time = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    correct = models.BooleanField(default=False)
 
     def number_of_responses(self):
         return self.response_set.count()
