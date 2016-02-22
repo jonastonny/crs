@@ -214,7 +214,7 @@ def question_answer_edit(request, room, questiongroup, question):
     if room_obj.owner == request.user:
         questionform = AddQuestionForm(instance=question_obj)
         answer_set = question_obj.answer_set.all()
-        answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
+        answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text, 'correct': obj.correct}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
 
         return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question, 'q': question_obj})
     else:

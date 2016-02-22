@@ -24,7 +24,7 @@
                 {% for aform in aforms %}
                     <div class="form-group has-feedback" id="answer-div">
                         <label>Answer:</label>
-
+                        {{ aform.correct|add_class:"correct" }} - mark this answer as correct?
                         {{ aform.answer_text|add_class:"form-control answer update" }}
                         <input type="hidden" id="answer_id" value="{{ aform.data.id }}">
                         <input type="hidden" id="delete-url" value="{% url 'answer_delete' room questiongroup question aform.data.id %}">

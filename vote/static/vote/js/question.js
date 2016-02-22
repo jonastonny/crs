@@ -1,10 +1,16 @@
 (function(){
 
     var clean = function(){
+        var corrects = $('#answers input.correct');
+        corrects.each(function (index, correct) {
+            $(correct).attr('id', 'id_' + index + '-correct');
+            $(correct).attr('name', index + '-correct');
+        });
         var answers = $('#answers textarea.answer');
         answers.each(function(index, answer){
             $(answer).attr('id', 'id_' + index + '-answer_text');
             $(answer).attr('name', index + '-answer_text');
+
 
             if(~(window.location.pathname).indexOf('edit')){
                 var answerId = $(answer).parent().find('#answer_id').val();
