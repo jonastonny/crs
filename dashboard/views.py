@@ -18,9 +18,10 @@ def dashboard(request):
 
 def searchRoom(request):
     query = request.GET.get('q', '')
+    per_page = request.GET.get('per_page', '6')
     page = request.GET.get('page')
     rooms_list = Room.objects.filter(title__icontains=query)
-    paginator = Paginator(rooms_list, 2)
+    paginator = Paginator(rooms_list, per_page)
 
     try:
         rooms = paginator.page(page)
@@ -28,4 +29,4 @@ def searchRoom(request):
         rooms = paginator.page(1)
     except EmptyPage:
         rooms = paginator.page(paginator.num_pages)
-    return render(request, template_name='dashboard/search_detail.html', context={'rooms': rooms, 'query': query})
+    return render(request, template_name='dashboard/search_detail.html', context={'rooms': rooms, 'query': query, 'per_page': per_page})

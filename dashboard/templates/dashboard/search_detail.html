@@ -1,27 +1,40 @@
 {% extends 'main/base.html' %}
 
+{% load humanize %}
 {% block content %}
 
     <div class="container">
 
-        <h1>Search for <em>{{ query }}</em></h1>
+        <div class="col-lg-6 col-lg-offset-3">
+            <h1>Search for <em>{% if query %}{{ query }}{% else %}anything{% endif %}</em></h1>
 
-        {% for room in rooms %}
-            <p><em>{{ room.owner.username }}</em>: <a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></p>
-        {% endfor %}
+            {% for room in rooms %}
 
-        <div class="pagination">
-            <ul class="pager">
-                {% if rooms.has_previous  %}
-                    <li><a href="?q={{ query }}&page={{ rooms.previous_page_number }}"><span aria-hidden="true">&larr;</span> Previous</a></li>
-                {% endif %}
-                <span class="current">
-                    {{ rooms.number }} of {{ rooms.paginator.num_pages }}
-                </span>
-                {% if rooms.has_next %}
-                   <li><a href="?q={{ query }}&page={{ rooms.next_page_number }}">Next <span aria-hidden="true">&rarr;</span></a></li>
-                {% endif %}
-            </ul>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title"><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a> by {{ room.owner.username }}</h3>
+                  </div>
+                  <div class="panel-body">
+                      <p>Room was created {{ room.date_time|naturalday }} and updated {{ room.updated_at|naturaltime  }}</p>
+                      <p>It has <strong>{{ room.questiongroup_set.count }}</strong> groups available.</p>
+                  </div>
+                </div>
+
+            {% endfor %}
+
+            <div class="my-pagination">
+                <ul class="pager">
+                    {% if rooms.has_previous  %}
+                        <li><a href="?q={{ query }}&page={{ rooms.previous_page_number }}{% if per_page %}&per_page={{ per_page }}{% endif %}"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                    {% endif %}
+                    <span class="current">
+                        {{ rooms.number }} of {{ rooms.paginator.num_pages }}
+                    </span>
+                    {% if rooms.has_next %}
+                       <li><a href="?q={{ query }}&page={{ rooms.next_page_number }}{% if per_page %}&per_page={{ per_page }}{% endif %}">Next <span aria-hidden="true">&rarr;</span></a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
 
     </div>
