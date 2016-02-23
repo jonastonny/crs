@@ -40,7 +40,11 @@ class QuestionDetailView(generic.DetailView):
     def get(self, request, *args, **kwargs):
         question_obj = Question.objects.get(pk=kwargs['pk'])
         room_obj = Room.objects.get(pk=question_obj.group.room.id)
+        answer_set = question_obj.answer_set.all()
         if room_obj.owner == request.user or question_obj.is_open:
+            return render(request, template_name=self.template_name, context={'question': question_obj})
+                                # Get's the users who have responded to a question (by getting all answers, all responses and all users)
+        elif request.user.id in [item for sublist in [[response.user_id for response in answer.response_set.all()] for answer in answer_set] for item in sublist]:
             return render(request, template_name=self.template_name, context={'question': question_obj})
         else:
             messages.warning(request, "Question '%s' is not open!" % question_obj.question_text[0:50])
