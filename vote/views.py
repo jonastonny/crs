@@ -43,7 +43,7 @@ class QuestionDetailView(generic.DetailView):
         if room_obj.owner == request.user or question_obj.is_open:
             return render(request, template_name=self.template_name, context={'question': question_obj})
         else:
-            messages.warning(request, "Question '%s' is not open!" % (question_obj.question_text[0:40]+' ...'))
+            messages.warning(request, "Question '%s' is not open!" % question_obj.question_text[0:50])
             return redirect(question_obj.group)
 
 
