@@ -2,10 +2,10 @@
     var toggleQuestion = function() {
         $(".toggleQuestion").click(function () {
             $(this).toggleClass("btn-warning btn-success");
-            if($(this).text() == "Question is open") {
-                $(this).text("Question is closed");
+            if($(this).text() == "Close Question") {
+                $(this).text("Open Question");
             } else {
-                $(this).text("Question is open");
+                $(this).text("Close Question");
             };
         });
     };
@@ -13,10 +13,10 @@
     var toggleQuestionGroup = function() {
         $(".toggleQuestionGroup").click(function () {
             $(this).toggleClass("btn-warning btn-success");
-            if($(this).text() == "Questiongroup is open") {
-                $(this).text("Questiongroup is closed");
+            if($(this).text() == "Close Group") {
+                $(this).text("Open Group");
             } else {
-                $(this).text("Questiongroup is open");
+                $(this).text("Close Group");
             };
         });
     };

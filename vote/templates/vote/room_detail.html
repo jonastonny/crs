@@ -47,9 +47,9 @@
                             {% if room|room_is_owned_by_user:user %}
                                 <td>
                                     {% if questiongroup.is_open %}
-                                        <button class="toggleQuestionGroup toggle_question btn btn-success btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Questiongroup is open</button>
+                                        <button class="toggleQuestionGroup toggle_question btn btn-warning btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Close Group</button>
                                     {% else %}
-                                        <button class="toggleQuestionGroup toggle_question btn btn-warning btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Questiongroup is closed</button>
+                                        <button class="toggleQuestionGroup toggle_question btn btn-success btn-xs" id="toggleQuestionGroup" data-url="{% url 'questiongroup_toggle' room.id questiongroup.id %}">Open Group</button>
                                     {% endif %}
 
                                 </td>

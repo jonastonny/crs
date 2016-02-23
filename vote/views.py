@@ -220,6 +220,7 @@ def question_answer_edit(request, room, questiongroup, question):
     else:
         return redirect(question_obj)
 
+
 @login_required
 def question_answer_update(request, room, questiongroup, question):
     if not request.method == 'POST':
@@ -335,6 +336,7 @@ def answer_response(request, room, questiongroup, question):
             response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
             answer_set = question_obj.answer_set.all()
             myData = {
+                'total_responses': question_obj.total_responses(),
                 'labels': [a.answer_text for a in answer_set],
                 'series': [a.number_of_responses() for a in answer_set]
             }
