@@ -55,7 +55,7 @@
             {% if question.is_open %}
                 <button type="submit" class="btn btn-primary btn-block">Send Answer</button>
             {% else %}
-                <a href="{% url 'question_response' question.group.room_id question.group_id question.id %}" class="btn btn-success btn-block">See live responses</a>
+                <a href="{% url 'question_response' question.group.room_id question.group_id question.id %}" class="btn btn-success btn-block">See responses</a>
             {% endif %}
         {% endif %}
         </form>
