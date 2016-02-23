@@ -12,7 +12,7 @@ from django.views import generic
 
 from vote.forms import VoteRoomForm, VoteQuestiongroupForm, AddQuestionForm, AddAnswerForm
 from vote.models import Room, QuestionGroup, Question, Subscription, Answer, Response
-from vote.templatetags.vote_extras import user_is_subscribed_to_room
+from vote.templatetags.vote_extras import user_is_subscribed_to_room, room_is_owned_by_user
 
 from vote.utils import get_pusher
 
@@ -31,6 +31,8 @@ class QuestionGroupDetailView(generic.DetailView):
         if not qg.is_open and request.user != qg.room.owner:
             messages.warning(request, "Group '%s' is not open!" % qg.title)
             return redirect(qg.room)
+        elif room_is_owned_by_user(qg.room, request.user):
+            return render(request, template_name=self.template_name, context={'questiongroup': qg})
         elif not user_is_subscribed_to_room(request.user, qg.room):
             messages.warning(request, "Subscribe to see groups!")
             return redirect(qg.room)
@@ -45,10 +47,12 @@ class QuestionDetailView(generic.DetailView):
         question_obj = Question.objects.get(pk=kwargs['pk'])
         room_obj = Room.objects.get(pk=question_obj.group.room.id)
         answer_set = question_obj.answer_set.all()
-        if not user_is_subscribed_to_room(request.user, room_obj):
+        if room_obj.owner == request.user:
+            return render(request, template_name=self.template_name, context={'question': question_obj})
+        elif not user_is_subscribed_to_room(request.user, room_obj):
             messages.warning(request, "Subscripe to the room to see questions!")
             return redirect(room_obj)
-        if room_obj.owner == request.user or question_obj.is_open:
+        elif question_obj.is_open:
             return render(request, template_name=self.template_name, context={'question': question_obj})
                                 # Get's the users who have responded to a question (by getting all answers, all responses and all users)
         elif request.user.id in [item for sublist in [[response.user_id for response in answer.response_set.all()] for answer in answer_set] for item in sublist]:
@@ -321,15 +325,20 @@ def answer_delete(request, room, questiongroup, question, answer):
 def question_response(request, room, questiongroup, question):
     question = Question.objects.get(pk=question)
     room_obj = Room.objects.get(pk=room)
-    if not user_is_subscribed_to_room(request.user, room_obj):
-        messages.warning(request, "Subscribe to room in order to see responses!")
-        return redirect(room_obj)
     answer_set = question.answer_set.all()
     myData = {
         'labels': [strip_tags(a.answer_text) for a in answer_set],
         'series': [a.number_of_responses() for a in answer_set]
     }
-    return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
+    if room_is_owned_by_user(room_obj, request.user):
+        return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
+    if user_is_subscribed_to_room(request.user, room_obj):
+        return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
+    else:
+        messages.warning(request, "Subscribe to room in order to see responses!")
+        return redirect(room_obj)
+
+    return redirect(room_obj)   # Default, return to room
 
 
 @login_required
