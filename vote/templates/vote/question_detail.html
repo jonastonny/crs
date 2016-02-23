@@ -34,6 +34,9 @@
                 <div class="radio">
                     <label>
                         <input type="radio" name="answer" value="{{ answer.id }}"
+                            {% if not question.is_open %}
+                                disabled
+                            {% endif %}
                             {% for response in answer.response_set.all %}
                                 {% if response.user_id == request.user.id %}
                                     checked
