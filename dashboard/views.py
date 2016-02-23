@@ -16,7 +16,7 @@ def dashboard(request):
         return redirect('/authentication/login')
 
 
-def searchRoom(request):
+def search_room(request):
     query = request.GET.get('q', '')
     per_page = request.GET.get('per_page', '6')
     page = request.GET.get('page')

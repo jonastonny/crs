@@ -67,9 +67,9 @@
                 {% if questiongroup|questiongroup_is_owned_by_user:user %}
                 <td>
                     {% if question.is_open %}
-                        <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Question is open</button>
+                        <button class="toggleQuestion toggle_question btn btn-warning btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Close Question</button>
                     {% else %}
-                        <button class="toggleQuestion toggle_question btn btn-warning btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Question is closed</button>
+                        <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Open Question</button>
                     {% endif %}
                 </td>
                 <td>

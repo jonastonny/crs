@@ -25,48 +25,19 @@
             <div class="collapse" id="collapseQuestion">
                 {{ question.question_text|safe }}
             </div>
-            <small>Total Responses: {{ question.total_responses }}</small>
+            <small>Total Responses: <span id="response-count">{{ question.total_responses }}</span></small>
         </h1>
 
-        <div class="ct-chart" id="chart"></div>
+        <div class="ct-chart" id="chart">
+            <!-- CHART -->
+        </div>
 
         <input type="hidden" id="event" value="response-{{ room }}{{ questiongroup }}{{ question.id }}">
+        <input type="hidden" id="labels" value="{{ data.labels|safe }}">
+        <input type="hidden" id="series" value="{{ data.series|safe }}">
 
+        <script src="{% static 'vote/js/push.js' %}"></script>
 
-      <script>
-        var chart = new Chartist.Bar('.ct-chart', {
-              labels: {{ data.labels|safe }},
-              series: {{ data.series }}
-            }, {
-              low: 0,
-              axisY: {
-                    onlyInteger: true
-              },
-              distributeSeries: true
-            }
-        );
-
-        // Enable pusher logging - don't include this in production
-        Pusher.log = function(message) {
-          if (window.console && window.console.log) {
-            window.console.log(message);
-          }
-        };
-        var pusher = new Pusher('52b285639f1c7195cfac', {
-          encrypted: true
-        });
-        var channel = pusher.subscribe('crs');
-        var event = $("#event:hidden").val();
-        channel.bind(event, function(data) {
-            divs = $(".answer-box");
-            divs.each(function(index, value){
-                var answerId = parseInt($(value).attr('id'));
-                var count = data.data[answerId] ? data.data[answerId].answer_count : 0;
-                $(value).text(count);
-            });
-            chart.update(data.data);
-        });
-      </script>
     </div>
 
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
