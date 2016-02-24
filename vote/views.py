@@ -333,11 +333,15 @@ def question_response(request, room, questiongroup, question):
     }
     if room_is_owned_by_user(room_obj, request.user):
         return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
-    if user_is_subscribed_to_room(request.user, room_obj):
+    if not question.is_open and user_is_subscribed_to_room(request.user, room_obj):
         return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
     else:
-        messages.warning(request, "Subscribe to room in order to see responses!")
-        return redirect(room_obj)
+        if not user_is_subscribed_to_room(request.user, room_obj):
+            messages.warning(request, "Subscribe to room in order to see responses!")
+            return redirect(room_obj)
+        elif question.is_open:
+            messages.warning(request, "Hey, wait till question closes!")
+            return redirect(question)
 
     return redirect(room_obj)   # Default, return to room
 

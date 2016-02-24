@@ -10,6 +10,9 @@
             <li><a href="{% url 'questiongroup_detail' question.group.room_id question.group_id %}">{{ question.group.title }}</a></li>
             <li class="active">Question</li>
         </ol>
+
+        {% include 'main/messages.html' %}
+
         {% if question.group.room.owner == user %}
             {% if not question.is_open %}
                 <div class="alert alert-info alert-dismissible" role="alert">
