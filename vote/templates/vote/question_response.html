@@ -5,9 +5,8 @@
 
     <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
     <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-    <script src="http://cdn.jsdelivr.net/vue/1.0.16/vue.min.js"></script>
 
-    <div class="container" height="100%">
+    <div class="container fill">
 
         <ol class="breadcrumb">
             <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
@@ -28,7 +27,7 @@
             <small>Total Responses: <span id="response-count">{{ question.total_responses }}</span></small>
         </h1>
 
-        <div class="ct-chart" id="chart">
+        <div class="ct-chart ct-golden-section my-chart" id="chart">
             <!-- CHART -->
         </div>
 

@@ -17,7 +17,7 @@
 
         <div class="form-group">
             <label>Question:</label>
-            {{ qform.question_text|add_class:"form-control update" }}
+            {{ qform.question_text|add_class:"form-control update"|attr:"rows:2" }}
         </div>
 
             <div id="answers">
@@ -25,7 +25,7 @@
                     <div class="form-group has-feedback" id="answer-div">
                         <label>Answer:</label>
                         {{ aform.correct|add_class:"correct" }} - mark this answer as correct?
-                        {{ aform.answer_text|add_class:"form-control answer update" }}
+                        {{ aform.answer_text|add_class:"form-control answer update"|attr:"rows:2" }}
                         <input type="hidden" id="answer_id" value="{{ aform.data.id }}">
                         <input type="hidden" id="delete-url" value="{% url 'answer_delete' room questiongroup question aform.data.id %}">
                         <button type="button" class="remove-answer btn btn-primary btn-block">Remove</button>

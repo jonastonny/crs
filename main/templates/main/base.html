@@ -6,20 +6,26 @@
     <title>CRS</title>
     {% block extra_head %}{% endblock %}
 
+    <meta name="viewport" content="width=device-width">
+
     <script src="{% static 'main/js/jquery-1.12.0.min.js' %}"></script>
     <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
     <script src="https://js.pusher.com/3.0/pusher.min.js"></script>
     <script src="{% static 'main/js/main_utils.js' %}"></script>
+    <script src="{% static 'main/js/autosize.min.js' %}"></script>
+
 
     <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css'  %}">
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
 </head>
 <body>
 
-    {% include 'main/nav.html' %}
+{% include 'main/nav.html' %}
 
-    {% block content %}{% endblock %}
+{% block content %}{% endblock %}
 
+<script>autosize($('textarea'));</script>
 {#    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>#}
+
 </body>
 </html>

@@ -1,5 +1,10 @@
 body {
     padding-top: 70px;
+    height: 100%;
+}
+
+html {
+    height: 100%;
 }
 
 .toggle_subscription {
@@ -12,6 +17,7 @@ body {
 
 textarea {
     font-family: "Courier New";
+    resize: none;
 }
 
 .my-pagination {
@@ -19,7 +25,21 @@ textarea {
 }
 
 td {
-vertical-align: middle;
+    vertical-align: middle;
+}
+
+.fill {
+  min-height: 100%;
+  height: 100%;
+  display:flex;
+  flex-flow:column;
+}
+
+.my-chart {
+  flex:1 1 0;
+  overflow:hidden;
+  height:auto;
+  min-height: 250px;
 }
 
 li.L0, li.L1, li.L2, li.L3,
