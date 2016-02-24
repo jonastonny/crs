@@ -29,6 +29,7 @@
             $('#answers').append(answerDiv);
             answerDiv.find('textarea.answer').val('').attr('value', '').focus();
             answerDiv.find('input:hidden#answer_id').val('None');
+            answerDiv.find('input.correct').removeAttr('checked');
             removeAnswer();
             postUpdate();
             clean();
