@@ -1,4 +1,5 @@
 import bleach
+import short_url
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -21,22 +22,6 @@ class RoomDetailView(generic.DetailView):
     template_name = 'vote/room_detail.html'
     model = Room
 
-
-class QuestionGroupDetailView(generic.DetailView):
-    template_name = 'vote/questiongroup_detail.html'
-    model = QuestionGroup
-
-    def get(self, request, *args, **kwargs):
-        qg = get_object_or_404(QuestionGroup, pk=kwargs['pk'])
-        if not qg.is_open and request.user != qg.room.owner:
-            messages.warning(request, "Group '%s' is not open!" % qg.title)
-            return redirect(qg.room)
-        elif room_is_owned_by_user(qg.room, request.user):
-            return render(request, template_name=self.template_name, context={'questiongroup': qg})
-        elif not user_is_subscribed_to_room(request.user, qg.room):
-            messages.warning(request, "Subscribe to see groups!")
-            return redirect(qg.room)
-        return render(request, template_name=self.template_name, context={'questiongroup': qg})
 
 
 class QuestionDetailView(generic.DetailView):
@@ -137,6 +122,25 @@ def question_toggle(request, room, questiongroup, question):
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=403)
+
+
+class QuestionGroupDetailView(generic.DetailView):
+    template_name = 'vote/questiongroup_detail.html'
+    model = QuestionGroup
+
+    def get(self, request, *args, **kwargs):
+        qg = get_object_or_404(QuestionGroup, pk=kwargs['pk'])
+        my_short_url = short_url.encode_url(qg.id)
+        context={'questiongroup': qg, 'short_url': my_short_url}
+        if not qg.is_open and request.user != qg.room.owner:
+            messages.warning(request, "Group '%s' is not open!" % qg.title)
+            return redirect(qg.room)
+        elif room_is_owned_by_user(qg.room, request.user):
+            return render(request, template_name=self.template_name, context=context)
+        elif not user_is_subscribed_to_room(request.user, qg.room):
+            messages.warning(request, "Subscribe to see groups!")
+            return redirect(qg.room)
+        return render(request, template_name=self.template_name, context=context)
 
 
 @login_required

@@ -1,7 +1,8 @@
+import short_url
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.views import generic
@@ -9,6 +10,7 @@ from django.views import generic
 from django.views.generic import *
 
 from home.forms import HomeProfileEdit
+from vote.models import QuestionGroup
 
 
 class IndexView(TemplateView):
@@ -44,3 +46,10 @@ def profile_update(request):
         form.save()
         return redirect('profile')
     return render(request, 'home/profile_edit.html', {'user': user, 'form': form})
+
+
+@login_required
+def url_redirect(request, short):
+    group_id = short_url.decode_url(short)
+    group = get_object_or_404(QuestionGroup, pk=group_id)
+    return redirect(group)

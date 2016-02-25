@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'home.apps.HomeConfig',
     'widget_tweaks',
+    'compressor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,6 +141,15 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     'main/static/',
 ]
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_ROOT = 'main/static/'
+COMPRESS_ENABLED = True
 
 # Redirect to LOGIN_REDIRECT_URL after login
 LOGIN_REDIRECT_URL = '/dashboard'
