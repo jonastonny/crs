@@ -64,7 +64,17 @@
                 </td>
                 <td>{{ question.number_of_possible_answers }}</td>
                 <td>{{ question.total_responses }}</td>
-                <td>{{ question|what_did_user_answer:request.user|safe }}</td>
+                <td>
+                    {% if question.is_open %}
+                        {{ question|what_did_user_answer:request.user|safe }}
+                    {% else %}
+                        {% if question.percentages_correct.0 %}
+                            {{ question|what_did_user_answer:request.user|safe }}
+                        {% else %}
+                            No correct answer
+                        {% endif %}
+                    {% endif %}
+                </td>
                 <td>
                     {% if question.is_open %}
                         Hidden
