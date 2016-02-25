@@ -7,3 +7,4 @@ django-super-inlines
 pusher
 bleach
 django_compressor
+short_url
