@@ -33,6 +33,8 @@
             removeAnswer();
             postUpdate();
             clean();
+            console.log("Added")
+            autosize($('textarea'));
         });
     };
 

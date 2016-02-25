@@ -2,6 +2,7 @@
 
 {% block content %}
 {% load staticfiles %}
+{% load compress %}
 
     <div class="container">
         <ol class="breadcrumb">
@@ -45,8 +46,8 @@
                                     checked
                                 {% endif %}
                             {% endfor %}>
-                            {{ answer|safe }}
 
+                            {{ answer.answer_text|safe }}
                     </label>
                 </div>
             {% endfor %}
@@ -64,8 +65,11 @@
     </div>
 
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+    {% compress js %}
     <script src="{% static 'vote/js/pretty.js' %}"></script>
     <script src="{% static 'vote/js/toggle.js' %}"></script>
     <script src="{% static 'vote/js/subscribe.js' %}"></script>
+    {% endcompress %}
 
 {% endblock %}
