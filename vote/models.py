@@ -61,6 +61,19 @@ class Question(models.Model):
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     is_open = models.BooleanField(default=False)
 
+    def percentages_correct(self):
+        correct_responses = 0
+        all_responses = 0
+        for answer in self.answer_set.all():
+            if answer.correct:
+                for response in answer.response_set.all():
+                    correct_responses += 1
+                    all_responses += 1
+            else:
+                for response in answer.response_set.all():
+                    all_responses += 1
+        return round(100 / all_responses * correct_responses, 1)
+
     def number_of_possible_answers(self):
         return self.answer_set.count()
 
