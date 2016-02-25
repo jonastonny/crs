@@ -64,16 +64,18 @@ class Question(models.Model):
     def percentages_correct(self):
         correct_responses = 0
         all_responses = 0
+        has_correct_answer = False
         for answer in self.answer_set.all():
             if answer.correct:
+                has_correct_answer = True
                 correct_responses += answer.response_set.count()
                 all_responses += answer.response_set.count()
             else:
                 all_responses += answer.response_set.count()
         if all_responses == 0:
-            return 0.0
+            return has_correct_answer, 0.0
         else:
-            return round(100 / all_responses * correct_responses, 1)
+            return has_correct_answer, round(100 / all_responses * correct_responses, 1)
 
     def number_of_possible_answers(self):
         return self.answer_set.count()

@@ -43,7 +43,7 @@
             <th>Responses</th>
             <th>My answer</th>
             <th>% correct responses</th>
-            <th>Date published</th>
+            <th>Date created</th>
             <th>Changed</th>
             <th>Open for answers</th>
             {% if questiongroup|questiongroup_is_owned_by_user:user %}
@@ -69,7 +69,11 @@
                     {% if question.is_open %}
                         Hidden
                     {% else %}
-                        {{ question.percentages_correct }}</td>
+                        {% if question.percentages_correct.0 == False %}
+                            No correct answer
+                        {% else %}
+                            {{ question.percentages_correct.1 }}</td>
+                        {% endif %}
                     {% endif %}
                 <td>{{ question.pub_date }}</td>
                 <td>{{ question.updated_at|naturaltime }}</td>
