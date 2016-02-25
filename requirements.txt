@@ -6,3 +6,4 @@ django-mailgun
 django-super-inlines
 pusher
 bleach
+django_compressor
