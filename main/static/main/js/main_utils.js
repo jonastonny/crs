@@ -22,4 +22,5 @@
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
     }
     });
+
 })();

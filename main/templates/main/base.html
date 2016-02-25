@@ -29,8 +29,9 @@
 
 {% block content %}{% endblock %}
 
+{% compress js %}
 <script>autosize($('textarea'));</script>
-{#    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>#}
+{% endcompress %}
 
 </body>
 </html>
