@@ -1,7 +1,5 @@
-      var labels = JSON.parse($("#labels").val().replace(/'/g, '"'));
-      var series = JSON.parse($("#series").val());
-      console.log(labels)
-      console.log(series)
+var labels = JSON.parse($("#labels").val().replace(/'/g, '"'));
+var series = JSON.parse($("#series").val());
 
 var chart = new Chartist.Bar('.ct-chart', {
       labels: labels,
@@ -9,7 +7,7 @@ var chart = new Chartist.Bar('.ct-chart', {
     }, {
       low: 0,
       axisY: {
-            onlyInteger: true
+          onlyInteger: true
       },
       distributeSeries: true
     }
@@ -35,4 +33,10 @@ channel.bind(event, function(data) {
     });
     $("#response-count").text(data.data.total_responses);
     chart.update(data.data);
+});
+
+$("#toggle-answer").click(function(){
+    setTimeout(function(){
+        chart.update();
+    }, 150);
 });

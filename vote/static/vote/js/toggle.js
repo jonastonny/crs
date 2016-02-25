@@ -1,6 +1,7 @@
 (function () {
     var toggleQuestion = function() {
         $(".toggleQuestion").click(function () {
+            toggleDisabled();
             $(this).toggleClass("btn-warning btn-success");
             if($(this).text() == "Close Question") {
                 $(this).text("Open Question");
@@ -12,6 +13,7 @@
 
     var toggleQuestionGroup = function() {
         $(".toggleQuestionGroup").click(function () {
+            toggleDisabled();
             $(this).toggleClass("btn-warning btn-success");
             if($(this).text() == "Close Group") {
                 $(this).text("Open Group");
@@ -20,6 +22,13 @@
             };
         });
     };
+
+
+    var toggleDisabled = function() {
+        $(".disable-toggle").each(function(index, value){
+           $(value).prop('disabled', function(i, v) { return !v; });
+        });
+    }
     toggleQuestion();
     toggleQuestionGroup();
 })();
