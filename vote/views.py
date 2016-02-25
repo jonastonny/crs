@@ -25,7 +25,6 @@ class RoomDetailView(generic.DetailView):
     model = Room
 
 
-
 class QuestionDetailView(generic.DetailView):
     template_name = 'vote/question_detail.html'
     model = Question

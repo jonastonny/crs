@@ -41,6 +41,7 @@
             <th>Question</th>
             <th>Created answers</th>
             <th>Responses</th>
+            <th>My answer</th>
             <th>% correct responses</th>
             <th>Date published</th>
             <th>Changed</th>
@@ -63,7 +64,13 @@
                 </td>
                 <td>{{ question.number_of_possible_answers }}</td>
                 <td>{{ question.total_responses }}</td>
-                <td>{{ question.percentages_correct }}</td>
+                <td>{{ question|what_did_user_answer:request.user|safe }}</td>
+                <td>
+                    {% if question.is_open %}
+                        Hidden
+                    {% else %}
+                        {{ question.percentages_correct }}</td>
+                    {% endif %}
                 <td>{{ question.pub_date }}</td>
                 <td>{{ question.updated_at|naturaltime }}</td>
 

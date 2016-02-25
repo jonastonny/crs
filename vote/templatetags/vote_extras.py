@@ -31,3 +31,24 @@ def group_disabled_class(questiongroup):
 def answer_correct(answer):
     if answer.correct:
         return 'checked'
+
+
+@register.filter
+def what_did_user_answer(question, user):
+    if not question.is_open:
+        for answer in question.answer_set.all():
+            if answer.correct:
+                for response in answer.response_set.all():
+                    if response.user_id == user.id:
+                        return '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'
+            else:
+                for response in answer.response_set.all():
+                    if response.user_id == user.id:
+                        return '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>'
+        return "Not registered"
+    else:
+        for answer in question.answer_set.all():
+            for response in answer.response_set.all():
+                if response.user_id == user.id:
+                    return "Registered"
+        return "Answer now!"
