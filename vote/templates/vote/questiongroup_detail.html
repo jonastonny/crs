@@ -97,7 +97,9 @@
 
     </div>
 
+    {% compress js %}
     <script src="{% static 'vote/js/toggle.js' %}"></script>
     <script src="{% static 'vote/js/subscribe.js' %}"></script>
+    {% endcompress %}
 
 {% endblock %}
