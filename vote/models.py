@@ -66,13 +66,14 @@ class Question(models.Model):
         all_responses = 0
         for answer in self.answer_set.all():
             if answer.correct:
-                for response in answer.response_set.all():
-                    correct_responses += 1
-                    all_responses += 1
+                correct_responses += answer.response_set.count()
+                all_responses += answer.response_set.count()
             else:
-                for response in answer.response_set.all():
-                    all_responses += 1
-        return round(100 / all_responses * correct_responses, 1)
+                all_responses += answer.response_set.count()
+        if all_responses == 0:
+            return 0.0
+        else:
+            return round(100 / all_responses * correct_responses, 1)
 
     def number_of_possible_answers(self):
         return self.answer_set.count()
