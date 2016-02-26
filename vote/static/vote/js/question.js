@@ -74,16 +74,19 @@
         $('.update').blur(function(data) {
             var _this = $(this);
             if (_this.val()){
-                if ($(this).attr('id') == 'id_question_text') {
+                if ($(_this).attr('id') == 'id_question_text') {
                     var postdata = {
-                        question_text: $(this).val()
+                        question_text: $(_this).val(),
                     }
                 }
                 else {
+                    console.log($(_this).siblings('.correct')[0].checked);
                     var postdata = {
-                        answer_text: $(this).val(),
-                        answer_id: $(this).siblings('#answer_id')[0].value
+                        answer_text: $(_this).val(),
+                        answer_id: $(_this).siblings('#answer_id')[0].value,
+                        correct: $(_this).siblings('.correct')[0].checked
                     }
+                    console.log(postdata);
                 }
                 $.ajax({
                     url: $("#update-url").data("url"),

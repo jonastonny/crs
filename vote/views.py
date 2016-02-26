@@ -261,7 +261,10 @@ def question_answer_update(request, room, questiongroup, question):
 
         answerform = AddAnswerForm(request.POST)
         if answerform.is_valid():
-            (answer_obj, created) = Answer.objects.update_or_create(id=my_id, question_id=question, defaults={'answer_text': bleach.clean(request.POST['answer_text'], tags=ALLOWED_TAGS)})
+            (answer_obj, created) = Answer.objects.update_or_create(id=my_id,
+                                                                    question_id=question,
+                                                                    defaults={'answer_text': bleach.clean(answerform.instance.answer_text, tags=ALLOWED_TAGS),
+                                                                                                              'correct': answerform.instance.correct})
             data = serializers.serialize("json", [answer_obj])
             return JsonResponse(data, safe=False)
         return JsonResponse(answerform.errors)
