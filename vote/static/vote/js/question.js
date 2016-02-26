@@ -33,7 +33,7 @@
             removeAnswer();
             postUpdate();
             clean();
-            console.log("Added")
+            console.log("Added");
             autosize($('textarea'));
         });
     };
@@ -58,49 +58,75 @@
     };
 
     var toggleButton = function(){
-        if($('.remove-answer').length == 1){
-            $('.remove-answer').each(function(){
+        var val = $('.remove-answer');
+        if(val.length == 1){
+            val.each(function(){
                $(this).hide();
             });
         }
         else{
-            $('.remove-answer').each(function(){
+            val.each(function(){
                $(this).show();
             });
         }
     };
 
-    var postUpdate = function() {
-        $('.update').blur(function(data) {
+    var updateAnswer = function() {
+        $('.update-answer').blur(function(data) {
+            updateAnswerHelper(this);
+        });
+        $('.correct').change(function(data){
+            updateAnswerHelper(this);
+        });
+    };
+
+
+    function updateAnswerHelper(_that){
+        var _this = $(_that).parent();
+        console.log(_this);
+
+        //console.log($(_this).siblings('.correct')[0].checked);
+        var postdata = {
+            answer_text: _this.children('.update-answer')[0].value,
+            answer_id: _this.children('#answer_id')[0].value,
+            correct: _this.children('.correct')[0].checked
+        };
+        console.log(postdata);
+        $.ajax({
+            url: $("#update-url").data("url"),
+            method: 'POST',
+            data: postdata
+        }).done(function(data) {
+            _this.find('#answer_id').attr('value', JSON.parse(data)[0].pk);
+        });
+    }
+
+    var updateQuestion = function(){
+        $('.update-question').blur(function(){
             var _this = $(this);
             if (_this.val()){
-                if ($(_this).attr('id') == 'id_question_text') {
-                    var postdata = {
-                        question_text: $(_this).val(),
-                    }
-                }
-                else {
-                    console.log($(_this).siblings('.correct')[0].checked);
-                    var postdata = {
-                        answer_text: $(_this).val(),
-                        answer_id: $(_this).siblings('#answer_id')[0].value,
-                        correct: $(_this).siblings('.correct')[0].checked
-                    }
-                    console.log(postdata);
+                var postdata = {
+                    question_text: $(_this).val(),
                 }
                 $.ajax({
                     url: $("#update-url").data("url"),
                     method: 'POST',
                     data: postdata
                 }).done(function(data) {
-                    _this.parent().find('#answer_id').attr('value', JSON.parse(data)[0].pk);
+                    console.log("Question updated...");
                 });
             }
         });
+    }
+
+
+    var postUpdate = function(){
+        updateAnswer();
+        updateQuestion();
     };
 
-    addAnswer();
     postUpdate();
+    addAnswer();
     removeAnswer();
     toggleButton();
 
