@@ -3,8 +3,6 @@ import short_url
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
-from django.core.serializers import json
-from django.db.models import Count
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -381,4 +379,3 @@ def answer_response(request, room, questiongroup, question):
             event = "response-%s%s%s" % (room, questiongroup, question)
             get_pusher().trigger('crs', event, {'data': myData})
     return redirect(qg)
-
