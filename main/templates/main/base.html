@@ -31,7 +31,11 @@
 
 {% compress js %}
 <script>autosize($('textarea'));</script>
+{#<script src="{% static 'main/js/MathJax.js' %}"></script>#}
 {% endcompress %}
+    <script type="text/javascript" async
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
 
 </body>
 </html>
