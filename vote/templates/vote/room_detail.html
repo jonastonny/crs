@@ -8,7 +8,7 @@
     <div class="container">
         <ol class="breadcrumb">
             <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-            <li><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a></li>
+            <li class="active">{{ room.title }}</li>
             <li class="active">Groups</li>
         </ol>
         <h2>{{ room.title }} <small> @ {{ room.owner.username }} |</small>

@@ -10,7 +10,7 @@
         <ol class="breadcrumb">
             <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'room_detail' questiongroup.room_id %}">{{ questiongroup.room.title }}</a></li>
-            <li><a href="{% url 'questiongroup_detail' questiongroup.room_id questiongroup.id %}">{{ questiongroup.title }}</a></li>
+            <li class="active">{{ questiongroup.title }}</li>
             <li class="active">Questions</li>
         </ol>
         Link to group: <a href="{% url 'url_redirect' short_url %}">{{ request.get_host }}/r/{{ short_url }}</a>

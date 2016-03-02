@@ -29,12 +29,12 @@ class QuestionDetailView(generic.DetailView):
 
     def get(self, request, *args, **kwargs):
         question_obj = Question.objects.get(pk=kwargs['pk'])
-        room_obj = Room.objects.get(pk=question_obj.group.room.id)
+        room_obj = Room.objects.get(pk=question_obj.group.room.id) #  Ok fordi den trækker på question_obj
         answer_set = question_obj.answer_set.all()
         if room_obj.owner == request.user:
             return render(request, template_name=self.template_name, context={'question': question_obj})
         elif not user_is_subscribed_to_room(request.user, room_obj):
-            messages.warning(request, "Subscripe to the room to see questions!")
+            messages.warning(request, "Subscribe to the room to see questions!")
             return redirect(room_obj)
         elif question_obj.is_open:
             return render(request, template_name=self.template_name, context={'question': question_obj})
@@ -361,12 +361,9 @@ def answer_response(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse(403)
 
-    try:
-        subscription = Subscription.objects.get(room=room, user=request.user)
-    except Subscription.DoesNotExist:
-        subscription = None
+    subscription = user_is_subscribed(room, request.user)
 
-    room_obj = Room.objects.get(pk=room)
+    room_obj = get_object_or_404(Room, pk=room)
     qg = room_obj.questiongroup_set.get(pk=questiongroup)
     if subscription or room_obj.owner == request.user and qg.is_open:
         question_obj = qg.question_set.get(pk=question)
@@ -382,3 +379,10 @@ def answer_response(request, room, questiongroup, question):
             event = "response-%s%s%s" % (room, questiongroup, question)
             get_pusher().trigger('crs', event, {'data': myData})
     return redirect(qg)
+
+
+def user_is_subscribed(room, user):
+    try:
+        return Subscription.objects.get(room=room, user=user)
+    except Subscription.DoesNotExist:
+        return None
