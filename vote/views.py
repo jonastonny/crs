@@ -198,7 +198,7 @@ def questiongroup_delete(request, room, questiongroup):
 def question_answer_create(request, room, questiongroup):
     size = len([k for k in request.POST if 'answer_text' in k])
     room_obj = Room.objects.get(pk=room)
-    questiongroup_obj = QuestionGroup.objects.get(pk=questiongroup)
+    questiongroup_obj = room_obj.questiongroup_set.get(pk=questiongroup)
     if not room_obj.owner == request.user:
         return redirect(questiongroup_obj)
     if request.method == 'POST':
@@ -227,8 +227,10 @@ def question_answer_create(request, room, questiongroup):
 
 @login_required
 def question_answer_edit(request, room, questiongroup, question):
-    room_obj = Room.objects.get(pk=room)
-    question_obj = Question.objects.get(pk=question, group=questiongroup)
+    room_obj = get_object_or_404(Room, pk=room)
+    # room_obj = Room.objects.get(pk=room)
+    question_obj = room_obj.questiongroup_set.get(pk=questiongroup).question_set.get(pk=question)
+    # question_obj = Question.objects.get(pk=question, group=questiongroup)
     if room_obj.owner == request.user:
         questionform = AddQuestionForm(instance=question_obj)
         answer_set = question_obj.answer_set.all()
@@ -245,7 +247,8 @@ def question_answer_update(request, room, questiongroup, question):
         return HttpResponse(status=402)
 
     if "question_text" in request.POST:
-        question_obj = Question.objects.get(id=question)
+        question_obj = get_object_or_404(Question, id=question)
+        # question_obj = Question.objects.get(id=question)
         questionform = AddQuestionForm(request.POST, instance=question_obj)
         if questionform.is_valid():
             questionform.instance.question_text = bleach.clean(questionform.instance.question_text, tags=ALLOWED_TAGS)
@@ -292,9 +295,9 @@ def question_delete(request, room, questiongroup, question):
         return HttpResponse(403)
     room = get_object_or_404(Room, pk=room)
     if room.owner == request.user:
-        qg = get_object_or_404(QuestionGroup, pk=questiongroup)
+        qg = room.questiongroup_set.get(pk=questiongroup)
         if qg.room == room:
-            question = get_object_or_404(Question, pk=question)
+            question = qg.question_set.get(pk=question)
             if question.group == qg:
                 (val, d) = question.delete()
                 if val > 0:
@@ -302,7 +305,7 @@ def question_delete(request, room, questiongroup, question):
                     return redirect(qg)
                 else:
                     messages.warning(request, 'Could not delete question.')
-                    return redirect(qg)  # Should link to Question instead
+                    return redirect(question)  # Should link to Question instead
 
     messages.warning(request, 'You are not allowed to delete this question!')
     return redirect(room)  # If anything goes wrong, return not allowed!
@@ -314,11 +317,11 @@ def answer_delete(request, room, questiongroup, question, answer):
         return HttpResponse(403)
     room = get_object_or_404(Room, pk=room)
     if room.owner == request.user:
-        qg = get_object_or_404(QuestionGroup, pk=questiongroup)
+        qg = room.questiongroup_set.get(pk=questiongroup)
         if qg.room == room:
-            question = get_object_or_404(Question, pk=question)
+            question = qg.question_set.get(pk=question)
             if question.group == qg:
-                answer = get_object_or_404(Answer, pk=answer)
+                answer = question.answer_set.get(pk=answer)
                 if answer.question == question:
                     (val, d) = answer.delete()
                     if val > 0:
@@ -331,8 +334,8 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 @login_required
 def question_response(request, room, questiongroup, question):
-    question = Question.objects.get(pk=question)
     room_obj = Room.objects.get(pk=room)
+    question = room_obj.questiongroup_set.get(pk=questiongroup).question_set.get(pk=question)
     answer_set = question.answer_set.all()
     myData = {
         'labels': [strip_tags(a.answer_text) for a in answer_set],
@@ -364,11 +367,11 @@ def answer_response(request, room, questiongroup, question):
         subscription = None
 
     room_obj = Room.objects.get(pk=room)
-    qg = get_object_or_404(QuestionGroup, pk=questiongroup)
+    qg = room_obj.questiongroup_set.get(pk=questiongroup)
     if subscription or room_obj.owner == request.user and qg.is_open:
-        question_obj = get_object_or_404(Question, pk=question)
+        question_obj = qg.question_set.get(pk=question)
         if question_obj.is_open:
-            answer_obj = get_object_or_404(Answer, pk=request.POST['answer'])
+            answer_obj = question_obj.answer_set.get(pk=request.POST['answer'])
             response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
             answer_set = question_obj.answer_set.all()
             myData = {
