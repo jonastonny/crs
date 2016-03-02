@@ -1,14 +1,31 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
+{% load staticfiles %}
+{% load compress %}
 
     <div class="container">
         <div class="jumbotron">
             <h1>A Classroom Response System supporting Math and Code syntax</h1>
             <p>When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$</p>
+
+            <pre>
+def get(self, request, *args, **kwargs):
+    qg = get_object_or_404(QuestionGroup, pk=kwargs['pk'])
+    my_short_url = short_url.encode_url(qg.id)
+    context = {'questiongroup': qg, 'short_url': my_short_url}
+    if not qg.is_open and request.user != qg.room.owner:
+        messages.warning(request, "Group '%s' is not open!" % qg.title)
+        return redirect(qg.room)</pre>
+
             <p><a class="btn btn-primary btn-lg" href="{% url 'dashboard' %}" role="button">Go To Dashboard</a></p>
         </div>
     </div>
+
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=desert"></script>
+    {% compress js %}
+    <script src="{% static 'vote/js/pretty.js' %}"></script>
+    {% endcompress %}
 
 {% endblock %}
