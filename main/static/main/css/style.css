@@ -42,8 +42,17 @@ td {
   min-height: 250px;
 }
 
+.response-label {
+    width: 100%;
+    background-color: #FFFAFA;
+    border-radius: 5px;
+    border:1px solid lightgrey;
+}
+
 li.L0, li.L1, li.L2, li.L3,
 li.L5, li.L6, li.L7, li.L8
 { list-style-type: decimal !important }
+
+
 
 
