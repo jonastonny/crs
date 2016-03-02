@@ -13,17 +13,19 @@
             {% for room in rooms %}
 
                 <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title"><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a> by {{ room.owner.username }}</h3>
+                  <div class="panel-heading clearfix">
+                      <h3 class="panel-title pull-left"><a href="{% url 'room_detail' room.id %}">{{ room.title }}</a> by {{ room.owner.username }}</h3>
+                      <div class="pull-right">
+                          {% if user|user_is_subscribed_to_room:room %}
+                              <button id="room_detail" class="btn btn-xs btn-warning toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Unsubscribe</button>
+                          {% else %}
+                              <button id="room_detail" class="btn btn-xs btn-primary toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Subscribe</button>
+                          {% endif %}
+                      </div>
                   </div>
                   <div class="panel-body">
                       <p>Room was created {{ room.date_time|naturalday }} and updated {{ room.updated_at|naturaltime  }}</p>
                       <p>It has <strong>{{ room.questiongroup_set.count }}</strong> groups available.</p>
-                      {% if user|user_is_subscribed_to_room:room %}
-                          <button id="room_detail" class="btn btn-warning toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Unsubscribe</button>
-                      {% else %}
-                          <button id="room_detail" class="btn btn-primary toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Subscribe</button>
-                      {% endif %}
                   </div>
                 </div>
 
