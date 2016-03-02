@@ -1,6 +1,8 @@
 {% extends 'main/base.html' %}
 
 {% load humanize %}
+{% load staticfiles %}
+{% load vote_extras %}
 {% block content %}
 
     <div class="container">
@@ -17,6 +19,11 @@
                   <div class="panel-body">
                       <p>Room was created {{ room.date_time|naturalday }} and updated {{ room.updated_at|naturaltime  }}</p>
                       <p>It has <strong>{{ room.questiongroup_set.count }}</strong> groups available.</p>
+                      {% if user|user_is_subscribed_to_room:room %}
+                          <button id="room_detail" class="btn btn-warning toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Unsubscribe</button>
+                      {% else %}
+                          <button id="room_detail" class="btn btn-primary toggle_subscription" data-url="{% url 'room_subscribe' room.id  %}">Subscribe</button>
+                      {% endif %}
                   </div>
                 </div>
 
@@ -38,5 +45,7 @@
         </div>
 
     </div>
+
+    <script src="{% static 'vote/js/subscribe.js' %}"></script>
 
 {% endblock %}

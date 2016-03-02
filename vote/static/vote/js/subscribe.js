@@ -11,6 +11,9 @@
                 if($(_this).attr("id") == "room_detail"){
                     if($(_this).html() == "Subscribe"){ $(_this).text("Unsubscribe") }
                     else{ $(_this).text("Subscribe") }
+                    if($(_this).hasClass("btn")) {
+                        $(_this).toggleClass("btn-primary btn-warning")
+                    }
                 }
                 else{
                     $(_parent).parent().remove();
