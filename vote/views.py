@@ -18,6 +18,7 @@ from vote.utils import get_pusher
 
 ALLOWED_TAGS = ['pre']
 
+
 class RoomDetailView(generic.DetailView):
     template_name = 'vote/room_detail.html'
     model = Room
@@ -28,8 +29,9 @@ class QuestionDetailView(generic.DetailView):
     model = Question
 
     def get(self, request, *args, **kwargs):
-        question_obj = Question.objects.get(pk=kwargs['pk'])
-        room_obj = Room.objects.get(pk=question_obj.group.room.id) #  Ok fordi den trækker på question_obj
+
+        question_obj = get_object_or_404(Question, pk=kwargs['pk'])
+        room_obj = get_object_or_404(Room, pk=question_obj.group.room.id)
         answer_set = question_obj.answer_set.all()
         if room_obj.owner == request.user:
             return render(request, template_name=self.template_name, context={'question': question_obj})
@@ -62,14 +64,14 @@ class CreateQuestionGroupView(generic.CreateView):
     fields = ['title']
 
     def form_valid(self, form):
-        room_obj = Room.objects.get(pk=self.kwargs['room'])
+        room_obj = get_object_or_404(Room, pk=self.kwargs['room'])
         if room_obj.owner_id == self.request.user.id:
             form.instance.room = room_obj
             return super(CreateQuestionGroupView, self).form_valid(form)
         return redirect(room_obj)
 
     def get(self, request, *args, **kwargs):
-        room_obj = Room.objects.get(pk=kwargs['room'])
+        room_obj = get_object_or_404(Room, pk=kwargs['room'])
         if not room_obj.owner == request.user:
             return redirect(room_obj)
         return render(request, template_name=self.template_name, context={'room': room_obj, 'form': generic.CreateView.get_form_class(self)})
@@ -77,7 +79,7 @@ class CreateQuestionGroupView(generic.CreateView):
 
 @login_required
 def room_edit(request, room):
-    room = Room.objects.get(pk=room)
+    room = get_object_or_404(Room, pk=room)
     if not room.owner == request.user:
         return redirect(room)
     context = {'room': room, 'form': VoteRoomForm(instance=room)}
@@ -88,7 +90,7 @@ def room_edit(request, room):
 def room_update(request, room):
     if not request.method == 'POST':
         return HttpResponse(status=201)
-    room = Room.objects.get(pk=room)
+    room = get_object_or_404(Room, pk=room)
     form = VoteRoomForm(request.POST or None, instance=room)
 
     if form.is_valid():
@@ -112,9 +114,9 @@ def question_toggle(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 
-    room_obj = Room.objects.get(id=room)
+    room_obj = get_object_or_404(Room, id=room)
     if request.user.id == room_obj.owner_id:
-        question_obj = Question.objects.get(id=question)
+        question_obj = get_object_or_404(Question, id=question)
         bool_status = question_obj.is_open
         question_obj.is_open = not bool_status
         question_obj.save()
@@ -147,9 +149,9 @@ def questiongroup_toggle(request, room, questiongroup):
     if not request.method == 'POST':
         return HttpResponse('{"message": "Updates are handled through POSTS only"}', status=405)
 
-    room_obj = Room.objects.get(id=room)
+    room_obj = get_object_or_404(Room, id=room)
     if request.user.id == room_obj.owner_id:
-        questiongroup_obj = QuestionGroup.objects.get(id=questiongroup)
+        questiongroup_obj = get_object_or_404(QuestionGroup, id=questiongroup)
         bool_status = questiongroup_obj.is_open
         questiongroup_obj.is_open = not bool_status
         questiongroup_obj.save()
@@ -160,8 +162,8 @@ def questiongroup_toggle(request, room, questiongroup):
 
 @login_required
 def questiongroup_edit(request, room, questiongroup):
-    room_obj = Room.objects.get(pk=room)
-    questiongroup_obj = QuestionGroup.objects.get(pk=questiongroup)
+    room_obj = get_object_or_404(Room, pk=room)
+    questiongroup_obj = get_object_or_404(QuestionGroup, pk=questiongroup)
     if room_obj.owner == request.user:
         context = {'questiongroup': questiongroup_obj, 'form': VoteQuestiongroupForm(instance=questiongroup_obj)}
         return render(request, 'vote/questiongroup_edit.html', context)
@@ -173,7 +175,7 @@ def questiongroup_update(request, room, questiongroup):
 
     if not request.method == 'POST':
         return HttpResponse(status=403)
-    questiongroup = QuestionGroup.objects.get(pk=questiongroup)
+    questiongroup = get_object_or_404(QuestionGroup, pk=questiongroup)
     form = VoteQuestiongroupForm(request.POST or None, instance=questiongroup)
 
     if form.is_valid():
@@ -184,7 +186,7 @@ def questiongroup_update(request, room, questiongroup):
 
 def questiongroup_delete(request, room, questiongroup):
     if request.method == 'POST':
-        questiongroup = QuestionGroup.objects.get(pk=questiongroup)
+        questiongroup = get_object_or_404(QuestionGroup, pk=questiongroup)
         if request.user == questiongroup.room.owner:
             questiongroup.delete()
             return redirect(questiongroup.room)
@@ -197,8 +199,9 @@ def questiongroup_delete(request, room, questiongroup):
 
 def question_answer_create(request, room, questiongroup):
     size = len([k for k in request.POST if 'answer_text' in k])
-    room_obj = Room.objects.get(pk=room)
-    questiongroup_obj = room_obj.questiongroup_set.get(pk=questiongroup)
+    room_obj = get_object_or_404(Room, pk=room)
+    questiongroup_obj = get_object_or_404(QuestionGroup, pk=questiongroup)
+
     if not room_obj.owner == request.user:
         return redirect(questiongroup_obj)
     if request.method == 'POST':
@@ -228,13 +231,13 @@ def question_answer_create(request, room, questiongroup):
 @login_required
 def question_answer_edit(request, room, questiongroup, question):
     room_obj = get_object_or_404(Room, pk=room)
-    # room_obj = Room.objects.get(pk=room)
+    # question_obj = get_object_or_404(Question, pk=question, group=questiongroup)
     question_obj = room_obj.questiongroup_set.get(pk=questiongroup).question_set.get(pk=question)
     # question_obj = Question.objects.get(pk=question, group=questiongroup)
     if room_obj.owner == request.user:
         questionform = AddQuestionForm(instance=question_obj)
         answer_set = question_obj.answer_set.all()
-        answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text, 'correct': obj.correct}, instance=Answer.objects.get(id=obj.id)) for obj in answer_set]
+        answerforms = [AddAnswerForm(data={'id': obj.id, 'answer_text': obj.answer_text, 'correct': obj.correct}, instance=get_object_or_404(Answer, id=obj.id)) for obj in answer_set]
 
         return render(request, 'vote/question_edit.html', {'qform': questionform, 'aforms': answerforms, 'room': room, 'questiongroup': questiongroup, 'question': question, 'q': question_obj})
     else:
@@ -248,6 +251,7 @@ def question_answer_update(request, room, questiongroup, question):
 
     if "question_text" in request.POST:
         question_obj = get_object_or_404(Question, id=question)
+
         # question_obj = Question.objects.get(id=question)
         questionform = AddQuestionForm(request.POST, instance=question_obj)
         if questionform.is_valid():
@@ -278,7 +282,7 @@ def question_answer_update(request, room, questiongroup, question):
 def room_delete(request, room):
     if not request.method == 'POST':
         return HttpResponse(403)
-    room = Room.objects.get(pk=room)
+    room = get_object_or_404(Room, pk=room)
 
     if room.owner == request.user:
         messages.info(request, "%s was succesfully removed." % room.title)
@@ -334,7 +338,8 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 @login_required
 def question_response(request, room, questiongroup, question):
-    room_obj = Room.objects.get(pk=room)
+    # question = get_object_or_404(Question, pk=question)
+    room_obj = get_object_or_404(Room, pk=room)
     question = room_obj.questiongroup_set.get(pk=questiongroup).question_set.get(pk=question)
     answer_set = question.answer_set.all()
     myData = {
