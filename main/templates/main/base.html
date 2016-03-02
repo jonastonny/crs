@@ -13,9 +13,13 @@
     <script src="{% static 'main/js/jquery-1.12.0.min.js' %}"></script>
     <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'main/js/pusher.min.js' %}"></script>
+
+
     <script src="{% static 'main/js/main_utils.js' %}"></script>
     <script src="{% static 'main/js/autosize.min.js' %}"></script>
     {% endcompress %}
+
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
     {% compress css %}
     <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css'  %}">
@@ -30,8 +34,8 @@
 {% block content %}{% endblock %}
 
 {% compress js %}
-<script>autosize($('textarea'));</script>
-{#<script src="{% static 'main/js/MathJax.js' %}"></script>#}
+{#<script>autosize($('textarea'));</script>#}
+
 {% endcompress %}
     <script type="text/javascript" async
   src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">

@@ -23,9 +23,26 @@
         toggleButton();
     };
 
+
+//    <div class="form-group has-feedback" id="answer-div">
+//	<label>Answer:</label>
+//	<input class="correct" id="id_0-correct" name="0-correct" type="checkbox"> - mark this answer as correct?
+//	<textarea class="form-control answer" cols="40" id="id_0-answer_text" name="0-answer_text" rows="1"></textarea>
+//
+//
+//	<button type="button" class="btn btn-primary btn-block remove-answer" style="display: none;">Remove</button>
+//</div>
+//
+//    var div = $('<div></div>');
+//    var label = $('<label></label>');
+//    var input = $('<input type="checkbox">');
+//    var textarea = $('textarea');
+
+
+
     var addAnswer = function(){
         $('#add-answer').on('click', function(){
-            var answerDiv = $('#answer-div').clone();
+            var answerDiv = copyMe.clone();
             $('#answers').append(answerDiv);
             answerDiv.find('textarea.answer').val('').attr('value', '').focus();
             answerDiv.find('input:hidden#answer_id').val('None');
@@ -33,8 +50,12 @@
             removeAnswer();
             postUpdate();
             clean();
-            console.log("Added");
-            autosize($('textarea'));
+            //autosize($('textarea'));
+
+            var id = answerDiv.find('textarea').attr('id');
+            //tinyMCE.execCommand('mceRemoveEditor', false, id);
+            tinyMCE.execCommand('mceAddEditor', false, id);
+
         });
     };
 
@@ -117,7 +138,20 @@
                 });
             }
         });
-    }
+    };
+
+    tinyMCE.init({
+        toolbar: [
+            'undo redo | styleselect | bold italic | link | alignleft aligncenter alignright'
+          ]
+	});
+
+
+    var copyMe =  $('#answer-div').clone();
+    var a_id = $('#answer-div').find('textarea').attr('id');
+    var q_id = $('#id_question_text').attr('id');
+    tinyMCE.execCommand('mceAddEditor', false, a_id);
+    tinyMCE.execCommand('mceAddEditor', false, q_id);
 
 
     var postUpdate = function(){
