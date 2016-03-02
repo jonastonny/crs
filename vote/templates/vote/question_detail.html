@@ -31,7 +31,7 @@
 
         <div class="row">
             <h3>
-                {{ question.question_text|safe }}
+                {{ question.question_text|safe|linebreaksbr }}
             </h3>
             <hr>
         </div>
@@ -51,7 +51,7 @@
                                     {% endif %}
                                 {% endfor %}>
 
-                                {{ answer.answer_text|safe }}
+                                {{ answer.answer_text|safe|linebreaksbr }}
                         </label>
                     </div>
                 </div>
