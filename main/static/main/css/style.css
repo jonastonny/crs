@@ -47,6 +47,7 @@ td {
     background-color: #FFFAFA;
     border-radius: 5px;
     border:1px solid lightgrey;
+    min-height: 50px;
 }
 
 .response-row {
