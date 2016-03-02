@@ -33,16 +33,21 @@ class QuestionDetailView(generic.DetailView):
         question_obj = get_object_or_404(Question, pk=kwargs['pk'])
         room_obj = get_object_or_404(Room, pk=question_obj.group.room.id)
         answer_set = question_obj.answer_set.all()
+        # Requester is owner - owners should always be allowed access
         if room_obj.owner == request.user:
             return render(request, template_name=self.template_name, context={'question': question_obj})
+        # Requester is not owner and not subscribed - tell them to subscribe
         elif not user_is_subscribed_to_room(request.user, room_obj):
             messages.warning(request, "Subscribe to the room to see questions!")
             return redirect(room_obj)
-        elif question_obj.is_open:
+        # Requester is not owner but subscribed and group and question is open - let them answer!
+        elif question_obj.group.is_open and question_obj.is_open:
             return render(request, template_name=self.template_name, context={'question': question_obj})
+        # Above failed, but requester have once answered the given question and question or group is now closed
                                 # Get's the users who have responded to a question (by getting all answers, all responses and all users)
         elif request.user.id in [item for sublist in [[response.user_id for response in answer.response_set.all()] for answer in answer_set] for item in sublist]:
             return render(request, template_name=self.template_name, context={'question': question_obj})
+        # Everything failed, you are not allowed in here.
         else:
             messages.warning(request, "Question '%s' is not open!" % question_obj.question_text[0:50])
             return redirect(question_obj.group)
@@ -132,7 +137,7 @@ class QuestionGroupDetailView(generic.DetailView):
     def get(self, request, *args, **kwargs):
         qg = get_object_or_404(QuestionGroup, pk=kwargs['pk'])
         my_short_url = short_url.encode_url(qg.id)
-        context={'questiongroup': qg, 'short_url': my_short_url}
+        context = {'questiongroup': qg, 'short_url': my_short_url}
         if not qg.is_open and request.user != qg.room.owner:
             messages.warning(request, "Group '%s' is not open!" % qg.title)
             return redirect(qg.room)
