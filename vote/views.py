@@ -189,6 +189,7 @@ def questiongroup_update(request, room, questiongroup):
     return render(request, 'vote/questiongroup_edit.html', {'questiongroup': questiongroup, 'form': form})
 
 
+@login_required
 def questiongroup_delete(request, room, questiongroup):
     if request.method == 'POST':
         questiongroup = get_object_or_404(QuestionGroup, pk=questiongroup)
@@ -202,6 +203,7 @@ def questiongroup_delete(request, room, questiongroup):
     return redirect('dashboard')
 
 
+@login_required
 def question_answer_create(request, room, questiongroup):
     size = len([k for k in request.POST if 'answer_text' in k])
     room_obj = get_object_or_404(Room, pk=room)
