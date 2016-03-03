@@ -22,7 +22,7 @@
 
             <div id="answers">
                 {% for aform in aforms %}
-                    <div class="form-group has-feedback" id="answer-div">
+                    <div class="form-group has-feedback answer-div" id="answer-div">
                         <label>Answer:</label>
                         {{ aform.correct|add_class:"correct" }} - mark this answer as correct?
                         {{ aform.answer_text|add_class:"form-control answer update-answer"|attr:"rows:2" }}

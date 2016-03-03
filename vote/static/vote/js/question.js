@@ -146,12 +146,22 @@
           ]
 	});
 
-
     var copyMe =  $('#answer-div').clone();
-    var a_id = $('#answer-div').find('textarea').attr('id');
+    //var a_id = $('#answer-div').find('textarea').attr('id');
+    //tinyMCE.execCommand('mceAddEditor', false, a_id);
     var q_id = $('#id_question_text').attr('id');
-    tinyMCE.execCommand('mceAddEditor', false, a_id);
     tinyMCE.execCommand('mceAddEditor', false, q_id);
+
+    clean(); // Clean så vi adskiller id'erne på textareas, så tinymce virker
+
+    $('.answer-div').each(function(index){
+        console.log($(this));
+        var a_id = $(this).find('textarea').attr('id');
+        tinyMCE.execCommand('mceAddEditor', false, a_id);
+
+
+
+    });
 
 
     var postUpdate = function(){
