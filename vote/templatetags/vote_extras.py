@@ -52,3 +52,8 @@ def what_did_user_answer(question, user):
                 if response.user_id == user.id:
                     return "Registered"
         return "Answer now!"
+
+
+@register.filter
+def get_letter(integer):
+    return chr(ord('A') + integer)

@@ -3,6 +3,7 @@
 {% block content %}
 {% load staticfiles %}
 {% load compress %}
+{% load vote_extras %}
 
     <div class="container">
         <ol class="breadcrumb">
@@ -29,7 +30,7 @@
             </p>
         {% endif %}
 
-        <div class="row">
+        <div class="">
             <h3>
                 {{ question.question_text|safe }}
             </h3>
@@ -38,9 +39,15 @@
         {#{% url 'answer_response' question_group.room_id question_group.id question.id  %}#}
         <form action="{% url 'answer_response' question.group.room_id question.group.id question.id %}" method="POST">{% csrf_token %}
             {% for answer in question.answer_set.all %}
-                <div class="row response-row">
-                    <div class="response-radio">
-                        <label class="response-label">
+                {% if answer.correct and not question.is_open %}
+                    <div class="panel panel-success">
+                {% else %}
+                    <div class="panel panel-default">
+                {% endif %}
+
+                    <div class="panel-heading">{{ forloop.counter0|get_letter }}</div>
+                        <label class="answer-label">
+                            <div class="panel-body">
                             <input type="radio" class="disable-toggle" name="answer" value="{{ answer.id }}"
                                 {% if not question.is_open %}
                                     disabled
@@ -52,9 +59,9 @@
                                 {% endfor %}>
 
                                 {{ answer.answer_text|safe }}
+                            </div>
                         </label>
                     </div>
-                </div>
             {% endfor %}
         {% if question.group.room.owner_id == user.id %}
             <button type="submit" class="btn btn-primary btn-block disable-toggle" {% if not question.is_open %}disabled{% endif %}>Send Answer</button>
