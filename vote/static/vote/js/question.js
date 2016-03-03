@@ -127,8 +127,8 @@
             var _this = $(this);
             if (_this.val()){
                 var postdata = {
-                    question_text: $(_this).val(),
-                }
+                    question_text: $(_this).val()
+                };
                 $.ajax({
                     url: $("#update-url").data("url"),
                     method: 'POST',
