@@ -36,7 +36,27 @@
             </h3>
             <hr>
         </div>
-        {#{% url 'answer_response' question_group.room_id question_group.id question.id  %}#}
+
+
+        <style>
+
+            input[type=radio] + label {
+              width: 100%;
+              height: 100%;
+            }
+
+            input[type=radio]:checked + label {
+              border: solid black;
+              width: 100%;
+              height: 100%;
+            }
+
+            input[type="radio"] {
+                display:none;
+            }
+
+        </style>
+
         <form action="{% url 'answer_response' question.group.room_id question.group.id question.id %}" method="POST">{% csrf_token %}
             {% for answer in question.answer_set.all %}
                 {% if answer.correct and not question.is_open %}
@@ -44,11 +64,10 @@
                 {% else %}
                     <div class="panel panel-default">
                 {% endif %}
-
                     <div class="panel-heading">{{ forloop.counter0|get_letter }}</div>
-                        <label class="answer-label">
-                            <div class="panel-body">
-                            <input type="radio" class="disable-toggle" name="answer" value="{{ answer.id }}"
+                        <div class="answer-label" for="{{ answer.id }}">
+{#                            <div class="panel-body">#}
+                                <input type="radio" class="disable-toggle" name="answer" id="{{ answer.id }}"  value="{{ answer.id }}" class="radio"
                                 {% if not question.is_open %}
                                     disabled
                                 {% endif %}
@@ -58,9 +77,11 @@
                                     {% endif %}
                                 {% endfor %}>
 
-                                {{ answer.answer_text|safe }}
-                            </div>
-                        </label>
+                                <label for="{{ answer.id }}">
+                                    {{ answer.answer_text|safe }}
+                                </label>
+{#                            </div>#}
+                        </div>
                     </div>
             {% endfor %}
         {% if question.group.room.owner_id == user.id %}
