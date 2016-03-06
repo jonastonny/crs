@@ -104,7 +104,7 @@
 
     function updateAnswerHelper(_that){
         var _this = $(_that).parent();
-        console.log(_this);
+        //console.log(_this);
 
         //console.log($(_this).siblings('.correct')[0].checked);
         var postdata = {
@@ -118,6 +118,7 @@
             method: 'POST',
             data: postdata
         }).done(function(data) {
+            console.log("Done");
             _this.find('#answer_id').attr('value', JSON.parse(data)[0].pk);
         });
     }
@@ -140,9 +141,32 @@
         });
     };
 
+    tinyMCE.PluginManager.add('stylebuttons', function(editor, url) {
+        ['pre', 'p', 'code', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].forEach(function(name){
+            editor.addButton("style-" + name, {
+                tooltip: "Toggle " + name,
+                text: name.toUpperCase(),
+                onClick: function() { editor.execCommand('mceToggleFormat', false, name); },
+                onPostRender: function() {
+                    var self = this, setup = function() {
+                        editor.formatter.formatChanged(name, function(state) {
+                            self.active(state);
+                        });
+                    };
+                    editor.formatter ? setup() : editor.on('init', setup);
+                }
+            })
+        });
+    });
+
     tinyMCE.init({
+        // setup in order to see changes made in TinyMCE iframe
+        setup: function (editor) { editor.on('change', function () { editor.save(); }); },
+        plugins: "stylebuttons, link, paste, code",
+        paste_enable_default_filters: false,
+        menubar: false,
         toolbar: [
-            'undo redo | styleselect | bold italic | link | alignleft aligncenter alignright'
+            'undo redo | style-pre | bold italic | link | alignleft aligncenter alignright | code'
           ]
 	});
 
@@ -158,9 +182,6 @@
         console.log($(this));
         var a_id = $(this).find('textarea').attr('id');
         tinyMCE.execCommand('mceAddEditor', false, a_id);
-
-
-
     });
 
 
