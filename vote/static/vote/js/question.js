@@ -103,7 +103,7 @@
 
 
     function updateAnswerHelper(_that){
-        var _this = $(_that).parent();
+        var _this = $(_that).closest('#answer-div');
         //console.log(_this);
 
         //console.log($(_this).siblings('.correct')[0].checked);
@@ -123,9 +123,9 @@
         });
     }
 
-    var updateQuestion = function(){
-        $('.update-question').blur(function(){
-            var _this = $(this);
+    var updateQuestion = function(_that){
+        //$('.update-question').blur(function(){
+            var _this = $(_that).closest('textarea');
             if (_this.val()){
                 var postdata = {
                     question_text: $(_this).val()
@@ -138,7 +138,7 @@
                     console.log("Question updated...");
                 });
             }
-        });
+        //});
     };
 
     tinyMCE.PluginManager.add('stylebuttons', function(editor, url) {
@@ -161,7 +161,21 @@
 
     tinyMCE.init({
         // setup in order to see changes made in TinyMCE iframe
-        setup: function (editor) { editor.on('change', function () { editor.save(); }); },
+        setup: function (editor) {
+            editor.on('change', function () {
+                editor.save();
+                console.log(editor.getContent());
+            });
+
+            editor.on('blur', function(e) {
+                editor.save();
+                if (editor.getElement().id == 'id_question_text'){ updateQuestion(editor.getElement()); }
+                else{ updateAnswerHelper(editor.getElement()); }
+            });
+
+
+
+        },
         plugins: "stylebuttons, link, paste, code",
         paste_enable_default_filters: false,
         menubar: false,
