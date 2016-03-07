@@ -63,23 +63,49 @@ class CreateRoomView(generic.CreateView):
         return super(CreateRoomView, self).form_valid(form)
 
 
-class CreateQuestionGroupView(generic.CreateView):
-    template_name = 'vote/questiongroup_create.html'
-    model = QuestionGroup
-    fields = ['title']
+# class CreateQuestionGroupView(generic.CreateView):
+#     template_name = 'vote/questiongroup_create.html'
+#     model = QuestionGroup
+#     fields = ['title']
+#
+#     def form_valid(self, form):
+#         room_obj = get_object_or_404(Room, pk=self.kwargs['room'])
+#         if room_obj.owner_id == self.request.user.id:
+#             form.instance.room = room_obj
+#             return super(CreateQuestionGroupView, self).form_valid(form)
+#         return redirect(room_obj)
+#
+#     def form_invalid(self, form):
+#         room_obj = get_object_or_404(Room, pk=self.kwargs['room'])
+#         # form.instance.room = room_obj
+#         # form.save()
+#         self.get(self.request, form)
+#
+#     def get(self, request, *args, **kwargs):
+#         room_obj = get_object_or_404(Room, pk=kwargs['room'])
+#         if not room_obj.owner == request.user:
+#             return redirect(room_obj)
+#         return render(request, template_name=self.template_name, context={'room': room_obj, 'form': generic.CreateView.get_form_class(self)})
 
-    def form_valid(self, form):
-        room_obj = get_object_or_404(Room, pk=self.kwargs['room'])
-        if room_obj.owner_id == self.request.user.id:
-            form.instance.room = room_obj
-            return super(CreateQuestionGroupView, self).form_valid(form)
-        return redirect(room_obj)
 
-    def get(self, request, *args, **kwargs):
-        room_obj = get_object_or_404(Room, pk=kwargs['room'])
-        if not room_obj.owner == request.user:
-            return redirect(room_obj)
-        return render(request, template_name=self.template_name, context={'room': room_obj, 'form': generic.CreateView.get_form_class(self)})
+def questingroup_create(request, room):
+    room = Room.objects.get(pk=room)
+    if request.method == 'POST':
+        if not room.owner_id == request.user.id:
+            return redirect(room)
+        form = VoteQuestiongroupForm(request.POST)
+        if form.is_valid():
+            form.instance.owner_id = request.user.id
+            form.instance.room_id = room.id
+            qg = form.save()
+            return redirect(qg)
+        else:
+            context = {'room': room, 'form': form}
+    else:
+        context = {'room': room, 'form': VoteQuestiongroupForm()}
+
+    return render(request, 'vote/questiongroup_create.html', context=context)
+
 
 
 @login_required

@@ -169,8 +169,11 @@
 
             editor.on('blur', function(e) {
                 editor.save();
-                if (editor.getElement().id == 'id_question_text'){ updateQuestion(editor.getElement()); }
-                else{ updateAnswerHelper(editor.getElement()); }
+                var editorElement = editor.getElement();
+                if($(editorElement).hasClass('update')){
+                    if (editorElement.id == 'id_question_text'){ updateQuestion(editor.getElement()); }
+                    else{ updateAnswerHelper(editor.getElement()); }
+                }
             });
 
 

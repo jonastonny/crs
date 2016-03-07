@@ -1,6 +1,6 @@
 from django import forms
 
-from vote.models import Room, Question, Answer
+from vote.models import Room, Question, Answer, QuestionGroup
 
 
 class VoteRoomForm(forms.ModelForm):
@@ -13,7 +13,7 @@ class VoteRoomForm(forms.ModelForm):
 class VoteQuestiongroupForm(forms.ModelForm):
 
     class Meta:
-        model = Room
+        model = QuestionGroup
         fields = ['title']
 
 

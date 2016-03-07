@@ -55,6 +55,10 @@ td {
     height: 100%;
     font-weight: 500;
 }
+
+.answer-div {
+    margin-top:40px;
+}
 /**/
 .response-row {
     margin-top: 15px;
