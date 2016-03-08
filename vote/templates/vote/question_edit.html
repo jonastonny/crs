@@ -11,7 +11,7 @@
             <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'room_detail' q.group.room_id %}">{{ q.group.room.title }}</a></li>
             <li><a href="{% url 'questiongroup_detail' q.group.room_id q.group_id %}">{{ q.group.title }}</a></li>
-            <li><a href="{% url 'question_detail' q.group.room_id q.group_id q.id %}">{{ q.question_text|truncatechars:20 }}</a></li>
+            <li><a href="{% url 'question_detail' q.group.room_id q.group_id q.id %}">{{ q.question_text|striptags|truncatechars:20 }}</a></li>
             <li class="active">Edit question</li>
         </ol>
 
