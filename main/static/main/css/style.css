@@ -41,10 +41,6 @@ td {
   height:auto;
   min-height: 250px;
 }
-
-label {
-    font-weight: 500;
-}
 /* TODO: response-label is no longer used. Kept if we want to use it. Originally used on answers in question_detail.html */
 .response-label {
     width: 100%;
@@ -55,8 +51,6 @@ label {
 }
 
 .answer-label {
-    width: 100%;
-    height: 100%;
     font-weight: 500;
 }
 
