@@ -60,7 +60,7 @@
                                 </td>
                             {% else %}
                                 <td>
-                                    {{ questiongroup.is_open }}
+                                    {{ questiongroup.is_open|is_open|safe }}
                                 </td>
                             {% endif %}
                         </tr>

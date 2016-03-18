@@ -58,3 +58,17 @@ def what_did_user_answer(question, user):
 @register.filter
 def get_letter(integer):
     return chr(ord('A') + integer)
+
+
+@register.filter
+def is_open(boolean):
+    if boolean:
+        return '<span class="glyphicon glyphicon-ok-circle is-open" aria-hidden="true"></span>'
+    return '<span class="glyphicon glyphicon-ban-circle is-closed" aria-hidden="true"></span>'
+
+
+
+
+
+
+
