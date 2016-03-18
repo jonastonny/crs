@@ -66,12 +66,13 @@ class Question(models.Model):
         all_responses = 0
         has_correct_answer = False
         for answer in self.answer_set.all():
+            count = answer.response_set.count()
             if answer.correct:
                 has_correct_answer = True
-                correct_responses += answer.response_set.count()
-                all_responses += answer.response_set.count()
+                correct_responses += count
+                all_responses += count
             else:
-                all_responses += answer.response_set.count()
+                all_responses += count
         if all_responses == 0:
             return has_correct_answer, 0.0
         else:

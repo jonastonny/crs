@@ -20,6 +20,7 @@
                 {% if qform.errors %}
                     <div class="alert alert-warning" role="alert">{{ qform.errors.question_text }}</div>
                 {% endif %}
+                <hr>
                 <div id="answers">
                     {% for aform in aforms %}
                         <div class="form-group has-feedback answer-div" id="answer-div">

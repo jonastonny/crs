@@ -31,9 +31,8 @@
         {% endif %}
 
         <div class="">
-            <h3>
-                {{ question.question_text|safe }}
-            </h3>
+            <h4>Question:</h4>
+            <h3>{{ question.question_text|safe }}</h3>
             <hr>
         </div>
 
@@ -57,6 +56,9 @@
 
         </style>
 
+        <div>
+            <h4>Answers: </h4>
+        </div>
         <form action="{% url 'answer_response' question.group.room_id question.group.id question.id %}" method="POST">{% csrf_token %}
             {% for answer in question.answer_set.all %}
                 {% if answer.correct and not question.is_open %}

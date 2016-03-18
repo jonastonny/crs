@@ -2,9 +2,15 @@
 
 {% block content %}
 {% load staticfiles %}
+{% load compress %}
 
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'main/css/chartist.min.css' %}">
+    {% endcompress %}
+
+    {% compress js %}
+    <script src="{% static 'main/js/chartist.min.js' %}"></script>
+    {% endcompress %}
 
     <div class="container fill">
 

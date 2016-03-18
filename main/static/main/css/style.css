@@ -56,6 +56,10 @@ td {
     font-weight: 500;
 }
 
+span .ct-label {
+    font-size: 1.75em;
+}
+
 .answer-div {
     margin-top:40px;
 }

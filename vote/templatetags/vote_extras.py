@@ -37,14 +37,15 @@ def answer_correct(answer):
 def what_did_user_answer(question, user):
     if not question.is_open:
         for answer in question.answer_set.all():
-            if answer.correct:
-                for response in answer.response_set.all():
-                    if response.user_id == user.id:
+            for response in answer.response_set.all():
+                if response.user_id == user.id:
+                    if answer.correct:
                         return '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>'
-            else:
-                for response in answer.response_set.all():
-                    if response.user_id == user.id:
+                    else:
                         return '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>'
+            # else:
+            #     for response in answer.response_set.all():
+            #         if response.user_id == user.id:
         return "Not registered"
     else:
         for answer in question.answer_set.all():

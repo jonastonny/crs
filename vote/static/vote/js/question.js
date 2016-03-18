@@ -179,11 +179,11 @@
 
 
         },
-        plugins: "stylebuttons, link, paste, code",
+        plugins: "stylebuttons, link, paste, code, preview",
         paste_enable_default_filters: false,
         menubar: false,
         toolbar: [
-            'undo redo | style-pre | bold italic | link | alignleft aligncenter alignright | code'
+            'undo redo | style-pre | bold italic | link | alignleft aligncenter alignright | code | preview'
           ]
 	});
 
