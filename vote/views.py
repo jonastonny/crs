@@ -16,7 +16,16 @@ from vote.templatetags.vote_extras import user_is_subscribed_to_room, room_is_ow
 from vote.utils import get_pusher
 
 
-ALLOWED_TAGS = ['pre', 'br', 'p']
+ALLOWED_TAGS = [
+    'pre', 
+    'br', 
+    'p', 
+    'em', 
+    'strong', 
+    'b', 
+    'i',
+    'u',
+    ]
 
 
 class RoomDetailView(generic.DetailView):
