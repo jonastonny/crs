@@ -151,7 +151,7 @@
                 {% else %}
                 <td>
                     <div class="checkbox">
-                        {{ question.is_open }}
+                        {{ question.is_open|is_open|safe }}
                     </div>
                 </td>
                 {% endif %}
