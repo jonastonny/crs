@@ -6,7 +6,7 @@ from django.db import models
 
 
 class Room(models.Model):
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     date_time = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
