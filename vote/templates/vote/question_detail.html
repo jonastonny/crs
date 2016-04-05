@@ -1,10 +1,10 @@
 {% extends 'main/base.html' %}
 
 {% block content %}
-{% load staticfiles %}
-{% load compress %}
-{% load vote_extras %}
-{% load widget_tweaks %}
+    {% load staticfiles %}
+    {% load compress %}
+    {% load vote_extras %}
+    {% load widget_tweaks %}
 
     <div class="container">
         <ol class="breadcrumb">
@@ -19,8 +19,8 @@
         {% if question.group.room.owner == user %}
             {% if not question.is_open %}
                 <div class="alert alert-info alert-dismissible" role="alert">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <strong>Notice!</strong> This question is owned by you, but is not yet open for other users!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Notice!</strong> This question is owned by you, but is not yet open for other users!
                 </div>
                 <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' question.group.room.id question.group.id question.id %}">Open Question</button>
             {% else %}
@@ -49,9 +49,9 @@
             }
 
             input[type=radio]:checked + label {
-              border: solid black;
-              width: 100%;
-              height: 100%;
+                border: solid black;
+                width: 100%;
+                height: 100%;
             }
 
             input[type="radio"] {
@@ -70,44 +70,44 @@
                 {% else %}
                     <div class="panel panel-default">
                 {% endif %}
-                    <div class="panel-heading">{{ forloop.counter0|get_letter }}</div>
-                        <div class="answer-label" for="{{ answer.id }}">
-{#                            <div class="panel-body">#}
-                                <input type="radio" class="disable-toggle" name="answer" id="{{ answer.id }}"  value="{{ answer.id }}" class="radio"
-                                {% if not question.is_open %}
-                                    disabled
-                                {% endif %}
-                                {% for response in answer.response_set.all %}
-                                    {% if response.user_id == request.user.id %}
-                                        checked
-                                    {% endif %}
-                                {% endfor %}>
-                                <label for="{{ answer.id }}" class="answer-label">
-                                    {{ answer.answer_text|safe }}
-                                </label>
-{#                            </div>#}
-                        </div>
-                    </div>
+            <div class="panel-heading">{{ forloop.counter0|get_letter }}</div>
+            <div class="answer-label" for="{{ answer.id }}">
+                {#                            <div class="panel-body">#}
+                <input type="radio" class="disable-toggle" name="answer" id="{{ answer.id }}"  value="{{ answer.id }}" class="radio"
+                        {% if not question.is_open %}
+                       disabled
+                        {% endif %}
+                        {% for response in answer.response_set.all %}
+                            {% if response.user_id == request.user.id %}
+                       checked
+                            {% endif %}
+                        {% endfor %}>
+                <label for="{{ answer.id }}" class="answer-label">
+                    {{ answer.answer_text|safe }}
+                </label>
+                {#                            </div>#}
+            </div>
+            </div>
             {% endfor %}
-        {% if question.group.room.owner_id == user.id %}
-            <button type="submit" class="btn btn-primary btn-block disable-toggle" {% if not question.is_open %}disabled{% endif %}>Send Answer</button>
-            <a href="{% url 'question_response' question.group.room_id question.group_id question.id %}" class="btn btn-success btn-block">See live responses</a>
-        {% else %}
-            {% if question.is_open %}
-                <button type="submit" class="btn btn-primary btn-block">Send Answer</button>
+            {% if question.group.room.owner_id == user.id %}
+                <button type="submit" class="btn btn-primary btn-block disable-toggle" {% if not question.is_open %}disabled{% endif %}>Send Answer</button>
+                <a href="{% url 'question_response' question.group.room_id question.group_id question.id %}" class="btn btn-success btn-block">See live responses</a>
             {% else %}
-                <a href="{% url 'question_response' question.group.room_id question.group_id question.id %}" class="btn btn-success btn-block">See responses</a>
+                {% if question.is_open %}
+                    <button type="submit" class="btn btn-primary btn-block">Send Answer</button>
+                {% else %}
+                    <a href="{% url 'question_response' question.group.room_id question.group_id question.id %}" class="btn btn-success btn-block">See responses</a>
+                {% endif %}
             {% endif %}
-        {% endif %}
         </form>
     </div>
 
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
     {% compress js %}
-    <script src="{% static 'vote/js/pretty.js' %}"></script>
-    <script src="{% static 'vote/js/toggle.js' %}"></script>
-    <script src="{% static 'vote/js/subscribe.js' %}"></script>
+        <script src="{% static 'vote/js/pretty.js' %}"></script>
+        <script src="{% static 'vote/js/toggle.js' %}"></script>
+        <script src="{% static 'vote/js/subscribe.js' %}"></script>
     {% endcompress %}
 
 {% endblock %}
