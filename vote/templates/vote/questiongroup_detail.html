@@ -54,7 +54,6 @@
                                     <tr>
                                         <th>Created answers</th>
                                         <th>Responses</th>
-                                        <th>My answer</th>
                                         <th>% correct responses</th>
                                         <th>Date created</th>
                                         <th>Changed</th>
@@ -64,17 +63,6 @@
                                     <tr>
                                         <td>{{ question.number_of_possible_answers }}</td>
                                         <td>{{ question.total_responses }}</td>
-                                        <td>
-                                            {% if question.is_open %}
-                                                {{ question|what_did_user_answer:request.user|safe }}
-                                            {% else %}
-                                                {% if question.percentages_correct.0 %}
-                                                    {{ question|what_did_user_answer:request.user|safe }}
-                                                {% else %}
-                                                    No correct answer
-                                                {% endif %}
-                                            {% endif %}
-                                        </td>
                                         <td>
                                             {% if question.is_open %}
                                                 Hidden
@@ -105,6 +93,7 @@
                 <table class="table table-hover">
                     <tr>
                         <th>Question</th>
+                        <th>My answer</th>
                         <th>Info</th>
                         {#            <th>Created answers</th>#}
                         {#            <th>Responses</th>#}
@@ -125,6 +114,18 @@
                         <tr>
                             <td>
                                 <a href="{% url 'question_detail' questiongroup.room_id questiongroup.id question.id %}">{{ question.question_text|striptags|truncatechars:50 }}</a>
+                            </td>
+
+                            <td>
+                                {% if question.is_open %}
+                                    {{ question|what_did_user_answer:request.user|safe }}
+                                {% else %}
+                                    {% if question.percentages_correct.0 %}
+                                        {{ question|what_did_user_answer:request.user|safe }}
+                                    {% else %}
+                                        No correct answer
+                                    {% endif %}
+                                {% endif %}
                             </td>
 
 
