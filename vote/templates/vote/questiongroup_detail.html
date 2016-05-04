@@ -3,6 +3,7 @@
 {% load humanize %}
 {% load staticfiles %}
 {% load compress %}
+{% load cache %}
 
 {% block content %}
 
@@ -38,56 +39,57 @@
             {#      Create modals - created outside the main table      #}
 
             {% for question in questiongroup.question_set.all %}
+                {% cache 30 modal %}
+                    <div class="modal fade" id="myModal-{{ forloop.counter0 }}" role="dialog">
+                        <div class="modal-dialog">
 
-                <div class="modal fade" id="myModal-{{ forloop.counter0 }}" role="dialog">
-                    <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">{{ question.question_text|striptags|truncatechars:65 }}</h4>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-hover table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th>Created answers</th>
-                                        <th>Responses</th>
-                                        <th>% correct responses</th>
-                                        <th>Date created</th>
-                                        <th>Changed</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ question.number_of_possible_answers }}</td>
-                                        <td>{{ question.total_responses }}</td>
-                                        <td>
-                                            {% if question.is_open %}
-                                                Hidden
-                                            {% else %}
-                                                {% if question.percentages_correct.0 == False %}
-                                                    No correct answer
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">{{ question.question_text|striptags|truncatechars:65 }}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-hover table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th>Created answers</th>
+                                            <th>Responses</th>
+                                            <th>% correct responses</th>
+                                            <th>Date created</th>
+                                            <th>Changed</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ question.number_of_possible_answers }}</td>
+                                            <td>{{ question.total_responses }}</td>
+                                            <td>
+                                                {% if question.is_open %}
+                                                    Hidden
                                                 {% else %}
-                                                    {{ question.percentages_correct.1 }}</td>
+                                                    {% if question.percentages_correct.0 == False %}
+                                                        No correct answer
+                                                    {% else %}
+                                                        {{ question.percentages_correct.1 }}</td>
+                                                    {% endif %}
                                                 {% endif %}
-                                            {% endif %}
-                                        <td>{{ question.pub_date }}</td>
-                                        <td>{{ question.updated_at|naturaltime }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <td>{{ question.pub_date }}</td>
+                                            <td>{{ question.updated_at|naturaltime }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endcache %}
             {% endfor %}
 
-            {#            Modal slut #}
+            {# Modal slut #}
 
             <div class="table-responsive">
                 <table class="table table-hover">

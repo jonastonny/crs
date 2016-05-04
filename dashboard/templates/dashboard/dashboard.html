@@ -3,6 +3,7 @@
 {% block content %}
     {% load staticfiles %}
     {% load humanize %}
+    {% load cache %}
 
     <div class="container">
         <h1>Dashboard</h1>
@@ -35,6 +36,7 @@
                             <td>
                                 <a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a>
                             </td>
+                            {% cache 30 dashboard-results %}
                             <td>
                                 {{ subscribed.date_time }}
                             </td>
@@ -44,6 +46,7 @@
                             <td>
                                 {{ subscribed.room.updated_at|naturaltime }}
                             </td>
+                            {% endcache %}
                             <td>
                                 <button class="btn btn-primary btn-xs toggle_subscription" data-url="{% url 'room_subscribe' subscribed.room.id %}">Unsubscribe</button>
                             </td>

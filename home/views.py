@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.views import generic
-from django.views.decorators.cache import cache_page
 
 from django.views.generic import *
 
@@ -24,7 +23,6 @@ class IndexView(TemplateView):
 
 
 @login_required
-@cache_page(15)
 def profile_detail(request):
     return render(request, template_name='home/profile_detail.html', context={'user': request.user})
 
