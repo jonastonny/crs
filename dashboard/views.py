@@ -17,9 +17,10 @@ def dashboard(request):
         return redirect('/authentication/login')
 
 
+@cache_page(15)
 def search_room(request):
     query = request.GET.get('q', '')
-    per_page = request.GET.get('per_page', '6')
+    per_page = request.GET.get('per_page', '5')
     page = request.GET.get('page')
     rooms_list = Room.objects.filter(title__icontains=query)
     paginator = Paginator(rooms_list, per_page)
