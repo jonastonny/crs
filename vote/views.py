@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.html import strip_tags
 from django.views import generic
+from django.views.decorators.cache import cache_page
 
 from vote.forms import VoteRoomForm, VoteQuestiongroupForm, AddQuestionForm, AddAnswerForm
 from vote.models import Room, QuestionGroup, Question, Subscription, Answer, Response
@@ -17,22 +18,25 @@ from vote.utils import get_pusher
 
 
 ALLOWED_TAGS = [
-    'pre', 
-    'br', 
+    'pre',
+    'br',
     'p', 
     'em', 
     'strong', 
     'b', 
     'i',
     'u',
+    'code',
     ]
 
 
+@cache_page(15)
 class RoomDetailView(generic.DetailView):
     template_name = 'vote/room_detail.html'
     model = Room
 
 
+@cache_page(15)
 class QuestionDetailView(generic.DetailView):
     template_name = 'vote/question_detail.html'
     model = Question
@@ -165,6 +169,7 @@ def question_toggle(request, room, questiongroup, question):
         return HttpResponse(status=403)
 
 
+@cache_page(15)
 class QuestionGroupDetailView(generic.DetailView):
     template_name = 'vote/questiongroup_detail.html'
     model = QuestionGroup

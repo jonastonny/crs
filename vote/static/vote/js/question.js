@@ -68,8 +68,8 @@
                 if(~(window.location.pathname).indexOf('edit')){ // we are editing and deleting
                     if($(_this).parent().find("#answer_id").val() != "None"){
                         $.ajax({
-                           method: 'POST',
-                           url : _this.parent().find('#delete-url').val()
+                            method: 'POST',
+                            url : _this.parent().find('#delete-url').val()
                         });
                     }
                 }
@@ -82,12 +82,12 @@
         var val = $('.remove-answer');
         if(val.length == 1){
             val.each(function(){
-               $(this).hide();
+                $(this).hide();
             });
         }
         else{
             val.each(function(){
-               $(this).show();
+                $(this).show();
             });
         }
     };
@@ -125,19 +125,19 @@
 
     var updateQuestion = function(_that){
         //$('.update-question').blur(function(){
-            var _this = $(_that).closest('textarea');
-            if (_this.val()){
-                var postdata = {
-                    question_text: $(_this).val()
-                };
-                $.ajax({
-                    url: $("#update-url").data("url"),
-                    method: 'POST',
-                    data: postdata
-                }).done(function(data) {
-                    console.log("Question updated...");
-                });
-            }
+        var _this = $(_that).closest('textarea');
+        if (_this.val()){
+            var postdata = {
+                question_text: $(_this).val()
+            };
+            $.ajax({
+                url: $("#update-url").data("url"),
+                method: 'POST',
+                data: postdata
+            }).done(function(data) {
+                console.log("Question updated...");
+            });
+        }
         //});
     };
 
@@ -167,6 +167,14 @@
                 console.log(editor.getContent());
             });
 
+            editor.onInit.add(function(ed) {
+                ed.pasteAsPlainText = true;
+            }
+
+            // editor.on('onInit', function(ed){
+            //     ed.pasteAsPlainText = true;
+            // });
+
             editor.on('blur', function(e) {
                 editor.save();
                 var editorElement = editor.getElement();
@@ -184,8 +192,20 @@
         menubar: false,
         toolbar: [
             'undo redo | style-pre | bold italic | link | alignleft aligncenter alignright | code | preview'
-          ]
-	});
+        ],
+        // convert_newlines_to_brs : false,
+        paste_text_sticky : true,
+
+        // remove_redundant_brs : true,
+        // remove_trailing_nbsp : true,
+        // linebreaks: false,
+        // preformated: true,
+        // paste_auto_cleanup_on_paste : false,
+        // paste_remove_styles: true,
+        // paste_remove_styles_if_webkit: true,
+        // paste_strip_class_attributes: true,
+        // pasteAsPlainText: true
+    });
 
     var copyMe =  $('#answer-div').clone();
     //var a_id = $('#answer-div').find('textarea').attr('id');

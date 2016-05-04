@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.views import generic
+from django.views.decorators.cache import cache_page
 
 from vote.models import Room
 from django.shortcuts import render, redirect
@@ -9,6 +10,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 
 
+@cache_page(60)
 def dashboard(request):
     if request.user.is_authenticated():
         return render(request, 'dashboard/dashboard.html')
