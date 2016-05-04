@@ -159,7 +159,7 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_ROOT = 'main/static/'
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 
 # Redirect to LOGIN_REDIRECT_URL after login
 LOGIN_REDIRECT_URL = '/dashboard'

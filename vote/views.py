@@ -427,6 +427,9 @@ def answer_response(request, room, questiongroup, question):
     if subscription or room_obj.owner == request.user and qg.is_open:
         question_obj = qg.question_set.get(pk=question)
         if question_obj.is_open:
+            if not request.POST.get('answer'):
+                messages.error(request, 'You have to select one of the answers!')
+                return redirect(question_obj)
             answer_obj = question_obj.answer_set.get(pk=request.POST['answer'])
             response, created = Response.objects.update_or_create(question=question_obj, user=request.user, defaults={'answer': answer_obj, 'user': request.user, 'question': question_obj})
             answer_set = question_obj.answer_set.all()
