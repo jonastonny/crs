@@ -39,7 +39,6 @@
             {#      Create modals - created outside the main table      #}
 
             {% for question in questiongroup.question_set.all %}
-                {% cache 30 modal %}
                     <div class="modal fade" id="myModal-{{ forloop.counter0 }}" role="dialog">
                         <div class="modal-dialog">
 
@@ -86,7 +85,6 @@
                             </div>
                         </div>
                     </div>
-                {% endcache %}
             {% endfor %}
 
             {# Modal slut #}
