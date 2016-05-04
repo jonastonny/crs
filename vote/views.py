@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.html import strip_tags
 from django.views import generic
+from django.views.decorators.cache import cache_page
 
 from vote.forms import VoteRoomForm, VoteQuestiongroupForm, AddQuestionForm, AddAnswerForm
 from vote.models import Room, QuestionGroup, Question, Subscription, Answer, Response
@@ -405,6 +406,7 @@ def question_response(request, room, questiongroup, question):
 
 
 @login_required
+@cache_page(60)
 def answer_response(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse(403)

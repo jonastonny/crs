@@ -24,7 +24,7 @@ class IndexView(TemplateView):
 
 
 @login_required
-@cache_page(60 * 60)
+@cache_page(15)
 def profile_detail(request):
     return render(request, template_name='home/profile_detail.html', context={'user': request.user})
 
