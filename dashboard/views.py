@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 
 
-@cache_page(60)
+@cache_page(30)
 def dashboard(request):
     if request.user.is_authenticated():
         return render(request, 'dashboard/dashboard.html')
