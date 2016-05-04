@@ -166,15 +166,7 @@
                 editor.save();
                 console.log(editor.getContent());
             });
-
-            editor.onInit.add(function(ed) {
-                ed.pasteAsPlainText = true;
-            }
-
-            // editor.on('onInit', function(ed){
-            //     ed.pasteAsPlainText = true;
-            // });
-
+            
             editor.on('blur', function(e) {
                 editor.save();
                 var editorElement = editor.getElement();

@@ -27,8 +27,17 @@ ALLOWED_TAGS = [
     'i',
     'u',
     'code',
+    'a'
     ]
 
+
+ALLOWED_ATTRIBUTES = {
+    '*': ['class'],
+    'p': ['style'],
+    'a': ['href'],
+}
+
+ALLOWED_STYLES = ['text-align']
 
 class RoomDetailView(generic.DetailView):
     template_name = 'vote/room_detail.html'
@@ -255,12 +264,12 @@ def question_answer_create(request, room, questiongroup):
 
         if questionform.is_valid() and all([af.is_valid() for af in answerform]):
             new_question = questionform.save(commit=False)
-            new_question.question_text = bleach.clean(new_question.question_text, tags=ALLOWED_TAGS)
+            new_question.question_text = bleach.clean(new_question.question_text, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES, styles=ALLOWED_STYLES)
             new_question.save()
             for af in answerform:
                 new_answer = af.save(commit=False)
                 # af.cleaned_data['answer_text'] = bleach.clean(af.cleaned_data['answer_text'])
-                new_answer.answer_text = bleach.clean(new_answer.answer_text, tags=ALLOWED_TAGS, attributes={'*': ['class']})
+                new_answer.answer_text = bleach.clean(new_answer.answer_text, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES, styles=ALLOWED_STYLES)
                 new_answer.question = new_question
                 new_answer.save()
             return redirect(new_question)
@@ -299,7 +308,7 @@ def question_answer_update(request, room, questiongroup, question):
         # question_obj = Question.objects.get(id=question)
         questionform = AddQuestionForm(request.POST, instance=question_obj)
         if questionform.is_valid():
-            questionform.instance.question_text = bleach.clean(questionform.instance.question_text, tags=ALLOWED_TAGS)
+            questionform.instance.question_text = bleach.clean(questionform.instance.question_text, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES, styles=ALLOWED_STYLES)
             questionform.save()
         return JsonResponse(questionform.errors)
 
@@ -312,7 +321,7 @@ def question_answer_update(request, room, questiongroup, question):
         if answerform.is_valid():
             (answer_obj, created) = Answer.objects.update_or_create(id=my_id,
                                                                     question_id=question,
-                                                                    defaults={'answer_text': bleach.clean(answerform.instance.answer_text, tags=ALLOWED_TAGS),
+                                                                    defaults={'answer_text': bleach.clean(answerform.instance.answer_text, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES, styles=ALLOWED_STYLES),
                                                                                                               'correct': answerform.instance.correct})
             data = serializers.serialize("json", [answer_obj])
             return JsonResponse(data, safe=False)
@@ -406,7 +415,7 @@ def question_response(request, room, questiongroup, question):
 
 
 @login_required
-@cache_page(60)
+@cache_page(30)
 def answer_response(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse(403)
