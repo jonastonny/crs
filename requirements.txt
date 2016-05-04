@@ -8,3 +8,4 @@ pusher
 bleach
 django_compressor
 short_url
+python-memcached
