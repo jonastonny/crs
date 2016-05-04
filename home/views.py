@@ -14,7 +14,6 @@ from home.forms import HomeProfileEdit
 from vote.models import QuestionGroup
 
 
-@cache_page(60 * 60)
 class IndexView(TemplateView):
     template_name = 'home/index.html'
 
