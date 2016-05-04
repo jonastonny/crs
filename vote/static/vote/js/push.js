@@ -2,25 +2,25 @@ var labels = JSON.parse($("#labels").val().replace(/'/g, '"'));
 var series = JSON.parse($("#series").val());
 
 var chart = new Chartist.Bar('.ct-chart', {
-      labels: labels,
-      series: series
+        labels: labels,
+        series: series
     }, {
-      low: 0,
-      axisY: {
-          onlyInteger: true
-      },
-      distributeSeries: true
+        low: 0,
+        axisY: {
+            onlyInteger: true
+        },
+        distributeSeries: true
     }
 );
 
 // Enable pusher logging - don't include this in production
 Pusher.log = function(message) {
-  if (window.console && window.console.log) {
-    window.console.log(message);
-  }
+    if (window.console && window.console.log) {
+        window.console.log(message);
+    }
 };
 var pusher = new Pusher('52b285639f1c7195cfac', {
-  encrypted: true
+    encrypted: true
 });
 var channel = pusher.subscribe('crs');
 var event = $("#event:hidden").val();

@@ -16,13 +16,13 @@
         Link to group: <a href="{% url 'url_redirect' short_url %}">{{ request.get_host }}/r/{{ short_url }}</a>
         {% if not questiongroup.is_open %}
             <div class="alert alert-info alert-dismissible" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <strong>Notice!</strong> This room is owned by you, but is not yet open for other users!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Notice!</strong> This room is owned by you, but is not yet open for other users!
             </div>
         {% endif %}
         <h2>{{ questiongroup.title }}
             {% if questiongroup|questiongroup_is_owned_by_user:user %}
-               <small><a href="{% url 'questiongroup_edit' questiongroup.room_id questiongroup.id %}">Edit</a></small> |
+                <small><a href="{% url 'questiongroup_edit' questiongroup.room_id questiongroup.id %}">Edit</a></small> |
                 <small>
                     <a href="{% url 'question_create' questiongroup.room_id questiongroup.id %}">
                         Add Question
@@ -35,131 +35,132 @@
 
         {% if questiongroup.has_questions %}
 
-{#      Create modals - created outside the main table      #}
+            {#      Create modals - created outside the main table      #}
 
             {% for question in questiongroup.question_set.all %}
 
                 <div class="modal fade" id="myModal-{{ forloop.counter0 }}" role="dialog">
-                  <div class="modal-dialog">
+                    <div class="modal-dialog">
 
-                  <!-- Modal content-->
-                      <div class="modal-content">
-                          <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                              <h4 class="modal-title">{{ question.question_text|striptags|truncatechars:65 }}</h4>
-                          </div>
-                          <div class="modal-body">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">{{ question.question_text|striptags|truncatechars:65 }}</h4>
+                            </div>
+                            <div class="modal-body">
                                 <table class="table table-hover table-condensed">
                                     <thead>
-                                        <tr>
-                                            <th>Created answers</th>
-                                            <th>Responses</th>
-                                            <th>My answer</th>
-                                            <th>% correct responses</th>
-                                            <th>Date created</th>
-                                            <th>Changed</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Created answers</th>
+                                        <th>Responses</th>
+                                        <th>% correct responses</th>
+                                        <th>Date created</th>
+                                        <th>Changed</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>{{ question.number_of_possible_answers }}</td>
-                                            <td>{{ question.total_responses }}</td>
-                                            <td>
-                                                {% if question.is_open %}
-                                                    {{ question|what_did_user_answer:request.user|safe }}
+                                    <tr>
+                                        <td>{{ question.number_of_possible_answers }}</td>
+                                        <td>{{ question.total_responses }}</td>
+                                        <td>
+                                            {% if question.is_open %}
+                                                Hidden
+                                            {% else %}
+                                                {% if question.percentages_correct.0 == False %}
+                                                    No correct answer
                                                 {% else %}
-                                                    {% if question.percentages_correct.0 %}
-                                                        {{ question|what_did_user_answer:request.user|safe }}
-                                                    {% else %}
-                                                        No correct answer
-                                                    {% endif %}
+                                                    {{ question.percentages_correct.1 }}</td>
                                                 {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if question.is_open %}
-                                                    Hidden
-                                                {% else %}
-                                                    {% if question.percentages_correct.0 == False %}
-                                                        No correct answer
-                                                    {% else %}
-                                                        {{ question.percentages_correct.1 }}</td>
-                                                    {% endif %}
-                                                {% endif %}
-                                            <td>{{ question.pub_date }}</td>
-                                            <td>{{ question.updated_at|naturaltime }}</td>
-                                        </tr>
+                                            {% endif %}
+                                        <td>{{ question.pub_date }}</td>
+                                        <td>{{ question.updated_at|naturaltime }}</td>
+                                    </tr>
                                     </tbody>
                                 </table>
-                          </div>
-                          <div class="modal-footer">
-                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          </div>
-                      </div>
-                  </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
 
-{#            Modal slut #}
+            {#            Modal slut #}
 
-        <div class="table-responsive">
-        <table class="table table-hover">
-        <tr>
-            <th>Question</th>
-            <th>Info</th>
-{#            <th>Created answers</th>#}
-{#            <th>Responses</th>#}
-{#            <th>My answer</th>#}
-{#            <th>% correct responses</th>#}
-{#            <th>Date created</th>#}
-{#            <th>Changed</th>#}
-            <th>Open for answers</th>
-            {% if questiongroup|questiongroup_is_owned_by_user:user %}
-                <th>
-                    Remove Question
-                </th>
-            {% endif %}
-        </tr>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Question</th>
+                        <th>My answer</th>
+                        <th>Info</th>
+                        {#            <th>Created answers</th>#}
+                        {#            <th>Responses</th>#}
+                        {#            <th>My answer</th>#}
+                        {#            <th>% correct responses</th>#}
+                        {#            <th>Date created</th>#}
+                        {#            <th>Changed</th>#}
+                        <th>Open for answers</th>
+                        {% if questiongroup|questiongroup_is_owned_by_user:user %}
+                            <th>
+                                Remove Question
+                            </th>
+                        {% endif %}
+                    </tr>
 
-        {% for question in questiongroup.question_set.all %}
+                    {% for question in questiongroup.question_set.all %}
 
-            <tr>
-                <td>
-                    <a href="{% url 'question_detail' questiongroup.room_id questiongroup.id question.id %}">{{ question.question_text|striptags|truncatechars:50 }}</a>
-                </td>
+                        <tr>
+                            <td>
+                                <a href="{% url 'question_detail' questiongroup.room_id questiongroup.id question.id %}">{{ question.question_text|striptags|truncatechars:50 }}</a>
+                            </td>
+
+                            <td>
+                                {% if question.is_open %}
+                                    {{ question|what_did_user_answer:request.user|safe }}
+                                {% else %}
+                                    {% if question.percentages_correct.0 %}
+                                        {{ question|what_did_user_answer:request.user|safe }}
+                                    {% else %}
+                                        No correct answer
+                                    {% endif %}
+                                {% endif %}
+                            </td>
 
 
-                <td>
-                    <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal-{{ forloop.counter0 }}">Show info</button>
-                </td>
+                            <td>
+                                <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal-{{ forloop.counter0 }}">Show info</button>
+                            </td>
 
 
-                {% if questiongroup|questiongroup_is_owned_by_user:user %}
-                <td>
-                    {% if question.is_open %}
-                        <button class="toggleQuestion toggle_question btn btn-warning btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Close Question</button>
-                    {% else %}
-                        <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Open Question</button>
-                    {% endif %}
-                </td>
-                <td>
-                    <form action="{% url 'question_delete' questiongroup.room_id questiongroup.id question.id %}" method="post">{% csrf_token %}
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-danger btn-xs">Delete</button>
-                        </div>
-                    </form>
-                </td>
-                {% else %}
-                <td>
-                    <div class="checkbox">
-                        {{ question.is_open|is_open|safe }}
-                    </div>
-                </td>
-                {% endif %}
-            </tr>
-        {% endfor %}
+                            {% if questiongroup|questiongroup_is_owned_by_user:user %}
+                                <td>
+                                    {% if question.is_open %}
+                                        <button class="toggleQuestion toggle_question btn btn-warning btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Close Question</button>
+                                    {% else %}
+                                        <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Open Question</button>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form action="{% url 'question_delete' questiongroup.room_id questiongroup.id question.id %}" method="post">{% csrf_token %}
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <div class="checkbox">
+                                        {{ question.is_open|is_open|safe }}
+                                    </div>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
 
-        </table>
-        </div>
+                </table>
+            </div>
         {% else %}
             <p>Currently no questions in this room!</p>
         {% endif %}
@@ -167,8 +168,8 @@
     </div>
 
     {% compress js %}
-    <script src="{% static 'vote/js/toggle.js' %}"></script>
-    <script src="{% static 'vote/js/subscribe.js' %}"></script>
+        <script src="{% static 'vote/js/toggle.js' %}"></script>
+        <script src="{% static 'vote/js/subscribe.js' %}"></script>
     {% endcompress %}
 
 {% endblock %}
