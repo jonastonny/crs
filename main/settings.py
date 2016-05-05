@@ -162,7 +162,8 @@ COMPRESS_ROOT = 'main/static/'
 COMPRESS_ENABLED = False
 
 # Redirect to LOGIN_REDIRECT_URL after login
-LOGIN_REDIRECT_URL = '/dashboard'
+LOGIN_URL = 'dashboard'
+LOGIN_REDIRECT_URL = 'dashboard'
 
 # Mailgun vairables for email
 EMAIL_BACKEND = 'django_mailgun.MailgunBackend'

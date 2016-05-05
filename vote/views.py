@@ -2,6 +2,7 @@ import bleach
 import short_url
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core import serializers
 
 from django.http import HttpResponse, JsonResponse
@@ -39,12 +40,13 @@ ALLOWED_ATTRIBUTES = {
 
 ALLOWED_STYLES = ['text-align']
 
-class RoomDetailView(generic.DetailView):
+
+class RoomDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = 'vote/room_detail.html'
     model = Room
 
 
-class QuestionDetailView(generic.DetailView):
+class QuestionDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = 'vote/question_detail.html'
     model = Question
 
@@ -73,7 +75,7 @@ class QuestionDetailView(generic.DetailView):
             return redirect(question_obj.group)
 
 
-class CreateRoomView(generic.CreateView):
+class CreateRoomView(LoginRequiredMixin, generic.CreateView):
     template_name = 'vote/room_create.html'
     model = Room
     fields = ['title']
@@ -108,6 +110,7 @@ class CreateRoomView(generic.CreateView):
 #         return render(request, template_name=self.template_name, context={'room': room_obj, 'form': generic.CreateView.get_form_class(self)})
 
 
+@login_required
 def questingroup_create(request, room):
     room = Room.objects.get(pk=room)
     if request.method == 'POST':
@@ -125,7 +128,6 @@ def questingroup_create(request, room):
         context = {'room': room, 'form': VoteQuestiongroupForm()}
 
     return render(request, 'vote/questiongroup_create.html', context=context)
-
 
 
 @login_required
@@ -176,7 +178,7 @@ def question_toggle(request, room, questiongroup, question):
         return HttpResponse(status=403)
 
 
-class QuestionGroupDetailView(generic.DetailView):
+class QuestionGroupDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = 'vote/questiongroup_detail.html'
     model = QuestionGroup
 
