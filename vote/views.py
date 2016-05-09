@@ -410,7 +410,7 @@ def question_response(request, room, questiongroup, question):
             messages.warning(request, "Subscribe to room in order to see responses!")
             return redirect(room_obj)
         elif question.is_open:
-            messages.warning(request, "Hey, wait till question closes!")
+            messages.warning(request, "Hey, wait till the question closes!")
             return redirect(question)
 
     return redirect(room_obj)   # Default, return to room
@@ -443,6 +443,20 @@ def answer_response(request, room, questiongroup, question):
             event = "response-%s%s%s" % (room, questiongroup, question)
             get_pusher().trigger('crs', event, {'data': myData})
     return redirect(qg)
+
+
+@login_required
+def get_response_data(request, room, questiongroup, question):
+    room_obj = get_object_or_404(Room, pk=room)
+    question = room_obj.questiongroup_set.get(pk=questiongroup).question_set.get(pk=question)
+    answer_set = question.answer_set.all()
+    myData = {
+        # 'question': question.question_text,
+        'labels': [strip_tags(a.answer_text) for a in answer_set],
+        'series': [a.number_of_responses() for a in answer_set]
+    }
+
+    return JsonResponse({'data': myData})
 
 
 def user_is_subscribed(room, user):

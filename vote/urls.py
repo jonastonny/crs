@@ -29,5 +29,7 @@ urlpatterns = [
     # ANSWERS
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/(?P<question>[0-9]+)/response/$', views.answer_response, name='answer_response'),
     url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/(?P<question>[0-9]+)/answer/(?P<answer>[0-9]+)/delete/$', views.answer_delete, name='answer_delete'),
+    # DATA
+    url(r'^room/(?P<room>[0-9]+)/group/(?P<questiongroup>[0-9]+)/question/(?P<question>[0-9]+)/responses/data$', views.get_response_data, name='response_data'),
 
 ]

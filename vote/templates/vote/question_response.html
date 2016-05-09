@@ -38,8 +38,7 @@
         </div>
 
         <input type="hidden" id="event" value="response-{{ room }}{{ questiongroup }}{{ question.id }}">
-        <input type="hidden" id="labels" value="{{ data.labels|safe }}">
-        <input type="hidden" id="series" value="{{ data.series|safe }}">
+        <input type="hidden" id="data-url" value="{% url 'response_data' room questiongroup question.id %}">
 
         <script src="{% static 'vote/js/push.js' %}"></script>
 
