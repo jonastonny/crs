@@ -18,13 +18,6 @@ $.ajax({
     chart.update(data.data);
 });
 
-
-// Enable pusher logging - don't include this in production
-Pusher.log = function(message) {
-    if (window.console && window.console.log) {
-        window.console.log(message);
-    }
-};
 var pusher = new Pusher('52b285639f1c7195cfac', {
     encrypted: true
 });
