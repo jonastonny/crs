@@ -392,8 +392,8 @@ def answer_delete(request, room, questiongroup, question, answer):
 
 
 @login_required
+@cache_page(30)
 def question_response(request, room, questiongroup, question):
-    # question = get_object_or_404(Question, pk=question)
     room_obj = get_object_or_404(Room, pk=room)
     question = room_obj.questiongroup_set.get(pk=questiongroup).question_set.get(pk=question)
     answer_set = question.answer_set.all()
@@ -403,21 +403,11 @@ def question_response(request, room, questiongroup, question):
     }
     if room_is_owned_by_user(room_obj, request.user):
         return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
-    if not question.is_open and user_is_subscribed_to_room(request.user, room_obj):
-        return render(request, 'vote/question_response.html', {'room': room, 'questiongroup': questiongroup, 'question': question, 'data': myData})
-    else:
-        if not user_is_subscribed_to_room(request.user, room_obj):
-            messages.warning(request, "Subscribe to room in order to see responses!")
-            return redirect(room_obj)
-        elif question.is_open:
-            messages.warning(request, "Hey, wait till the question closes!")
-            return redirect(question)
-
+    messages.error(request, 'You must own the room to see results')
     return redirect(room_obj)   # Default, return to room
 
 
 @login_required
-@cache_page(30)
 def answer_response(request, room, questiongroup, question):
     if not request.method == 'POST':
         return HttpResponse(403)

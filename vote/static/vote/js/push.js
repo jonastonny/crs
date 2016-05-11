@@ -44,5 +44,5 @@ channel.bind(event, function(data) {
 $("#toggle-answer").click(function(){
     setTimeout(function(){
         chart.update();
-    }, 150);
+    }, 600);
 });
