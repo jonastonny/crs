@@ -105,7 +105,10 @@
                         <th>Open for answers</th>
                         {% if questiongroup|questiongroup_is_owned_by_user:user %}
                             <th>
-                                Remove Question
+                                See responses
+                            </th>
+                            <th>
+                                Remove question
                             </th>
                         {% endif %}
                     </tr>
@@ -144,6 +147,11 @@
                                         <button class="toggleQuestion toggle_question btn btn-success btn-xs" data-url="{% url 'question_toggle' questiongroup.room_id questiongroup.id question.id %}">Open Question</button>
                                     {% endif %}
                                 </td>
+
+                                <td>
+                                    <a href="{% url 'question_response' questiongroup.room_id questiongroup.id question.id %}" class="btn btn-success btn-xs">See responses</a>
+                                </td>
+
                                 <td>
                                     <form action="{% url 'question_delete' questiongroup.room_id questiongroup.id question.id %}" method="post">{% csrf_token %}
                                         <div class="form-group">
