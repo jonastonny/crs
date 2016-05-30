@@ -31,27 +31,27 @@
                         <th>Unsubscribe</th>
                     </tr>
 
-                    {% for subscribed in user.subscription_set.all %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a>
-                            </td>
-                            {% cache 30 dashboard-results %}
-                            <td>
-                                {{ subscribed.date_time }}
-                            </td>
-                            <td>
-                                {{ subscribed.room.total_subscribers }}
-                            </td>
-                            <td>
-                                {{ subscribed.room.updated_at|naturaltime }}
-                            </td>
-                            {% endcache %}
-                            <td>
-                                <button class="btn btn-primary btn-xs toggle_subscription" data-url="{% url 'room_subscribe' subscribed.room.id %}">Unsubscribe</button>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                    {% cache 30 dashboard-results request.user 'results' %}
+                        {% for subscribed in user.subscription_set.all %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'room_detail' subscribed.room.id %}">{{ subscribed.room.title }}</a>
+                                </td>
+                                <td>
+                                    {{ subscribed.date_time }}
+                                </td>
+                                <td>
+                                    {{ subscribed.room.total_subscribers }}
+                                </td>
+                                <td>
+                                    {{ subscribed.room.updated_at|naturaltime }}
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-xs toggle_subscription" data-url="{% url 'room_subscribe' subscribed.room.id %}">Unsubscribe</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endcache %}
                 </table>
             </div>
 
